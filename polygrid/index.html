@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+table, th, td {
+	padding: 4px;
+	text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+</style>
+</head>
+<script src="polydiv.js"> </script>
+<script src="polydiv_data.js"> </script>
+<script>
+var exampleCount = 1;
+function displayQuestion(divisionResult) {
+	var htmlString = " <div class='row'>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " </div>";
+	return htmlString;
+};
+function displayAnswer(divisionResult) {
+	var htmlString = "<button type='button' class='btn btn-info aDisplay'";
+	htmlString += " data-toggle='collapse' data-target='#demo"+ count + "'>";
+	htmlString += "Show Answer</button>";
+	htmlString += "<div id='demo" + count +"' class='collapse' >";
+	htmlString += " <div class='row'>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += divisionResult.htmlLatexGrid();
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " </div>";
+	//second row
+	htmlString += "<br><br>";
+	htmlString += " <div class='row'>";
+	htmlString += " <div class='col-sm-3'>";
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-6' >";
+	htmlString += latexRemoteImage(divisionResult.latexShow());
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-3'>";
+	htmlString += " </div>";
+	htmlString += " </div>";
+	
+	return htmlString;
+};
+
+function nextButton(){
+	return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
+};
+function handleClick(event) {
+		 console.log("latexButton click handler");	 
+		 var divisionResult = nextExample().simplify();
+		 $("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
+		 exampleCount ++;
+		 $("#latexHolder").append(displayQuestion(divisionResult)); 
+		 $("#latexHolder").append(displayAnswer(divisionResult)); 
+		 $("#latexHolder").append("<hr>"); 	
+		 if (hasMoreExamples()) {
+			$("#latexHolder").append(nextButton()); 	
+		}
+		event.currentTarget.remove();
+};		
+	
+$(document).ready(function(){
+    $(".nextButton").on("click", function(event){
+		$(".nextButton").attr('disabled',true);
+		//$(".nextButton").attr('style','display = none');
+		handleClick(event)
+	});	
+});
+</script>
+
+<body>
+
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+	<h1>Polynomial Division using the Grid Method</h1>
+</div> 	
+</div>
+<div class='col-sm-1'>
+</div>
+</div>
+
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+Most students learn how to divide polynomials using the long division method, which looks very similar to the long division method
+used for dividing numbers. A less widely known method is the grid or tabular method, described 
+<a href="http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html">here</a> and 
+<a href="http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html">here</a>.
+This page collects together a few worked out examples.
+</div>
+<div class='col-sm-1'>
+</div>
+</div>
+<hr>
+<br>
+<button id="latexButton" class="nextButton btn btn-default"">example</button>
+<br>
+<br>
+
+<div id="latexHolder"></div>
+
+<div id="bottomElement">
+<br>
+<br>
+</div>
+
+</body>
+
+</html>

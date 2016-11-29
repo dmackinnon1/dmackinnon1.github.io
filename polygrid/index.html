@@ -22,10 +22,11 @@ table, th, td {
 </style>
 </head>
 <script src="polydiv.js"> </script>
-<script src="polydiv_data.js"> </script>
+<!-- script src="polydiv_data.js"> </script -->
+<script src="polydiv_rand.js"> </script>
 <script>
 var exampleCount = 1;
-function displayQuestion(divisionResult) {
+function displayQuestion(divisionResult){
 	return latexRemoteImage(divisionResult.latexShowQuestion());
 };
 function displayAnswer(divisionResult) {
@@ -45,7 +46,6 @@ function nextButton(){
 	return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
 };
 function handleClick(event) {
-		console.log("latexButton click handler");	 
 		var divisionResult = nextExample().simplify();
 		$("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
 		exampleCount ++;
@@ -54,6 +54,8 @@ function handleClick(event) {
 		$("#latexHolder").append("<hr>"); 	
 		if (hasMoreExamples()) {
 			$("#latexHolder").append(nextButton()); 	
+		} else {
+			$("#bottomElement").append("To see more examples, reload the page.");
 		}
 		event.currentTarget.remove();
 		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
@@ -83,7 +85,7 @@ Most students learn how to divide polynomials using the long division method, wh
 used for dividing numbers. A less widely known method is the grid or tabular method, described 
 <a href="http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html">here</a> and 
 <a href="http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html">here</a>.
-This page collects together a few worked out examples.
+This page will randomly generate a few worked out examples - to see each example click the button. To get a fresh set of examples, reload the page.
 <hr>
 <br>
 <button id="latexButton" class="nextButton btn btn-default"">example</button>
@@ -91,7 +93,7 @@ This page collects together a few worked out examples.
 <br>
 
 <div id="latexHolder" style="text-align=center"></div>
-
+<br>
 <div id="bottomElement">
 <br>
 <br>

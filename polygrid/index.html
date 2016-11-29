@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 </head>
 
 <style>
@@ -13,7 +16,7 @@ table, th, td {
 	padding: 4px;
 	text-align: center;
     border: 1px solid black;
-    border-collapse: collapse;
+    border-collapse: collapse; 
 }
 
 </style>
@@ -23,43 +26,18 @@ table, th, td {
 <script>
 var exampleCount = 1;
 function displayQuestion(divisionResult) {
-	var htmlString = " <div class='row'>";
-	htmlString += " <div class='col-sm-4'>";
-	htmlString += " </div>";
-	htmlString += " <div class='col-sm-4'>";
-	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
-	htmlString += " </div>";
-	htmlString += " <div class='col-sm-4'>";
-	htmlString += " </div>";
-	htmlString += " </div>";
-	return htmlString;
+	return latexRemoteImage(divisionResult.latexShowQuestion());
 };
 function displayAnswer(divisionResult) {
-	var htmlString = "<button type='button' class='btn btn-info aDisplay'";
+	var htmlString = "<button type='button' class='btn btn-info '";
 	htmlString += " data-toggle='collapse' data-target='#demo"+ count + "'>";
 	htmlString += "Show Answer</button>";
-	htmlString += "<div id='demo" + count +"' class='collapse' >";
-	htmlString += " <div class='row'>";
-	htmlString += " <div class='col-sm-4'>";
-	htmlString += " </div>";
-	htmlString += " <div class='col-sm-4'>";
+	htmlString += "<div id='demo" + count +"' class='collapse ' >";
+	htmlString += "<br>";
 	htmlString += divisionResult.htmlLatexGrid();
-	htmlString += " </div>";
-	htmlString += " <div class='col-sm-4'>";
-	htmlString += " </div>";
-	htmlString += " </div>";
-	//second row
-	htmlString += "<br><br>";
-	htmlString += " <div class='row'>";
-	htmlString += " <div class='col-sm-3'>";
-	htmlString += " </div>";
-	htmlString += " <div class='col-sm-6' >";
+	htmlString += "<br>";
 	htmlString += latexRemoteImage(divisionResult.latexShow());
 	htmlString += " </div>";
-	htmlString += " <div class='col-sm-3'>";
-	htmlString += " </div>";
-	htmlString += " </div>";
-	
 	return htmlString;
 };
 
@@ -67,23 +45,23 @@ function nextButton(){
 	return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
 };
 function handleClick(event) {
-		 console.log("latexButton click handler");	 
-		 var divisionResult = nextExample().simplify();
-		 $("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
-		 exampleCount ++;
-		 $("#latexHolder").append(displayQuestion(divisionResult)); 
-		 $("#latexHolder").append(displayAnswer(divisionResult)); 
-		 $("#latexHolder").append("<hr>"); 	
-		 if (hasMoreExamples()) {
+		console.log("latexButton click handler");	 
+		var divisionResult = nextExample().simplify();
+		$("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
+		exampleCount ++;
+		$("#latexHolder").append(displayQuestion(divisionResult)); 
+		$("#latexHolder").append(displayAnswer(divisionResult)); 
+		$("#latexHolder").append("<hr>"); 	
+		if (hasMoreExamples()) {
 			$("#latexHolder").append(nextButton()); 	
 		}
 		event.currentTarget.remove();
+		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
 };		
 	
 $(document).ready(function(){
     $(".nextButton").on("click", function(event){
 		$(".nextButton").attr('disabled',true);
-		//$(".nextButton").attr('style','display = none');
 		handleClick(event)
 	});	
 });
@@ -99,37 +77,28 @@ $(document).ready(function(){
 <div class="page-header">
 	<h1>Polynomial Division using the Grid Method</h1>
 </div> 	
-</div>
-<div class='col-sm-1'>
-</div>
-</div>
 
-<div class='row'>
-<div class='col-sm-1'>
-</div>
-<div class='col-sm-10'>
+
 Most students learn how to divide polynomials using the long division method, which looks very similar to the long division method
 used for dividing numbers. A less widely known method is the grid or tabular method, described 
 <a href="http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html">here</a> and 
 <a href="http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html">here</a>.
 This page collects together a few worked out examples.
-</div>
-<div class='col-sm-1'>
-</div>
-</div>
 <hr>
 <br>
 <button id="latexButton" class="nextButton btn btn-default"">example</button>
 <br>
 <br>
 
-<div id="latexHolder"></div>
+<div id="latexHolder" style="text-align=center"></div>
 
 <div id="bottomElement">
 <br>
 <br>
 </div>
-
+<div class='col-sm-1'>
+</div>
+</div>
 </body>
 
 </html>

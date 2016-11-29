@@ -447,11 +447,12 @@ class DivisionResult {
 		return table;
 	}
 	//TODO: refactor these to reuse (latex mode)
-	internalLatexHtmlTableRow(firstTerm, remainingTerms) {
+	internalLatexHtmlTableRow(firstTerm, remainingTerms, columns) {
 		var rowHtml = "<tr>";
 		rowHtml += "<td>" + this.latexRemoteImage(firstTerm.revShow()) + "</td>";
-		for (var i = remainingTerms.rawSize() -1; i > 0; i--) {
-			rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(i).revShow()) + "</td>";
+		for (var i = 0; i <= columns; i++) {
+			var index = remainingTerms.rawSize() -1 -i;
+			rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(index).revShow()) + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}
@@ -466,11 +467,11 @@ class DivisionResult {
 	}
 	
 	htmlLatexGrid(){
-		var table = "<table>";
+		var table = "<table align='center'>";
 		table += this.internalLatexHtmlTopRow(this.solution.main);
 		var limit = this.grid.length - 1;
 		for(var i = 0; i< this.grid.length; i ++) {
-			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), this.grid[limit-i]);
+			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), this.grid[limit-i], this.solution.main.degree());
 		}
 		table += "</table>"	
 		return table;
@@ -482,13 +483,11 @@ class DivisionResult {
 	
 	latexRemoteImage(latexString) {
 		console.log("latexRemoteImage provided polnomial: " + latexString);
-		var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
+		return "$$"+latexString +"$$";
+		//var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
 		return imgStr;
 	}
 }
-
-
-
 
 // todo: move latex functions to another location?
 
@@ -498,18 +497,7 @@ class DivisionResult {
 */
 function latexRemoteImage(latexString) {
 	console.log("latexRemoteImage provided polnomial: " + latexString);
-	var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
-	return imgStr;
-}
-
-/*
-* Just for testing
-*/
-function samplePolyImage() {
-	var p3 = new Poly([0,-1,2,-3,0,5]);
-	return latexRemoteImage(p3.latexShow());	
-}
-function samplePolyImage2() {
-	var p3 = new Rational(new Poly([3,-1,0,9]), new Poly([-2,3]));
-	return latexRemoteImage(p3.simplify().latexShow());	
+	var mathJaxDelimiter = "$$";
+	return mathJaxDelimiter + latexString + mathJaxDelimiter;
+	//return "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
 }

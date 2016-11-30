@@ -67,6 +67,17 @@ $(document).ready(function(){
 		handleClick(event)
 	});	
 });
+$(document).ready(function(){
+	$(".checkbox").on('click',function(e){
+		var remainders = $('#remainderCheck:checked').val();
+		console.log("checkbox clicked: " + remainders);
+		if (remainders == 'yes') {
+			generateWithRemainders = true;
+		} else {
+			generateWithRemainders = false;
+		}
+	});
+});
 </script>
 
 <body>
@@ -86,6 +97,15 @@ A less widely known method is the grid or tabular method, described
 <a href="http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html">here</a> and 
 <a href="http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html">here</a>.
 This page will randomly generate a few examples showing the completed grids - to see each example click the button. To get a fresh set of examples, reload the page.
+<br>
+<br>
+<div class="well well-sm">
+ <form>
+    <div class="checkbox">
+      <label><input id="remainderCheck" type="checkbox" checked="checked" value="yes">generate examples with remainders</label>
+    </div>
+   </form>
+</div>
 <hr>
 <br>
 <button id="latexButton" class="nextButton btn btn-default"">example</button>

@@ -6,6 +6,9 @@
 var count = 0;
 var limit = 6; //limit - how many examples will we provide?
 var cRange = 9;
+
+var generateWithRemainders = true;
+
 function hasMoreExamples() {
 	return count < limit;
 };
@@ -38,9 +41,8 @@ function randomPoly(degree) {
 function randomRational() {
 	//1 pick a random remainder, lets make it from deg 0 to 2;
 	//let's weight things towards having no remainder -  a bit better than 50%
-	var hasRemainder = randomInt(2);
 	var remainder = new Poly([0]);
-	if (hasRemainder === 1) {
+	if (generateWithRemainders === true) {
 		remainder = randomPoly(randomInt(2));
 	}
 	//2 pick a random quotient, lets make it 1 or 2 more than the remainder;

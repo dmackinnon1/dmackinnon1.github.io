@@ -426,9 +426,7 @@ class DivisionResult {
 	remainderCalculation() {
 		var prod = this.question.denominator.prod(this.solution.main);
 		var remain = this.question.numerator.sub(prod);
-		var htmlString = this.question.numerator.revShow() + " - " + prod.revShow();
-		htmlString += " = " + remain.revShow();
-		return "$$" + remain + "$$";
+		return "$$" + remain.revShow() + "$$";
 	}
 	
 	hasRemainder() {
@@ -454,6 +452,10 @@ class DivisionResult {
 
 	latexShow() {
 		return this.question.revLatexShow() + " = " + this.solution.latexShow();
+	}
+	
+	latexShowSolution() {
+		return this.solution.latexShow();
 	}
 	
 	latexShowQuestion() {
@@ -536,24 +538,29 @@ class DivisionResult {
 			if (step === 1) {
 				htmlSection += "First, place the divisor down the first column of the grid.";
 				htmlSection += " The goal is to find a polynomial to place along the top so that when the grid is filled ";
-				htmlSection += "in with the product, the sum of all the terms filled in equals the dividend."
+				htmlSection += "by forming the product of the leftmost column and the top row, the sum will equal the dividend. ";
+				htmlSection += "The top row will be the quotient. If the sum of the cells in the table does not match the dividend, ";
+				htmlSection += "there is a remainder.";
 				htmlSection += "<br><br>";
 			} else if (step == 2){
 				htmlSection += "The product of the first two cells must give us the first term in the dividend.";
-				htmlSection += "The rest of the column is found by multiplying each of the terms in the divisor by the term that was placed in the top row.";
+				htmlSection += "The rest of the column is found by multiplying each of the terms in the divisor by the term that was just placed in the top row.";
 				htmlSection += "<br><br>";
 			} else if (step === this.history.length) {
 				htmlSection += "Once the whole table is filled in, if the sum of all the internal cells equals the dividend, we are done."
 				htmlSection += " Otherwise, we know that we have a remainder. To find the remainder, subtract the sum of the internal cells ";
-				htmlSection += "of the grid from the divisor. What is left over is the remainder."
+				htmlSection += "of the grid from the divisor."
 				htmlSection += "<br><br>";
 			} else {
-				htmlSection += "Continue filling in the top row with an value that will give the amount required to obtain the next highest power of the divisor."
-				htmlSection += " Then fill in the rest of the column by multiplying by the terms in the first column.";
+				htmlSection += "Continue by filling in the top row with a value that results in a term that completes the sum for the next highest power."
+				htmlSection += " Then fill in the rest of the column by multiplying by the terms of the divisor in the first column.";
 				htmlSection += "<br><br>";
 			}
 			htmlSection += this.htmlHistoryEntry(this.history[i].grid, this.history[i].column, answerSoFar);
 		}
+		htmlSection += "<br>The top row of the grid provides us with the quotient.";
+		htmlSection += this.latexRemoteImage(this.solution.main.revLatexShow());
+		
 		if (this.hasRemainder()){
 			htmlSection += "<br>In this case, there is a remainder: ";
 			htmlSection += this.remainderCalculation();

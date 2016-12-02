@@ -37,7 +37,8 @@ function displayAnswer(divisionResult) {
 	htmlString += "<br>";
 	htmlString += divisionResult.htmlLatexGrid();
 	htmlString += "<br>";
-	htmlString += latexRemoteImage(divisionResult.latexShow());
+	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
+	htmlString += "<br> " + latexRemoteImage("=" + divisionResult.latexShowSolution());
 	htmlString += "<button type='button' class='btn btn-info '";
 	htmlString += " data-toggle='collapse' data-target='#full"+ count + "'>";
 	htmlString += "Show Additional Steps</button>";

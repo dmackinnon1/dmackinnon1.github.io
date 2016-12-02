@@ -31,13 +31,20 @@ function displayQuestion(divisionResult){
 };
 function displayAnswer(divisionResult) {
 	var htmlString = "<button type='button' class='btn btn-info '";
-	htmlString += " data-toggle='collapse' data-target='#demo"+ count + "'>";
+	htmlString += " data-toggle='collapse' data-target='#answer"+ count + "'>";
 	htmlString += "Show Answer</button>";
-	htmlString += "<div id='demo" + count +"' class='collapse ' >";
+	htmlString += "<div id='answer" + count +"' class='collapse ' >";
 	htmlString += "<br>";
 	htmlString += divisionResult.htmlLatexGrid();
 	htmlString += "<br>";
 	htmlString += latexRemoteImage(divisionResult.latexShow());
+	htmlString += "<button type='button' class='btn btn-info '";
+	htmlString += " data-toggle='collapse' data-target='#full"+ count + "'>";
+	htmlString += "Show Additional Steps</button>";
+	htmlString += "<div id='full" + count +"' class='collapse ' >";
+	htmlString += "<br>";
+	htmlString += "<div>" + divisionResult.htmlLatexHistory() + "</div>";
+	htmlString += " </div>";
 	htmlString += " </div>";
 	return htmlString;
 };
@@ -63,10 +70,10 @@ function handleClick(event) {
 	
 $(document).ready(function(){
     $(".nextButton").on("click", function(event){
-		$(".nextButton").attr('disabled',true);
-		handleClick(event)
+		handleClick(event);
 	});	
 });
+
 $(document).ready(function(){
 	$(".checkbox").on('click',function(e){
 		var remainders = $('#remainderCheck:checked').val();
@@ -102,7 +109,7 @@ This page will randomly generate a few examples showing the completed grids - to
 <div class="well well-sm">
  <form>
     <div class="checkbox">
-      <label><input id="remainderCheck" type="checkbox" checked="checked" value="yes">generate examples with remainders</label>
+      <label><input id="remainderCheck" type="checkbox" value="yes">generate examples with remainders</label>
     </div>
    </form>
 </div>

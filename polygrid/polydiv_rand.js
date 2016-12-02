@@ -4,10 +4,10 @@
 * Randomly generates Rational expressions.
 */
 var count = 0;
-var limit = 6; //limit - how many examples will we provide?
+var limit = 4; //limit - how many examples will we provide?
 var cRange = 9;
 
-var generateWithRemainders = true;
+var generateWithRemainders = false;
 
 function hasMoreExamples() {
 	return count < limit;
@@ -33,7 +33,13 @@ function randomPoly(degree) {
 	}
 	var terms = [];	
 	for (var i = 0; i <= degree; i ++){
-		terms.push(randomRange(0 - cRange, cRange));
+		//make the polynomials sparser - a good chance of zero
+		var zeroChance = randomInt(10);
+		if (zeroChance < 2) {
+			terms.push(0);
+		} else {		
+			terms.push(randomRange(0 - cRange, cRange));
+		}
 	}
 	return new Poly(terms);
 }
@@ -43,13 +49,21 @@ function randomRational() {
 	//let's weight things towards having no remainder -  a bit better than 50%
 	var remainder = new Poly([0]);
 	if (generateWithRemainders === true) {
-		remainder = randomPoly(randomInt(2));
+		remainder = randomPoly(randomRange(1,2));
+		if (remainder.isEqual(new Poly([0]))) {
+			remainder = new Poly([1,randomInt(5)]);
+		}
 	}
+	
+	console.log("remainder: " + remainder.toString());
 	//2 pick a random quotient, lets make it 1 or 2 more than the remainder;
 	var quotient = randomPoly(randomRange(1,2) + remainder.degree());	
+	console.log("quotient: " + quotient.toString());
 	//3 now pick a denominator, make it in the range of deg 1 to 3.
-	var denominator = randomPoly(randomRange(1,3));
+	var denominator = randomPoly(randomRange(1,2) + remainder.degree());
+	console.log("denominator: " + denominator.toString());
 	// now the numerator will be computed: n = qd + r	
 	var numerator = quotient.prod(denominator).add(remainder);
+	console.log("numerator: " + numerator.toString());
 	return new Rational(numerator, denominator);
 };

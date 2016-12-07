@@ -21,11 +21,12 @@ table, th, td {
 
 </style>
 </head>
-<script src="polydiv.js"> </script>
+<script src="js/polydiv.js"> </script>
 <!-- script src="polydiv_data.js"> </script -->
-<script src="polydiv_rand.js"> </script>
+<script src="js/polydiv_rand.js"> </script>
 <script>
 var exampleCount = 1;
+PolyGrid.useGlyphQuestion = true;
 function displayQuestion(divisionResult){
 	return latexRemoteImage(divisionResult.latexShowQuestion());
 };
@@ -45,6 +46,10 @@ function displayAnswer(divisionResult) {
 	htmlString += "<div id='full" + count +"' class='collapse ' >";
 	htmlString += "<br>";
 	htmlString += "<div>" + divisionResult.htmlLatexHistory() + "</div>";
+	htmlString += "<br>";
+	htmlString += "So we finally have:";
+	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
+	htmlString += "<br> " + latexRemoteImage("=" + divisionResult.latexShowSolution());
 	htmlString += " </div>";
 	htmlString += " </div>";
 	return htmlString;

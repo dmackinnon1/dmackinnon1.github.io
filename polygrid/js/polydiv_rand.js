@@ -57,10 +57,21 @@ function randomRational() {
 	
 	console.log("remainder: " + remainder.toString());
 	//2 pick a random quotient, lets make it 1 or 2 more than the remainder;
-	var quotient = randomPoly(randomRange(1,2) + remainder.degree());	
+	var quotient = randomPoly(randomRange(1,2) + remainder.degree());
+	if(quotient.isEqual(Poly.zero())) {
+		quotient = new Poly([1,2]); //arbitrary for the moment
+	}
 	console.log("quotient: " + quotient.toString());
 	//3 now pick a denominator, make it in the range of deg 1 to 3.
-	var denominator = randomPoly(randomRange(1,2) + remainder.degree());
+	var denominator = null;
+	if (remainder.isEqual(Poly.zero())) {
+		denominator = randomPoly(randomRange(1,3));
+	} else {
+		denominator = randomPoly(remainder.degree() + 1);
+	}	
+	if (denominator.isEqual(Poly.zero())){
+		denominator = new Poly([1,1]); //arbitrary
+	}
 	console.log("denominator: " + denominator.toString());
 	// now the numerator will be computed: n = qd + r	
 	var numerator = quotient.prod(denominator).add(remainder);

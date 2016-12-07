@@ -1,8 +1,16 @@
+
+
+var PolyGrid = {
+	useGlyphQuestion: false,
+	glyphQuestion:"<span class='glyphicon glyphicon-question-sign'> ",
+	nonGlyphQuestion:"-- ? --",
+};
 /*
 * A Poly represents a single variable polynomial.
 * This representation is used to help carry out calculations
 * like polynomial division.
 */
+
 class Poly {
 	/*
 	* To create a polynomial, provide a list of coefficients.
@@ -10,6 +18,10 @@ class Poly {
 	*/
 	constructor(coefficients) {
 		this.coefficients = coefficients;
+	}
+	
+	static zero() {
+		return new Poly([0]);
 	}
 	
 	/*
@@ -62,44 +74,60 @@ class Poly {
 		}
 		return this;
 	}
-	
+	/*
+	* return a string for the ith term of the polynomial
+	*/
+	showAt(i, isLeading, showZero) {
+		var termString = "";
+		var currentPoly = this.polyAt(i);
+		var term = currentPoly.coefficients[i];
+		if (term === 0) {
+			if (showZero) return "0";
+			return "";
+		}
+		//figure out the sign
+		var sign = "+";
+		if (term < 0) {
+			term = term * (-1);
+			sign = "-";
+		} else if (isLeading) {
+			sign = "";
+		}
+		// adjust the term
+		if (i !== 0 && term === 1) {
+			term = "";
+		}
+		//figure out the power
+		var power = "";
+		if (i === 1) {
+			power = "x";
+		} else if (i > 1) {
+			power = "x^" + i;
+		}
+
+		var result = "";
+		if (isLeading) {
+			result += sign + term + power;
+		} else {
+			result += " "+ sign + " " + term + power;
+		}
+		return result;
+	}
 	/*
 	* Use show() to print the polynomial in ascending order.
 	*/
 	show() {
-		if (this.degree() === 0 && this.coefficient(0) === 0) {
-			return "" + this.coefficient(0);
-		}
-		var rep = "";		
-		var first = true;
-		for (var i = 0; i < this.rawSize(); i ++) {
-			if (this.coefficient(i) === 0) continue;
-			
-			if (!first) {
-				if (this.coefficient(i) > 0){
-					rep += " + ";
-				} else {
-					rep += " - ";
-				}
-				
-				if (this.coefficient(i) != 1 && this.coefficient(i) !== -1) {
-					if (this.coefficient(i) > 0) {
-						rep += this.coefficient(i);
-					} else {
-						rep += (-1 * this.coefficient(i));
-					}
-				}
-			} else {
-				if ((this.coefficient(i) !== 1 && (this.coefficient(i) !== -1)) || (i === 0)) 
-					rep +=  this.coefficient(i) 
+		this.trim();
+		var rep = "";
+		if (this.degree() === 0){
+			rep = this.showAt(0,true,true);
+		} else {
+			var first = true;
+			var rep = "";
+			for (var i = 0; i < this.rawSize(); i ++) {
+				rep += this.showAt(i,first, false);
+				first = false;
 			}
-			first = false;
-			if (i === 1){
-				rep += "x";
-			}
-			if (i > 1) {
-				rep += "x^" + i;
-			}				
 		}
 		return rep;
 	}
@@ -109,52 +137,17 @@ class Poly {
 	* TODO: There are some bugs in here.
 	*/
 	revShow() {
-		if (this.degree() === 0 && this.coefficient(0) === 0) {
-			return "" + this.coefficient(0);
-		}
-		var rep = "";		
-		var first = true;
-		for (var i = this.degree(); i >= 0 ; i --) {
-			if (this.coefficient(i) === 0) continue;
-			
-			if (!first) {
-				if (this.coefficient(i) > 0){
-					rep += " + ";
-				} else {
-					rep += " - ";
-				}
-				
-				if (this.coefficient(i) != 1) {
-					if (this.coefficient(i) > 0) {
-						rep += this.coefficient(i);
-					} else if (this.coefficient(i) !== -1){
-						rep += (-1 * this.coefficient(i));
-					} else {
-						rep += "1";
-					}
-				} else {
-					if (i === 0){
-						rep += "1";
-					} 
-				}
-			} else {	
-				if ((this.coefficient(i) !== 1 && (this.coefficient(i) !== -1)) || (i === 0)){ 
-					rep +=  this.coefficient(i) 
-				} else if(this.coefficient(i) === -1){
-					if (i == 0){
-						rep += "1";
-					} else {
-						rep +=  "-";
-					}
-				} 
+		this.trim();
+		var rep = "";
+		if (this.degree() === 0){
+			rep = this.showAt(0,true,true);
+		} else {
+			var first = true;
+			var rep = "";
+			for (var i = this.rawSize() -1; i >= 0; i --) {
+				rep += this.showAt(i,first, false);
+				first = false;
 			}
-			first = false;
-			if (i === 1){
-				rep += "x";
-			}
-			if (i > 1) {
-				rep += "x^" + i;
-			}					
 		}
 		return rep;
 	}
@@ -279,7 +272,7 @@ class Poly {
 	divide(other){
 		var n = other.degree();
 		if (n > this.degree()) {
-			return new Mixed(new Poly([0]), new Rat(this, other));
+			return new Mixed(new Poly([0]), new Rational(this, other));
 		}
 		var quotient = new Poly([0]);
 		var grid = [];
@@ -500,16 +493,23 @@ class DivisionResult {
 		table += "</table>"	
 		return table;
 	}
+	
+	// <span class="glyphicon glyphicon-question-sign"></span>	
+	//"-- ? --"
 	//TODO: refactor these to reuse (latex mode)
 	internalLatexHtmlTableRow(firstTerm, remainingTerms, columns, limit) {
 		var rowHtml = "<tr>";
 		rowHtml += "<td>" + this.latexRemoteImage(firstTerm.revShow()) + "</td>";
+		var qmark = PolyGrid.nonGlyphQuestion;
+		if (PolyGrid.useGlyphQuestion) {
+			qmark = PolyGrid.glyphQuestion;
+		}
 		for (var i = 0; i <= columns; i++) {
 			var index = remainingTerms.rawSize() -1 -i;
 			if (columns - i > limit)
 				rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(index).revShow()) + "</td>";
 			else
-				rowHtml += "<td>" + "-- ? --" + "</td>";
+				rowHtml += "<td>" + qmark + "</td>";
 
 		}
 		return rowHtml += "</tr>";
@@ -519,11 +519,15 @@ class DivisionResult {
 	internalLatexHtmlTopRow(terms, limit) {
 		var rowHtml = "<tr>";
 		rowHtml += "<td></td>";
+		var qmark = PolyGrid.nonGlyphQuestion;
+		if (PolyGrid.useGlyphQuestion) {
+			qmark = PolyGrid.glyphQuestion;
+		}
 		for (var i = terms.rawSize() -1; i >= 0; i--) {
 			if (i > limit)
 				rowHtml += "<td>" + this.latexRemoteImage(terms.polyAt(i).revShow()) + "</td>";
 			else 
-				rowHtml += "<td>" + "-- ? --" + "</td>";
+				rowHtml += "<td>" + qmark + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}
@@ -531,6 +535,7 @@ class DivisionResult {
 	htmlLatexHistory() {
 		var answerSoFar = new Poly([0]);
 		var htmlSection = "";
+		var degree = this.question.numerator.degree();
 		for (var i = 0; i < this.history.length; i++) {
 			var step = this.history.length - this.history[i].column - 1;
 			answerSoFar = answerSoFar.add(this.solution.main.polyAt(this.solution.main.degree() - i));
@@ -543,16 +548,20 @@ class DivisionResult {
 				htmlSection += "there is a remainder.";
 				htmlSection += "<br><br>";
 			} else if (step == 2){
-				htmlSection += "The product of the first two cells must give us the first term in the dividend.";
-				htmlSection += "The rest of the column is found by multiplying each of the terms in the divisor by the term that was just placed in the top row.";
+				htmlSection += "The product of the first two cells must give us the first term in the dividend, ";
+				htmlSection += "\\(" + this.question.numerator.polyAt((degree - step) + 2).revShow() + "\\).";
+				htmlSection += " The rest of the column is found by multiplying each of the terms in the divisor by the term that was just placed in the top row.";
 				htmlSection += "<br><br>";
 			} else if (step === this.history.length) {
-				htmlSection += "Once the whole table is filled in, if the sum of all the internal cells equals the dividend, we are done."
+				htmlSection += "The next term to take care of in the dividend is ";
+				htmlSection += "\\(" + this.question.numerator.polyAt((degree - step) + 2).revShow() + "\\).";
+				htmlSection += " Once the whole table is filled in, if the sum of all the internal cells equals the dividend, we are done.";
 				htmlSection += " Otherwise, we know that we have a remainder. To find the remainder, subtract the sum of the internal cells ";
 				htmlSection += "of the grid from the divisor."
 				htmlSection += "<br><br>";
 			} else {
-				htmlSection += "Continue by filling in the top row with a value that results in a term that completes the sum for the next highest power."
+				htmlSection += "Continue by filling in the top row with a value that results in a term that completes the sum for the next highest power, ";
+				htmlSection += "\\(" + this.question.numerator.polyAt((degree - step) + 2).revShow() + "\\).";
 				htmlSection += " Then fill in the rest of the column by multiplying by the terms of the divisor in the first column.";
 				htmlSection += "<br><br>";
 			}
@@ -569,6 +578,7 @@ class DivisionResult {
 			htmlSection += "<br>In this case, the sum of all the inner cells of the grid equals the dividend, so the remainder is zero.";
 			htmlSection += "<br>";
 		}
+		
 		return htmlSection;		
 	}
 	

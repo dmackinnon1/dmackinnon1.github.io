@@ -402,14 +402,14 @@ class Game {
 			}
 		} else {
 			console.log("wrong cell chosen");
-			this.misstep ++;
 			if (cell.hide && !this.isInWrong(cell)) {
+				this.misstep ++;
+				$("#missteps").html("<h3 align='center'>missteps: " + this.misstep + "</h3>");
 				var glyph = "<span class='glyphicon glyphicon-remove-circle' ";
 				glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 				parentTarget.innerHTML= glyph;
 				this.wrong.push(parentTarget);
 			}
-			$("#missteps").html("<h3 align='center'>missteps: " + this.misstep + "</h3>");
 		}
 	}
 	

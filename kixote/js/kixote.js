@@ -182,6 +182,10 @@ class Path {
 		this.cells = [];
 	}
 	
+	clear() {
+		this.cells = [];
+	}
+
 	size(){
 		return this.cells.length;
 	}
@@ -212,6 +216,10 @@ class Path {
 	initPath() {
 		var tries = 0;
 		while (!this.isTour() && tries < 10) {
+			this.clear();
+			if(tries > 0) {
+				console.log("debug: retrying tour generation: " + tries + " " + this);
+			}
 			this.warnsdorffPath();
 			tries ++;
 		}
@@ -336,10 +344,19 @@ class Game {
 		this.wrong = [];
 		this.misstep = 0;
 	}
+
+	toString(){
+		return "" + this.path + ": " + this.path.isTour(); 
+	}
 	
+	isIncomplete(){
+		return !this.path.isTour();
+	}
+
 	getPath() {
 		return this.path;
 	}
+
 	getBoard() {
 		return this.board;
 	}
@@ -352,6 +369,7 @@ class Game {
 			this.path.initPath();
 			if (path.isTour()) break;
 			this.path = new Path(board, board.randomStart());
+			this.path.initPath();
 		}		
 		this.path.decorateCells(difficulty);
 	}
@@ -365,7 +383,7 @@ class Game {
 		
 	}
 	
-	getCell (i, j) {
+	getCell(i, j) {
 		return this.board.cells[i][j];
 	}
 	
@@ -473,7 +491,7 @@ class Game {
 	
 	}
 };
-
+//the game instance
 var gameBoard = new Board(8,8);
 gameBoard.init();
 var kixote = new Game(gameBoard);

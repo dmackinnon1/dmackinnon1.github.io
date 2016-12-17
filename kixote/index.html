@@ -23,7 +23,10 @@ table, th, td {
 function loadBoard() {
 	kixote = new Game(gameBoard);
 	kixote.init();
-	console.log(kixote.getPath().toString());
+	if (kixote.isIncomplete()) {
+		console.log("debug: " + kixote);
+	}
+	//console.log(kixote.getPath().toString());
 	return htmlForBoard(kixote.getBoard());
 };
 

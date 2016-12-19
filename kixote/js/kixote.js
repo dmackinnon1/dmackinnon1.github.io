@@ -1,6 +1,5 @@
 
-//Classes for generating knight tours.
-
+//Classes for generating knight tours, and kings tours
 /*
 * A Cell is a square on the chessboard.
 */
@@ -32,63 +31,114 @@ class Cell {
 		}
 	}
 	
-	nne(){
-		if ((this.rowNum + 2 < this.board.getRowSize())&&(this.colNum + 1 <this.board.getColumnSize())){
-			return this.board.cells[this.rowNum + 2][this.colNum + 1];
+	neighbor(i,j) {
+		if ((this.rowNum + i < this.board.getRowSize())
+			&&(this.rowNum + i >= 0)
+			&&(this.colNum + j < this.board.getColumnSize())
+			&&(this.colNum + j >= 0)){
+			return this.board.cells[this.rowNum + i][this.colNum + j];
 		}
 		return null;
+	}
+	
+	/*
+	* Knight moves
+	*/
+
+	nne(){
+		return this.neighbor(2,1);
 	}
 	
 	nnw(){
-		if ((this.rowNum + 2 < this.board.getRowSize())&&(this.colNum - 1 >= 0)){ 
-			return this.board.cells[this.rowNum + 2][this.colNum - 1];
-		}
-		return null;
+		return this.neighbor(2,-1);
 	}
 	
 	ene(){
-		if ((this.rowNum + 1 < this.board.getRowSize())&&(this.colNum +2 < this.board.getColumnSize())){
-			return this.board.cells[this.rowNum + 1][this.colNum + 2];
-		}
-		return null;		
+		return this.neighbor(1,2);		
 	}
 	
 	wnw(){
-		if ((this.rowNum + 1 < this.board.getRowSize())&&(this.colNum - 2 >= 0)){ 
-			return this.board.cells[this.rowNum + 1][this.colNum - 2];
-		}
-		return null;
+		return this.neighbor(1,-2);
 	}
 	
 	sse(){
-		if ((this.rowNum - 2 >= 0)&&(this.colNum + 1 < this.board.getColumnSize())){ 
-			return this.board.cells[this.rowNum - 2][this.colNum + 1];
-		}
-		return null;
+		return this.neighbor(-2,1);
 	}
 	
 	ese(){
-		if ((this.rowNum - 1 >= 0)&&(this.colNum + 2 < this.board.getColumnSize())){ 
-			return this.board.cells[this.rowNum - 1][this.colNum + 2];
-		}
-		return null;
+		return this.neighbor(-1,2);
 	}
 	
 	ssw(){
-		if ((this.rowNum - 2 >= 0)&&(this.colNum - 1 >= 0)){ 
-			return this.board.cells[this.rowNum - 2][this.colNum - 1];
-		}	
-		return null;
+		return this.neighbor(-2,-1)
 	}
 	
 	wsw(){
-		if ((this.rowNum - 1 >= 0)&&(this.colNum - 2 >= 0)){ 
-			return this.board.cells[this.rowNum - 1][this.colNum - 2];
-		}	
-		return null;
+		return this.neighbor(-1,-2);
 	}
 	
+	/*
+	* King moves
+	*/
+
+	north(){
+		return this.neighbor(1,0);
+	}
+	
+	south(){
+		return this.neighbor(-1,0);
+	}
+	
+	east(){
+		return this.neighbor(0,1);		
+	}
+	
+	west(){
+		return this.neighbor(0,-1);
+	}
+	
+	northEast(){
+		return this.neighbor(1,1);
+	}
+	
+	northWest(){
+		return this.neighbor(1,-1);
+	}
+	
+	southEast(){
+		return this.neighbor(-1,1)
+	}
+	
+	southWest(){
+		return this.neighbor(-1,-1);
+	}
+	
+
 	neighbors(){
+		if (game.isKixote) { //reference to the global, not great.
+			return this.knightNeighbors();
+		} else {
+			return this.kingNeighbors();
+		}
+
+	}
+
+	kingNeighbors() {
+		var list = [];
+		if(this.north() != null) list.push(this.north());
+		if(this.south() != null) list.push(this.south());
+		if(this.east() != null) list.push(this.east());
+		if(this.west() != null) list.push(this.west());
+		
+		if(this.northEast() != null) list.push(this.northEast());
+		if(this.northWest() != null) list.push(this.northWest());
+		if(this.southEast() != null) list.push(this.southEast());
+		if(this.southWest() != null) list.push(this.southWest());
+				
+		return list;
+	}
+
+	knightNeighbors() {
 		var list = [];
 		if(this.ese() != null) list.push(this.ese());
 		if(this.sse() != null) list.push(this.sse());
@@ -102,6 +152,7 @@ class Cell {
 				
 		return list;
 	}
+
 	
 	isNeighbor(cell) {
 		var nbrs = this.neighbors();
@@ -139,9 +190,7 @@ class Board {
 	init() {
 		for (var i = 0; i < this.rowNum; i ++) {
 			this.cells[i] = [];
-			//console.log("created row " + i);
 			for (var j = 0; j < this.colNum; j ++){
-				//console.log("created entry " + i + " " + j);
 				this.cells[i].push (new Cell(i, j, this));
 			}
 		}
@@ -317,12 +366,9 @@ function htmlForBoard(board) {
 };
 
 function cellClick(event) {
-	console.log("cell was clicked!");
 	var i = parseInt(event.target.getAttribute("data-row"));
 	var j = parseInt(event.target.getAttribute("data-col"));
-	console.log("i " + i);
-	console.log("j " + j);
-	kixote.clicked(i,j, event.target); //event.target
+	game.clicked(i,j, event.target); //event.target
 };
 
 /**
@@ -330,19 +376,19 @@ function cellClick(event) {
 */
 function randomInt(lessThan){
 	var selection = Math.floor(Math.random()*(lessThan));
-	//console.log("choosing " + selection + " out of " + lessThan);
 	return selection;
 };
 
 class Game {
 	
-	constructor(board) {
+	constructor(board, isKixote) {
 		this.board = board;
 		board.init();
 		this.path = new Path(this.board, this.board.randomStart());
 		this.solution = [];
 		this.wrong = [];
 		this.misstep = 0;
+		this.isKixote = isKixote;
 	}
 
 	toString(){
@@ -406,7 +452,6 @@ class Game {
 		if (target.localName === 'span') {
 			parentTarget = target.parentNode;
 		}	
-		console.log("aiming for cell: " + targetCell);
 		if (targetCell.isEqual(cell)){
 			console.log("correct cell chosen");
 			this.solution.push(cell);
@@ -419,7 +464,6 @@ class Game {
 				$("#finish").html("<h2 align='center'>Finished!</h2>");
 			}
 		} else {
-			console.log("wrong cell chosen");
 			if (cell.hide && !this.isInWrong(cell)) {
 				this.misstep ++;
 				$("#missteps").html("<h3 align='center'>missteps: " + this.misstep + "</h3>");
@@ -464,7 +508,6 @@ class Game {
 	colourSolution() {
 			for (var i = 0; i < this.solution.length; i ++){
 				var div = this.getDiv(this.solution[i].rowNum, this.solution[i].colNum);
-				console.log(div);
 				div.css("background","#ebebe0");
 			}
 			var lastIndex = this.solution.length -1;
@@ -476,11 +519,7 @@ class Game {
 	
 	resetWrongs() {
 		for (var k = 0; k < this.wrong.length; k++){
-			//var div = this.getDiv(this.wrong[i].rowNum, this.wrong[i].colNum);
 			var div = this.wrong[k];
-			console.log(div);
-			//console.log(div.firstChild);
-			//div.css("background","white");
 			var i = parseInt(div.getAttribute("data-row"));
 			var j = parseInt(div.getAttribute("data-col"));
 			var glyph = "<span class='glyphicon glyphicon-question-sign' ";
@@ -494,4 +533,4 @@ class Game {
 //the game instance
 var gameBoard = new Board(8,8);
 gameBoard.init();
-var kixote = new Game(gameBoard);
+var game = null;

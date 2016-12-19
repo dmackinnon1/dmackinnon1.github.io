@@ -56,8 +56,26 @@ function displayAnswer(divisionResult) {
 };
 
 function nextButton(){
-	return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
+	if (exampleCount === 1) {
+		return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>example</button>";
+	} else {
+		return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
+	}
 };
+
+function resetButton(){
+	return "<br><br><button id='resetButton' class='nextButton btn btn-default' onclick='resetExamplesClicked(event)'>reset examples</button>";
+
+};
+
+function resetExamplesClicked(event) {
+	console.log("reset button clicked");
+	resetExamples();
+	exampleCount = 1;
+	$("#latexHolder").html(nextButton());
+	$("#bottomElement").html("<br>");	 			
+}
+
 function handleClick(event) {
 		var divisionResult = nextExample().simplify();
 		$("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
@@ -68,7 +86,8 @@ function handleClick(event) {
 		if (hasMoreExamples()) {
 			$("#latexHolder").append(nextButton()); 	
 		} else {
-			$("#bottomElement").append("To see more examples, reload the page.");
+			$("#bottomElement").append("To see more examples, reload the page, or click the button below.");
+			$("#bottomElement").append(resetButton());			
 		}
 		event.currentTarget.remove();
 		MathJax.Hub.Typeset(); //required to render dynamically generated Latex

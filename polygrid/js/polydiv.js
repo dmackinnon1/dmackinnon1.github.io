@@ -611,8 +611,6 @@ class DivisionResult {
 	
 	latexRemoteImage(latexString) {
 		return "$$"+latexString +"$$";
-		//var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
-		return imgStr;
 	}
 };
 

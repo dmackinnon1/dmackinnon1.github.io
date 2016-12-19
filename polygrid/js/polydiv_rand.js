@@ -13,6 +13,10 @@ function hasMoreExamples() {
 	return count < limit;
 };
 
+function resetExamples() {
+	count = 0;
+}
+
 function nextExample(){
 	count ++;
 	return randomRational();

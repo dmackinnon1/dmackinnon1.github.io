@@ -379,6 +379,11 @@ function randomInt(lessThan){
 	return selection;
 };
 
+
+/*
+* The game curretly plays, but is also aware of display 
+* elements. Should refactor and move display elements out.
+*/
 class Game {
 	
 	constructor(board, isKixote) {
@@ -426,7 +431,7 @@ class Game {
 		last.css("background"," #999966");	
 		$("#finish").html("");
 		$("#missteps").html("<h3 align='center'>missteps: 0 </h3>");
-		
+		$('#mapDisplay').html(this.svgMap());		
 	}
 	
 	getCell(i, j) {
@@ -460,9 +465,11 @@ class Game {
 			this.resetWrongs();
 			this.updatePath();
 			this.colourSolution();
+			$('#mapDisplay').html(this.svgMap());
 			if (this.getIsDone()){
 				$("#finish").html("<h2 align='center'>Finished!</h2>");
 			}
+
 		} else {
 			if (cell.hide && !this.isInWrong(cell)) {
 				this.misstep ++;
@@ -526,8 +533,36 @@ class Game {
 			glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 			div.innerHTML = glyph;
 		}
-		this.wrong = [];
-	
+		this.wrong = [];	
+	}
+//maybe make the map size configurable
+	svgMap() {
+		var svg = "<svg align='center' width='240' height='240'>";
+		var prev = null;
+		for (var i=0; i< this.solution.length; i++) {
+			var cell = this.solution[i];
+			var x = (15 + cell.colNum*30);
+			var y = (15 + cell.rowNum*30);
+			svg +=  "<circle cx='" + x + "' cy='" + y +"'";
+			svg += " r='3' stroke='black' stroke-width='1' fill='grey' />";
+			if (i === 0){
+				svg +=  "<circle cx='" + x + "' cy='" + y +"'";
+				svg += " r='6' stroke='black' stroke-width='1' fill='none' />";			
+			} else if (i === this.solution.length - 1) {
+				svg +=  "<circle cx='" + x + "' cy='" + y +"'";
+				svg += " r='5' stroke='black' stroke-width='1' fill='black' />";					
+			}
+			if (prev !== null) {
+				var px = (15 + prev.colNum*30);
+				var py = (15 + prev.rowNum*30);
+				svg += " <line x1='" + px +"' y1='"+py + "' x2='" + x + "' y2='" + y +"'"; 
+				svg += " stroke='black' stroke-width='2'/>";
+			}
+			prev = cell;
+		}
+
+		svg += "</svg>";
+		return svg;
 	}
 };
 //the game instance

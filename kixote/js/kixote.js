@@ -515,7 +515,7 @@ class Game {
 	colourSolution() {
 			for (var i = 0; i < this.solution.length; i ++){
 				var div = this.getDiv(this.solution[i].rowNum, this.solution[i].colNum);
-				div.css("background","#ebebe0");
+				div.css("background","#ccccb3");
 			}
 			var lastIndex = this.solution.length -1;
 			if (lastIndex >= 0) {
@@ -536,8 +536,26 @@ class Game {
 		this.wrong = [];	
 	}
 //maybe make the map size configurable
+// also, make it additive, instead of redrawing each time
 	svgMap() {
 		var svg = "<svg align='center' width='240' height='240'>";
+		//first the board
+		for (var i = 0; i < 8; i++) {
+			for (var j = 0; j < 8; j ++) {
+				var x = i*30;
+				var y = j*30;
+				if (i%2==0 && j%2==0){
+					svg += "<rect x='" +x + "' y='" + y +"'";
+					svg += "width='30' height='30' fill='#ccccb3' />";
+				}
+				if (i%2!=0 && j%2!=0){
+					svg += "<rect x='" +x + "' y='" + y +"'";
+					svg += "width='30' height='30' fill='#ccccb3' />";
+				}
+			}
+		}
+
+		//now the path
 		var prev = null;
 		for (var i=0; i< this.solution.length; i++) {
 			var cell = this.solution[i];

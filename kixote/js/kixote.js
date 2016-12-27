@@ -515,7 +515,7 @@ class Game {
 	colourSolution() {
 			for (var i = 0; i < this.solution.length; i ++){
 				var div = this.getDiv(this.solution[i].rowNum, this.solution[i].colNum);
-				div.css("background","#ccccb3");
+				div.css("background","#e0e0d1");
 			}
 			var lastIndex = this.solution.length -1;
 			if (lastIndex >= 0) {
@@ -535,8 +535,8 @@ class Game {
 		}
 		this.wrong = [];	
 	}
-//maybe make the map size configurable
-// also, make it additive, instead of redrawing each time
+	//maybe make the map size configurable
+	// also, make it additive, instead of redrawing each time
 	svgMap() {
 		var svg = "<svg align='center' width='240' height='240'>";
 		//first the board
@@ -554,9 +554,21 @@ class Game {
 				}
 			}
 		}
-
 		//now the path
 		var prev = null;
+		for (var i=0; i< this.solution.length; i++) {
+			var cell = this.solution[i];
+			var x = (15 + cell.colNum*30);
+			var y = (15 + cell.rowNum*30);
+			if (prev !== null) {
+				var px = (15 + prev.colNum*30);
+				var py = (15 + prev.rowNum*30);
+				svg += " <line x1='" + px +"' y1='"+py + "' x2='" + x + "' y2='" + y +"'"; 
+				svg += " stroke='black' stroke-width='2'/>";
+			}
+			prev = cell;
+		}
+		//finally, the dots
 		for (var i=0; i< this.solution.length; i++) {
 			var cell = this.solution[i];
 			var x = (15 + cell.colNum*30);
@@ -569,16 +581,8 @@ class Game {
 			} else if (i === this.solution.length - 1) {
 				svg +=  "<circle cx='" + x + "' cy='" + y +"'";
 				svg += " r='5' stroke='black' stroke-width='1' fill='black' />";					
-			}
-			if (prev !== null) {
-				var px = (15 + prev.colNum*30);
-				var py = (15 + prev.rowNum*30);
-				svg += " <line x1='" + px +"' y1='"+py + "' x2='" + x + "' y2='" + y +"'"; 
-				svg += " stroke='black' stroke-width='2'/>";
-			}
-			prev = cell;
+			}			
 		}
-
 		svg += "</svg>";
 		return svg;
 	}

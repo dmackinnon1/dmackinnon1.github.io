@@ -56,6 +56,17 @@ $(document).ready(function(){
 	});	
 });
 
+$(document).ready(function(){
+	$(".checkbox").on('click',function(e){
+		var fancy = $('#fancyCheck:checked').val();
+		console.log("checkbox clicked: " + fancy);
+		if (fancy == 'yes') {
+			quiltic.toggleFancy(true);
+		} else {
+			quiltic.toggleFancy(false);
+		}
+	});
+});
 
 </script>
 
@@ -106,6 +117,11 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
   <button type="button" class="btn btn-primary" id="resetButton" >Reset</button>
   <button type="button" class="btn btn-primary" id="randomizeButton" onclick="randomizeClicked">Randomize</button>
 </div>
+<form>
+    <div class="checkbox">
+      <label><input id="fancyCheck" type="checkbox" value="yes">use decorated tiles</label>
+    </div>
+   </form>
 <hr>
 <div id='tileDisplay'> </div>
 <hr>

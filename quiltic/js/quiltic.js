@@ -6,6 +6,7 @@ quiltic.sizeFactor = 10;
 quiltic.strokeWidth = 3;
 quiltic.color = "grey";
 quiltic.crossings = 0;
+quiltic.useFancy = false;
 
 quiltic.fireEvent = function() {
 
@@ -19,6 +20,19 @@ quiltic.addCallback = function (callback) {
 }
 
 quiltic.tile = function(t,l,b,r) {
+	if (quiltic.useFancy) {
+		return quiltic.fancy(t,l,b,r);
+	}
+	return quiltic.plain(t,l,b,r);
+}
+
+quiltic.toggleFancy = function(toggle) {
+	quiltic.useFancy = toggle;
+	quiltic.display = htmlTable(quiltic.board);
+	quiltic.fireEvent();
+}
+
+quiltic.plain = function(t,l,b,r) {
 	var img = "<svg align='center' width='" + (quiltic.sizeFactor*4) + "' height='" + (quiltic.sizeFactor*4) +"'>";
 	//corners
 	img += quiltic.poly([quiltic.point(0,0), quiltic.point(1,0), quiltic.point(0,1)]);
@@ -51,6 +65,69 @@ quiltic.tile = function(t,l,b,r) {
 	img += "</svg>";
 	return img;
 };
+
+quiltic.fancy = function(t,l,b,r) {
+	var img = "<svg align='center' width='" + (quiltic.sizeFactor*4) + "' height='" + (quiltic.sizeFactor*4) +"'>";
+	
+	//handle blank
+	if(!t&&!l&&!r&&!b) { 
+		img += quiltic.poly([quiltic.point(0,0), quiltic.point(4,0), quiltic.point(4,4), quiltic.point(0,4)]);
+		img += "</svg>";
+		return img;	
+	}
+
+	//corners
+	if (t||l||!r||!b) {
+		img += quiltic.poly([quiltic.point(0,0), quiltic.point(1,0), quiltic.point(0,1)]);	
+	} else {
+		img += quiltic.line(quiltic.lpoints(0,0,1,0));
+		img += quiltic.line(quiltic.lpoints(0,0,0,1));
+	}
+	if (t||!l||r||!b) {	
+		img += quiltic.poly([quiltic.point(3,0), quiltic.point(4,0), quiltic.point(4,1)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(3,0,4,0));
+		img += quiltic.line(quiltic.lpoints(4,0,4,1));
+	}		
+	if (!t||l||!r||b) {	
+		img += quiltic.poly([quiltic.point(0,3), quiltic.point(0,4), quiltic.point(1,4)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(0,3,0,4));
+		img += quiltic.line(quiltic.lpoints(0,4,1,4));
+	}
+	if (!t||!l||r||b) {	
+		img += quiltic.poly([quiltic.point(4,3), quiltic.point(3,4), quiltic.point(4,4)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(4,3,4,4));
+		img += quiltic.line(quiltic.lpoints(3,4,4,4));
+	}
+	//center
+	img += quiltic.poly([quiltic.point(1,2), quiltic.point(2,1), quiltic.point(3,2), quiltic.point(2,3)]);
+	//open and closed paths
+	if(l) {	
+		img += quiltic.line(quiltic.lpoints(0,1,1,2));
+	} else {
+		img += quiltic.line(quiltic.lpoints(0,1,0,3));
+	}
+	if(t) {	
+		img += quiltic.line(quiltic.lpoints(2,1,3,0));
+	} else {
+		img += quiltic.line(quiltic.lpoints(1,0,3,0));
+	}
+	if(r) {	
+		img += quiltic.line(quiltic.lpoints(3,2,4,3));
+	} else {
+		img += quiltic.line(quiltic.lpoints(4,1,4,3));
+	}
+	if(b) {	
+		img += quiltic.line(quiltic.lpoints(1,4,2,3));
+	} else {
+		img += quiltic.line(quiltic.lpoints(1,4,3,4));
+	}
+	img += "</svg>";
+	return img;
+};
+
 
 //helpers for tile
 quiltic.point = function(x, y) {

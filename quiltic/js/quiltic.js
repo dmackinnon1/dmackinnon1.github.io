@@ -177,11 +177,33 @@ class QuilticBoard {
 		}
 	}
 
+	randomizeTile() {
+		var r = randomInt(this.rows);
+		var c = randomInt(this.cols);
+		var cell = 	this.tiles[r][c];
+		cell.t = randomInt(2);
+		cell.b = randomInt(2);
+		cell.r = randomInt(2);
+		cell.l = randomInt(2);
+		cell.enforceBorders();
+		cell.updateNeighbors();
+	}
+
 };
 
-//board instance
-quiltic.board = new QuilticBoard(7,5);
-quiltic.board.init();
+quiltic.randomize = function () {
+	for (var i = 0; i < 5; i++) { //replace magic number
+		quiltic.board.randomizeTile();
+	}
+	quiltic.display = htmlTable(quiltic.board);
+};
+
+quiltic.setup = function(rows, cols){
+	quiltic.board = new QuilticBoard(rows,cols);
+	quiltic.board.init();
+	quiltic.display = htmlTable(quiltic.board);
+
+};
 
 //board display
 function htmlTable(quilticBoard) {
@@ -192,7 +214,6 @@ function htmlTable(quilticBoard) {
 			html += "<td><div id='cell" + i +""+ j +"' class='quilticCell' onclick='cellClick(event)'";
 			html += " data-row='"+ i + "' data-col='" + j + "'>";
 			var tile = quilticBoard.tiles[i][j];
-
 			html +=  quiltic.tile(tile.t,tile.l,tile.b,tile.r);
 			html += "</div></td>";
 		}
@@ -200,6 +221,12 @@ function htmlTable(quilticBoard) {
 	}
 	html += "</table>";
 	return html;	
+};
+
+
+function randomInt(lessThan){
+	var selection = Math.floor(Math.random()*(lessThan));
+	return selection;
 };
 
 function cellClick(event) {
@@ -213,8 +240,5 @@ function cellClick(event) {
 	quiltic.display = htmlTable(quiltic.board);
 	$("#tileDisplay").html(quiltic.display);
 };
-
-quiltic.display = htmlTable(quiltic.board);
-
 
 

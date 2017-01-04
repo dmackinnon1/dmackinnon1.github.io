@@ -27,8 +27,34 @@ svg {
 
 $(document).ready(function(){
 	console.log("initialization called");
+		quiltic.setup(7,5);
     	$("#tileDisplay").html(quiltic.display);
 });
+
+function resetClicked(event) {
+	console.log("reset called");
+		quiltic.setup(7,5);
+    	$("#tileDisplay").html(quiltic.display);
+};
+
+function randomizeClicked(event) {
+	console.log("randomize called");
+		quiltic.randomize();
+    	$("#tileDisplay").html(quiltic.display);
+};
+
+$(document).ready(function(){
+    $("#resetButton").on("click", function(event){
+		resetClicked(event);
+	});	
+});
+
+$(document).ready(function(){
+    $("#randomizeButton").on("click", function(event){
+		randomizeClicked(event);
+	});	
+});
+
 
 </script>
 
@@ -75,8 +101,11 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
 <br>
 </div>
 <hr>
-
-
+<div class="btn-group">
+  <button type="button" class="btn btn-primary" id="resetButton" >Reset</button>
+  <button type="button" class="btn btn-primary" id="randomizeButton" onclick="randomizeClicked">Randomize</button>
+</div>
+<hr>
 <div id='tileDisplay'> </div>
 <hr>
 

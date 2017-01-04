@@ -1,10 +1,22 @@
 // classes and functions for generating celtic knot/plait patterns using tiles.
 
 var quiltic = {};
-
+quiltic.callbacks = [];
 quiltic.sizeFactor = 10;
 quiltic.strokeWidth = 3;
 quiltic.color = "grey";
+quiltic.crossings = 0;
+
+quiltic.fireEvent = function() {
+
+	for(var i=0; i< quiltic.callbacks.length; i++) {
+		quiltic.callbacks[i]();
+	}
+};
+
+quiltic.addCallback = function (callback) {
+	quiltic.callbacks.push(callback);
+}
 
 quiltic.tile = function(t,l,b,r) {
 	var img = "<svg align='center' width='" + (quiltic.sizeFactor*4) + "' height='" + (quiltic.sizeFactor*4) +"'>";
@@ -160,6 +172,7 @@ class QuilticBoard {
 		this.rows = rows;
 		this.cols = cols;
 		this.tiles = [];
+		this.crossings = 0;
 	}
 
 	init() {
@@ -175,6 +188,7 @@ class QuilticBoard {
 				this.tiles[i][j].enforceBorders();
 			}
 		}
+		this.countCrossings();
 	}
 
 	randomizeTile() {
@@ -189,20 +203,34 @@ class QuilticBoard {
 		cell.updateNeighbors();
 	}
 
+	countCrossings() {
+		var cross = 0;
+		for (var i = 0; i < this.rows; i ++) {
+			for (var j = 0; j < this.cols; j++) {
+				cross += this.tiles[i][j].b + this.tiles[i][j].r;
+			}
+		}
+		this.crossings = cross;
+	}
+
 };
 
 quiltic.randomize = function () {
 	for (var i = 0; i < 5; i++) { //replace magic number
 		quiltic.board.randomizeTile();
 	}
+	quiltic.board.countCrossings();
+	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
+	quiltic.fireEvent();
 };
 
 quiltic.setup = function(rows, cols){
 	quiltic.board = new QuilticBoard(rows,cols);
 	quiltic.board.init();
+	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
-
+	quiltic.fireEvent();
 };
 
 //board display
@@ -237,8 +265,11 @@ function cellClick(event) {
 	quiltic.board.tiles[i][j].rotate();
 	quiltic.board.tiles[i][j].enforceBorders();
 	quiltic.board.tiles[i][j].updateNeighbors();
+	quiltic.board.countCrossings();
+	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
-	$("#tileDisplay").html(quiltic.display);
+	quiltic.fireEvent();
+	
 };
 
 

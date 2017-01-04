@@ -26,21 +26,22 @@ svg {
 <script>
 
 $(document).ready(function(){
-	console.log("initialization called");
-		quiltic.setup(7,5);
-    	$("#tileDisplay").html(quiltic.display);
+	quiltic.addCallback( function handleUpdate() {
+		$("#tileDisplay").html(quiltic.display);
+		$("#crossingDisplay").html("<h3> crossings: " + quiltic.crossings + "</h3>");
+	});
+	resetClicked();
 });
+
 
 function resetClicked(event) {
 	console.log("reset called");
 		quiltic.setup(7,5);
-    	$("#tileDisplay").html(quiltic.display);
 };
 
 function randomizeClicked(event) {
 	console.log("randomize called");
 		quiltic.randomize();
-    	$("#tileDisplay").html(quiltic.display);
 };
 
 $(document).ready(function(){
@@ -108,7 +109,8 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
 <hr>
 <div id='tileDisplay'> </div>
 <hr>
-
+<div id='crossingDisplay' align='center'> </div>
+<hr>
 
 </div>
 <div class='col-sm-1'>

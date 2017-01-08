@@ -2,11 +2,11 @@
 
 var quiltic = {};
 quiltic.callbacks = [];
-quiltic.sizeFactor = 10;
+quiltic.sizeFactor = 5;
 quiltic.strokeWidth = 3;
 quiltic.color = "grey";
 quiltic.crossings = 0;
-quiltic.useFancy = false;
+quiltic.tileSet = "set 1";
 
 quiltic.fireEvent = function() {
 
@@ -20,114 +20,237 @@ quiltic.addCallback = function (callback) {
 }
 
 quiltic.tile = function(t,l,b,r) {
-	if (quiltic.useFancy) {
-		return quiltic.fancy(t,l,b,r);
+	if (quiltic.tileSet === "set 1") {
+		return quiltic.set1(t,l,b,r);
 	}
-	return quiltic.plain(t,l,b,r);
+	if (quiltic.tileSet === "set 2"){
+		return quiltic.set2(t,l,b,r);
+	}
+	return quiltic.set3(t,l,b,r);
+	
 }
 
-quiltic.toggleFancy = function(toggle) {
-	quiltic.useFancy = toggle;
+quiltic.toggleTileSet = function(toggle) {
+	quiltic.tileSet = toggle;
 	quiltic.display = htmlTable(quiltic.board);
 	quiltic.fireEvent();
 }
 
-quiltic.plain = function(t,l,b,r) {
-	var img = "<svg align='center' width='" + (quiltic.sizeFactor*4) + "' height='" + (quiltic.sizeFactor*4) +"'>";
+quiltic.set1= function(t,l,b,r) {
+	var baseSize = 8;
+	var img = "<svg align='center' width='" + (quiltic.sizeFactor*baseSize) + "' height='" + (quiltic.sizeFactor*baseSize) +"'>";
 	//corners
-	img += quiltic.poly([quiltic.point(0,0), quiltic.point(1,0), quiltic.point(0,1)]);
-	img += quiltic.poly([quiltic.point(3,0), quiltic.point(4,0), quiltic.point(4,1)]);
-	img += quiltic.poly([quiltic.point(0,3), quiltic.point(0,4), quiltic.point(1,4)]);
-	img += quiltic.poly([quiltic.point(4,3), quiltic.point(3,4), quiltic.point(4,4)]);
+	img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);
+	img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
+	img += quiltic.poly([quiltic.point(0,6), quiltic.point(0,8), quiltic.point(2,8)]);
+	img += quiltic.poly([quiltic.point(8,6), quiltic.point(6,8), quiltic.point(8,8)]);
 	//center
-	img += quiltic.poly([quiltic.point(1,2), quiltic.point(2,1), quiltic.point(3,2), quiltic.point(2,3)]);
+	img += quiltic.poly([quiltic.point(2,4), quiltic.point(4,2), quiltic.point(6,4), quiltic.point(4,6)]);
 	//open and closed paths
 	if(l) {	
-		img += quiltic.line(quiltic.lpoints(0,1,1,2));
+		img += quiltic.line(quiltic.lpoints(0,2,2,4));
 	} else {
-		img += quiltic.line(quiltic.lpoints(0,1,0,3));
+		img += quiltic.line(quiltic.lpoints(0,2,0,6));
 	}
 	if(t) {	
-		img += quiltic.line(quiltic.lpoints(2,1,3,0));
+		img += quiltic.line(quiltic.lpoints(4,2,6,0));
 	} else {
-		img += quiltic.line(quiltic.lpoints(1,0,3,0));
+		img += quiltic.line(quiltic.lpoints(2,0,6,0));
 	}
 	if(r) {	
-		img += quiltic.line(quiltic.lpoints(3,2,4,3));
+		img += quiltic.line(quiltic.lpoints(6,4,8,6));
 	} else {
-		img += quiltic.line(quiltic.lpoints(4,1,4,3));
+		img += quiltic.line(quiltic.lpoints(8,2,8,6));
 	}
 	if(b) {	
-		img += quiltic.line(quiltic.lpoints(1,4,2,3));
+		img += quiltic.line(quiltic.lpoints(2,8,4,6));
 	} else {
-		img += quiltic.line(quiltic.lpoints(1,4,3,4));
+		img += quiltic.line(quiltic.lpoints(2,8,6,8));
 	}
 	img += "</svg>";
 	return img;
 };
 
-quiltic.fancy = function(t,l,b,r) {
-	var img = "<svg align='center' width='" + (quiltic.sizeFactor*4) + "' height='" + (quiltic.sizeFactor*4) +"'>";
+quiltic.set2 = function(t,l,b,r) {
+	var baseSize = 8;
+	var img = "<svg align='center' width='" + (quiltic.sizeFactor*baseSize) + "' height='" + (quiltic.sizeFactor*baseSize) +"'>";
 	
 	//handle blank
 	if(!t&&!l&&!r&&!b) { 
-		img += quiltic.poly([quiltic.point(0,0), quiltic.point(4,0), quiltic.point(4,4), quiltic.point(0,4)]);
+		img += quiltic.poly([quiltic.point(0,0), quiltic.point(8,0), quiltic.point(8,8), quiltic.point(0,8)]);
 		img += "</svg>";
 		return img;	
 	}
-
+	//corners
+	img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);
+	img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
+	img += quiltic.poly([quiltic.point(0,6), quiltic.point(0,8), quiltic.point(2,8)]);
+	img += quiltic.poly([quiltic.point(8,6), quiltic.point(6,8), quiltic.point(8,8)]);
+	
+	/*
 	//corners
 	if (t||l||!r||!b) {
-		img += quiltic.poly([quiltic.point(0,0), quiltic.point(1,0), quiltic.point(0,1)]);	
+		img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);	
 	} else {
-		img += quiltic.line(quiltic.lpoints(0,0,1,0));
-		img += quiltic.line(quiltic.lpoints(0,0,0,1));
+		img += quiltic.line(quiltic.lpoints(0,0,2,0));
+		img += quiltic.line(quiltic.lpoints(0,0,0,2));
 	}
 	if (t||!l||r||!b) {	
-		img += quiltic.poly([quiltic.point(3,0), quiltic.point(4,0), quiltic.point(4,1)]);
+		img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
 	} else {
-		img += quiltic.line(quiltic.lpoints(3,0,4,0));
-		img += quiltic.line(quiltic.lpoints(4,0,4,1));
+		img += quiltic.line(quiltic.lpoints(6,0,8,0));
+		img += quiltic.line(quiltic.lpoints(8,0,8,2));
 	}		
 	if (!t||l||!r||b) {	
-		img += quiltic.poly([quiltic.point(0,3), quiltic.point(0,4), quiltic.point(1,4)]);
+		img += quiltic.poly([quiltic.point(0,6), quiltic.point(0,8), quiltic.point(2,8)]);
 	} else {
-		img += quiltic.line(quiltic.lpoints(0,3,0,4));
-		img += quiltic.line(quiltic.lpoints(0,4,1,4));
+		img += quiltic.line(quiltic.lpoints(0,6,0,8));
+		img += quiltic.line(quiltic.lpoints(0,8,2,8));
 	}
 	if (!t||!l||r||b) {	
-		img += quiltic.poly([quiltic.point(4,3), quiltic.point(3,4), quiltic.point(4,4)]);
+		img += quiltic.poly([quiltic.point(8,6), quiltic.point(6,8), quiltic.point(8,8)]);
 	} else {
-		img += quiltic.line(quiltic.lpoints(4,3,4,4));
-		img += quiltic.line(quiltic.lpoints(3,4,4,4));
+		img += quiltic.line(quiltic.lpoints(8,6,8,8));
+		img += quiltic.line(quiltic.lpoints(6,8,8,8));
 	}
+	*/
+
+	//midlines
+	img +=  quiltic.fline(quiltic.lpoints(1,3,3,1));
+	img +=  quiltic.fline(quiltic.lpoints(5,1,7,3));
+	img +=  quiltic.fline(quiltic.lpoints(7,5,5,7));
+	img +=  quiltic.fline(quiltic.lpoints(1,5,3,7));
+
+
 	//center
-	img += quiltic.poly([quiltic.point(1,2), quiltic.point(2,1), quiltic.point(3,2), quiltic.point(2,3)]);
+	img += quiltic.poly([quiltic.point(2,4), quiltic.point(4,2), quiltic.point(6,4), quiltic.point(4,6)]);
+	
+	//img += quiltic.poly([quiltic.point(3,3), quiltic.point(5,3), quiltic.point(5,5), quiltic.point(3,5)]);
 	//open and closed paths
 	if(l) {	
-		img += quiltic.line(quiltic.lpoints(0,1,1,2));
+		img += quiltic.line(quiltic.lpoints(0,2,2,4));
+		img += quiltic.poly([quiltic.point(3,3), quiltic.point(2,4), quiltic.point(3,5)]);
+		//midline
+		img += quiltic.fline(quiltic.lpoints(1,5,0,4));
 	} else {
-		img += quiltic.line(quiltic.lpoints(0,1,0,3));
+		img += quiltic.line(quiltic.lpoints(0,2,0,6));		
+		img += quiltic.line(quiltic.lpoints(3,3,3,5));
+		//midline
+		img += quiltic.fline(quiltic.lpoints(1,5,1,3));
 	}
 	if(t) {	
-		img += quiltic.line(quiltic.lpoints(2,1,3,0));
+		img += quiltic.line(quiltic.lpoints(4,2,6,0));
+		img += quiltic.poly([quiltic.point(3,3), quiltic.point(4,2), quiltic.point(5,3)]);
+		//midline
+		img += quiltic.fline(quiltic.lpoints(3,1,4,0));		
 	} else {
-		img += quiltic.line(quiltic.lpoints(1,0,3,0));
+		img += quiltic.line(quiltic.lpoints(2,0,6,0));
+		img += quiltic.line(quiltic.lpoints(3,3,5,3));
+		//midline
+		img += quiltic.fline(quiltic.lpoints(3,1,5,1));		
 	}
 	if(r) {	
-		img += quiltic.line(quiltic.lpoints(3,2,4,3));
+		img += quiltic.line(quiltic.lpoints(6,4,8,6));
+		img += quiltic.poly([quiltic.point(5,3), quiltic.point(6,4), quiltic.point(5,5)]);	
+		//midline
+		img += quiltic.fline(quiltic.lpoints(7,3,8,4));			
 	} else {
-		img += quiltic.line(quiltic.lpoints(4,1,4,3));
+		img += quiltic.line(quiltic.lpoints(8,2,8,6));
+		img += quiltic.line(quiltic.lpoints(5,3,5,5));
+		//midline
+		img += quiltic.fline(quiltic.lpoints(7,3,7,5));		
 	}
+
 	if(b) {	
-		img += quiltic.line(quiltic.lpoints(1,4,2,3));
+		img += quiltic.line(quiltic.lpoints(2,8,4,6));
+		img += quiltic.poly([quiltic.point(3,5), quiltic.point(4,6), quiltic.point(5,5)]);
+		//midline
+		img += quiltic.fline(quiltic.lpoints(5,7,4,8));
 	} else {
-		img += quiltic.line(quiltic.lpoints(1,4,3,4));
+		img += quiltic.line(quiltic.lpoints(2,8,6,8));
+		img += quiltic.line(quiltic.lpoints(3,5,5,5));
+		//midline
+		img += quiltic.fline(quiltic.lpoints(5,7,3,7));			
 	}
 	img += "</svg>";
 	return img;
 };
 
+quiltic.set3 = function(t,l,b,r) {
+	var baseSize = 8;
+	var img = "<svg align='center' width='" + (quiltic.sizeFactor*baseSize) + "' height='" + (quiltic.sizeFactor*baseSize) +"'>";
+	
+	//handle blank
+	if(!t&&!l&&!r&&!b) { 
+		img += quiltic.poly([quiltic.point(0,0), quiltic.point(8,0), quiltic.point(8,8), quiltic.point(0,8)]);
+		img += "</svg>";
+		return img;	
+	}
+	
+	
+	//corners
+	if (t||l||!r||!b) {
+		img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);	
+	} else {
+		img += quiltic.line(quiltic.lpoints(0,0,2,0));
+		img += quiltic.line(quiltic.lpoints(0,0,0,2));
+	}
+	if (t||!l||r||!b) {	
+		img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(6,0,8,0));
+		img += quiltic.line(quiltic.lpoints(8,0,8,2));
+	}		
+	if (!t||l||!r||b) {	
+		img += quiltic.poly([quiltic.point(0,6), quiltic.point(0,8), quiltic.point(2,8)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(0,6,0,8));
+		img += quiltic.line(quiltic.lpoints(0,8,2,8));
+	}
+	if (!t||!l||r||b) {	
+		img += quiltic.poly([quiltic.point(8,6), quiltic.point(6,8), quiltic.point(8,8)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(8,6,8,8));
+		img += quiltic.line(quiltic.lpoints(6,8,8,8));
+	}
+	
+
+	//center
+	img += quiltic.poly([quiltic.point(2,4), quiltic.point(4,2), quiltic.point(6,4), quiltic.point(4,6)]);
+	
+	//img += quiltic.poly([quiltic.point(3,3), quiltic.point(5,3), quiltic.point(5,5), quiltic.point(3,5)]);
+	//open and closed paths
+	if(l) {	
+		img += quiltic.line(quiltic.lpoints(0,2,2,4));
+		img += quiltic.poly([quiltic.point(3,3), quiltic.point(2,4), quiltic.point(3,5)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(0,2,0,6));		
+		img += quiltic.line(quiltic.lpoints(3,3,3,5));
+	}
+	if(t) {	
+		img += quiltic.line(quiltic.lpoints(4,2,6,0));
+		img += quiltic.poly([quiltic.point(3,3), quiltic.point(4,2), quiltic.point(5,3)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(2,0,6,0));
+		img += quiltic.line(quiltic.lpoints(3,3,5,3));
+	}
+	if(r) {	
+		img += quiltic.line(quiltic.lpoints(6,4,8,6));
+		img += quiltic.poly([quiltic.point(5,3), quiltic.point(6,4), quiltic.point(5,5)]);	
+	} else {
+		img += quiltic.line(quiltic.lpoints(8,2,8,6));
+		img += quiltic.line(quiltic.lpoints(5,3,5,5));
+	}
+	if(b) {	
+		img += quiltic.line(quiltic.lpoints(2,8,4,6));
+		img += quiltic.poly([quiltic.point(3,5), quiltic.point(4,6), quiltic.point(5,5)]);
+	} else {
+		img += quiltic.line(quiltic.lpoints(2,8,6,8));
+		img += quiltic.line(quiltic.lpoints(3,5,5,5));
+	}
+	img += "</svg>";
+	return img;
+};
 
 //helpers for tile
 quiltic.point = function(x, y) {
@@ -152,7 +275,13 @@ quiltic.poly = function(list) {
 
 quiltic.line = function(points) {
 	var line = "<line " + points;
-	line += " stroke-width='"+ quiltic.strokeWidth + "' stroke='"+ quiltic.color +"'/>";
+	line += " stroke-width='"+ quiltic.strokeWidth + "' stroke='"+ quiltic.color +"' stroke-linecap='round'/>";
+	return line;	
+};
+//fine line
+quiltic.fline = function(points) {
+	var line = "<line " + points;
+	line += " stroke-width='"+ (0.5*quiltic.strokeWidth) + "' stroke='"+ quiltic.color +"' stroke-linecap='round'/>";
 	return line;	
 };
 

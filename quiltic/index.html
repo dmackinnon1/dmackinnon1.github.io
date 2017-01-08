@@ -57,14 +57,10 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-	$(".checkbox").on('click',function(e){
-		var fancy = $('#fancyCheck:checked').val();
-		console.log("checkbox clicked: " + fancy);
-		if (fancy == 'yes') {
-			quiltic.toggleFancy(true);
-		} else {
-			quiltic.toggleFancy(false);
-		}
+	$("form input:radio").on('click',function(e){
+		var tile_set = $('input[name=tiles]:checked').val();
+		console.log("checkbox clicked: " + tile_set);
+		quiltic.toggleTileSet(tile_set);		
 	});
 });
 
@@ -117,11 +113,18 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
   <button type="button" class="btn btn-primary" id="resetButton" >Reset</button>
   <button type="button" class="btn btn-primary" id="randomizeButton" onclick="randomizeClicked">Randomize</button>
 </div>
-<form>
-    <div class="checkbox">
-      <label><input id="fancyCheck" type="checkbox" value="yes">use decorated tiles</label>
-    </div>
-   </form>
+<br>
+ <form>
+  <label class="radio-inline">
+  <input type="radio" name="tiles" value="set 1" checked> set 1<br>
+  </label>
+  <lable class="radio-inline">
+  <input type="radio" class="radio-inline" name="tiles" value="set 2"> set 2<br>
+  </lable>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="tiles" value="set 3"> set 3 <br>
+  </label>
+</form>
 <hr>
 <div id='tileDisplay'> </div>
 <hr>

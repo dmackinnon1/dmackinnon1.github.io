@@ -21,10 +21,17 @@ svg {
 	margin: auto ;
 	border: 0px solid black;
 }
+.buttonDiv {
+	background-color:  #ccccff;
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+
 </style>
 <script src="js/quiltic.js"></script>
 <script>
-
+var currentSize = "sm";
 $(document).ready(function(){
 	quiltic.addCallback( function handleUpdate() {
 		$("#tileDisplay").html(quiltic.display);
@@ -36,7 +43,13 @@ $(document).ready(function(){
 
 function resetClicked(event) {
 	console.log("reset called");
-		quiltic.setup(7,5);
+		if(currentSize === "sm") {
+			quiltic.setup(7,5);
+		} else if (currentSize === "md"){
+			quiltic.setup(8,10);
+		} else {
+			quiltic.setup(8,15);
+		}
 };
 
 function randomizeClicked(event) {
@@ -59,7 +72,12 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$("form input:radio").on('click',function(e){
 		var tile_set = $('input[name=tiles]:checked').val();
-		console.log("checkbox clicked: " + tile_set);
+		var newSize = $('input[name=size]:checked').val();
+		if (currentSize != newSize) {
+			currentSize = newSize;
+			return resetClicked(event);
+		}
+		//else assume tileSet toggle
 		quiltic.toggleTileSet(tile_set);		
 	});
 });
@@ -109,11 +127,28 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
 <br>
 </div>
 <hr>
+<div class="buttonDiv">
+<form>
+  <label class="radio-inline">
+  <input type="radio" name="size" value="sm" checked> small<br>
+  </label>
+  <lable class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="md"> medium<br>
+  </lable>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="large"> large<br>
+  </label>
+</form>
+</div>
+<br>
+<br>
 <div class="btn-group">
   <button type="button" class="btn btn-primary" id="resetButton" >Reset</button>
   <button type="button" class="btn btn-primary" id="randomizeButton" onclick="randomizeClicked">Randomize</button>
 </div>
 <br>
+<br>
+<div class="buttonDiv">
  <form>
   <label class="radio-inline">
   <input type="radio" name="tiles" value="set 1" checked> set 1<br>
@@ -125,6 +160,7 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
   <input type="radio" class="radio-inline" name="tiles" value="set 3"> set 3 <br>
   </label>
 </form>
+</div>
 <hr>
 <div id='tileDisplay'> </div>
 <hr>

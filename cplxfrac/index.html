@@ -38,7 +38,7 @@ function drawPoints() {
 		//console.log("cpoint: " + cpoint + ": " + value);
 		ctx.fillStyle = colorChooser(value);
 		//ctx.fillStyle = colorChooser(i);	
-		ctx.fillRect(200 + zoom*cpoint.xvalue, 150 + zoom*cpoint.yvalue, 0.5, 0.5);	
+		ctx.fillRect(150 + zoom*cpoint.xvalue, 150 + zoom*cpoint.yvalue, 0.5, 0.5);	
 	}
 };
 $(document).ready(function() {
@@ -80,9 +80,19 @@ $(document).ready(function(){
 });
 
 </script>
-
 <body>
-
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="..">
+        <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+      </a>
+	<p class="navbar-text navbar-right">
+	</p>
+	</div>
+	</div>
+      </div>
+</nav>
 <div class="container-fluid">
 <div class='row'>
 <div class='col-sm-1'>
@@ -92,7 +102,7 @@ $(document).ready(function(){
 	<h1>Cplxfrac <small>Some Mandelbrot and Julia Set Fractals</small></h1>
 </div> 	
 
-<canvas id="canvas" width="400" height="300" align="center" style="border:1px solid #000000;">
+<canvas id="canvas" width="300" height="300" align="center" style="border:1px solid #000000;">
 </canvas>
 <br>
 
@@ -127,6 +137,8 @@ Iteration depth: <input type="range" id="depth" min="2" max="50" step="2" value=
 <form>
 zoom: <input type="range" id="zoom" min="80" max="200" step="10" value="80"></input>
 </form>
+<hr>
+<br>
 
 
 </div>

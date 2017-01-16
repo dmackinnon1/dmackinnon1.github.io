@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+.buttonDiv {
+	background-color:  #ccccff;
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+.sliderDiv {
+	display: inline-block;	
+}
+
+</style>
+
+<script src="js/cplxfrac.js"> </script>
+
+<script>
+
+var selectedMap = cplxfrac.mandelbrotMap;
+var depth = 4;
+var zoom = 80;
+function drawPoints() {
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	for (var i = 0; i < 10000; i ++) {
+		var cpoint = randomCPNoscale();
+		//var value = mandelbrotMap.evaluate(cpoint,20);// <- make iteration levels a slider, boundary part of function def
+		var value = selectedMap.evaluate(cpoint, depth);
+		//console.log("cpoint: " + cpoint + ": " + value);
+		ctx.fillStyle = colorChooser(value);
+		//ctx.fillStyle = colorChooser(i);	
+		ctx.fillRect(200 + zoom*cpoint.xvalue, 150 + zoom*cpoint.yvalue, 0.5, 0.5);	
+	}
+};
+$(document).ready(function() {
+	var timedDraw = setInterval(drawPoints, 5);
+});
+
+$(document).ready(function(){
+	$("form input:radio").on('click',function(e){
+		var option = $('input[name=options]:checked').val();
+		console.log("radio clicked: " + option);
+		if (option === "mandelbrot") {
+			selectedMap = cplxfrac.mandelbrotMap;
+		} else if (option === "julia1") {
+			selectedMap = cplxfrac.juliaMap1;
+		} else if (option === "julia2") {
+			selectedMap = cplxfrac.juliaMap2;
+		} else if (option === "julia3") {
+			selectedMap = cplxfrac.juliaMap3;
+		} else if (option === "julia4") {
+			selectedMap = cplxfrac.juliaMap4;
+		}
+	});
+});
+
+$(document).ready(function(){
+	$("#depth").on('input change',function(e){
+		depth = e.currentTarget.value;
+		console.log("depth: " + depth);
+		
+	});
+});
+
+$(document).ready(function(){
+	$("#zoom").on('input change',function(e){
+		zoom = e.currentTarget.value;
+		console.log("zoom: " + zoom);
+		
+	});
+});
+
+</script>
+
+<body>
+
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+	<h1>Cplxfrac <small>Some Mandelbrot and Julia Set Fractals</small></h1>
+</div> 	
+
+<canvas id="canvas" width="400" height="300" align="center" style="border:1px solid #000000;">
+</canvas>
+<br>
+<div class="sliderDiv" width ="300">
+<form>
+Iteration depth: <input type="range" id="depth" min="2" max="50" step="2" value="4"></input>
+</form>
+</div>
+<div class="buttonDiv">
+<form>
+  <label class="radio-inline">
+  <input type="radio" name="options" value="mandelbrot" checked> mandelbrot <br>
+  </label>
+  <lable class="radio-inline">
+  <input type="radio" class="radio-inline" name="options" value="julia1"> julia 1 <br>
+  </lable>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="options" value="julia2"> julia 2<br>
+  </label>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="options" value="julia3"> julia 3<br>
+  </label>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="options" value="julia4"> julia 4<br>
+  </label>
+</form>
+</div>
+
+<br>
+<div class="sliderDiv" width ="300">
+<form>
+zoom: <input type="range" id="zoom" min="80" max="200" step="10" value="80"></input>
+</form>
+
+
+</div>
+<br>
+</div>
+<div class='col-sm-1'>
+</div>
+</div>
+</div>
+
+</body>
+</html>

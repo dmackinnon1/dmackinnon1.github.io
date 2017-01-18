@@ -42,12 +42,8 @@ function drawPoints() {
 	var ctx = canvas.getContext("2d");
 	for (var i = 0; i < 10000; i ++) {
 		var cpoint = randomCPNoscale();
-		//var value = mandelbrotMap.evaluate(cpoint,20);// <- make iteration levels a slider, boundary part of function def
 		var value = selectedMap.evaluate(cpoint, depth);
-		//console.log("cpoint: " + cpoint + ": " + value);
 		ctx.fillStyle = hslColorChooser(value);
-		//console.log("debug: " + hslColorChooser(value));
-		//ctx.fillStyle = colorChooser(i);	
 		var xShift;
 		var yShift;
 		if (currentSize == "sm") {
@@ -131,6 +127,7 @@ $(document).ready(function(){
         <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
       </a>
 	<p class="navbar-text navbar-right">
+	<a href=".." class="navbar-link">dmackinnon1.github.io</a>
 	</p>
 	</div>
 	</div>

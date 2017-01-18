@@ -11,7 +11,7 @@
 
 <body>
 
-<button id='testButton' onclick='roll10Dice(event)'>check for codap</button>
+<button id='testButton' onclick='roll10Dice(event)'>roll 100 pairs of dice</button>
 </body>
 
 
@@ -33,18 +33,19 @@ function randomRange(greaterThan, lessThan){
 
 
 var sampleNumber = 1;
-function roll10Dice() {
+function roll100Dice() {
 	if( !codapHelper.checkForCODAP()) return;
            
 	//generates child case
 	var doSample = function( iResult) {
 		var tID = iResult.caseID;
-              	var tHowMany = 10;
-                var addOneNumber = function() {
+              	var tHowMany = 100;
+                var rollDice = function() {
                     if( tHowMany > 0) {
-                        var tRandom = randomRange(1,6);
+                        var die1 = randomRange(0,6);
+			var die2 = randomRange(0,6);
                         // Tell CODAP to create a case in the child collection
-                        codapHelper.createCase('numbers', tRandom, tID, addOneNumber);
+                        codapHelper.createCase('dice', die1, die2, tID, rollDice);
                         tHowMany--;
                     } else codapHelper.closeCase('samples', null, tID);
 		};
@@ -65,13 +66,13 @@ codapHelper.initSim({
                 childAttrName: "sample"
             },
             {
-                name: 'numbers',
+                name: 'dice',
                 labels: {
-                    pluralCase: "numbers",
+                    pluralCase: "dice",
                     setOfCasesWithArticle: "a sample"
                 },
                 // The child collection also has just one attribute
-                attrs: [{name: "number", type: 'numeric', precision: 1}]
+                attrs: [{name: "die1", type: 'numeric', precision: 1},{name: "die2", type: 'numeric', precision: 1}]
             }
         ]
     });

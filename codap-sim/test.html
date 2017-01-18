@@ -49,7 +49,7 @@ function roll100Dice() {
                         tHowMany--;
                     } else codapHelper.closeCase('samples', null, tID);
 		};
-		addOneNumber(); //calls the child generator
+		rollDice(); //calls the child generator
 	}
 	codapHelper.openCase( 'samples', sampleNumber, doSample);
 	sampleNumber ++;

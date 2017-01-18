@@ -90,9 +90,8 @@ class Map {
 		return this.iterator(this.arrow, x, limit, this.initial, this.bound);
 	}	
 };
-/*
- * TODO: come up with a better method.
- */ 
+
+//old color chooser - no longer referenced 
 function colorChooser(level) {
 	var colors = ['#ffffff','#f2f2f2','#e6e6e6','#d9d9d9','#cccccc','#bfbfbf','#b3b3b3','#a6a6a6','#999999',
 	'#8c8c8c','#808080','#737373','#666666','#595959','#4d4d4d','#404040','#333333','#262626','#1a1a1a','#0d0d0d','#000000'];
@@ -100,6 +99,11 @@ function colorChooser(level) {
 	return colors[clevel];
 }
 
+//new color chooser based on hsl.
+function hslColorChooser(level) {
+	var l = (100 - Math.floor(level * 100)) + "%";
+	return "hsl(250, 50%, " + l +")";
+}
 
 var mandelbrot = function(x,c) { return x.squared().sum(c); };
 
@@ -134,22 +138,28 @@ var juliaIterator = function(arrow, value, limit, bound, initial) {
 	return level/limit;
 };
 	
+/*
+* Providing different initial points creates different fractals.
+* All these fractals are based off the same mandelbrot equation x^2 + c;
+*/
 
 var zero = new CPoint(0,0);
 var one = new CPoint(1,0);
-var julia1 = new CPoint(0.122,0.735);
-var julia2 = new CPoint(-0.99,-0.34);
-var julia3 = new CPoint(-0.11,-0.89);
+var imag = new CPoint(0,1);
+var rabbitPoint = new CPoint(-0.123,-0.745); //rabbit
+var seiglePoint = new CPoint(-0.391,-0.587); //siegle disk
+var julia1 = new CPoint(-0.322,-0.619); //almost seahorse
 var julia4 = new CPoint(-0.21,-0.79);
 var julia5 = new CPoint(-0.299,-0.777);
 
 cplxfrac.mandelbrotMap = new Map(mandelbrot, mandelbrotIterator,2, zero);
-cplxfrac.juliaMap1 = new Map(mandelbrot, juliaIterator, 2, julia2);
-cplxfrac.juliaMap2 = new Map(mandelbrot, juliaIterator, 2, julia5);
-cplxfrac.juliaMap3 = new Map(mandelbrot, juliaIterator, 2, julia4);
-cplxfrac.juliaMap4 = new Map(mandelbrot, juliaIterator, 2, julia1);
+cplxfrac.dendrite = new Map(mandelbrot, juliaIterator, 2, imag);
+cplxfrac.rabbit = new Map(mandelbrot, juliaIterator, 2, rabbitPoint);
+cplxfrac.siegleDisk = new Map(mandelbrot, juliaIterator, 2, seiglePoint);
+cplxfrac.julia1 = new Map(mandelbrot, juliaIterator, 2, julia1);
+
 /**
-* utilities
+* utilities for random number generation
 */
 
 function randomRange(greaterThan, lessThan){

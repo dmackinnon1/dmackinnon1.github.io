@@ -26,8 +26,17 @@
 <script>
 
 var selectedMap = cplxfrac.mandelbrotMap;
-var depth = 4;
+var currentMap = selectedMap;
+var depth = 8;
 var zoom = 80;
+var currentSize = "sm";
+var smShiftx = 150;
+var smShifty = 150;
+var mdShiftx = 250;
+var mdShifty = 200;
+var lrgShiftx = 350;
+var lrgShifty = 250;
+
 function drawPoints() {
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
@@ -36,14 +45,39 @@ function drawPoints() {
 		//var value = mandelbrotMap.evaluate(cpoint,20);// <- make iteration levels a slider, boundary part of function def
 		var value = selectedMap.evaluate(cpoint, depth);
 		//console.log("cpoint: " + cpoint + ": " + value);
-		ctx.fillStyle = colorChooser(value);
+		ctx.fillStyle = hslColorChooser(value);
+		//console.log("debug: " + hslColorChooser(value));
 		//ctx.fillStyle = colorChooser(i);	
-		ctx.fillRect(150 + zoom*cpoint.xvalue, 150 + zoom*cpoint.yvalue, 0.5, 0.5);	
+		var xShift;
+		var yShift;
+		if (currentSize == "sm") {
+			xShift = smShiftx;
+			yShift = smShifty;
+		} else if (currentSize == "md")  {
+			xShift = mdShiftx;
+			yShift = mdShifty;
+		} else if (currentSize == "lrg") {
+			xShift = lrgShiftx;
+			yShift = lrgShifty;
+		}
+		ctx.fillRect(xShift + zoom*cpoint.xvalue, yShift + zoom*cpoint.yvalue, 0.2, 0.2);	
 	}
 };
+
+function resetCanvas() {
+	if (currentSize == "sm") {
+		$(".canvasDiv").html("<canvas id='canvas' width='300' height='300' align='center' style='border:1px solid #000000;'>");
+	} else if (currentSize == "md") {
+		$(".canvasDiv").html("<canvas id='canvas' width='500' height='400' align='center' style='border:1px solid #000000;'>");
+	} else if (currentSize == "lrg") {
+		$(".canvasDiv").html("<canvas id='canvas' width='700' height='500' align='center' style='border:1px solid #000000;'>");
+	}	
+}
+
 $(document).ready(function() {
-	var timedDraw = setInterval(drawPoints, 5);
+	var timedDraw = setInterval(drawPoints, 4);
 });
+
 
 $(document).ready(function(){
 	$("form input:radio").on('click',function(e){
@@ -51,14 +85,23 @@ $(document).ready(function(){
 		console.log("radio clicked: " + option);
 		if (option === "mandelbrot") {
 			selectedMap = cplxfrac.mandelbrotMap;
+		} else if (option === "dendrite") {
+			selectedMap = cplxfrac.dendrite;
+		} else if (option === "rabbit") {
+			selectedMap = cplxfrac.rabbit;
+		} else if (option === "siegleDisk") {
+			selectedMap = cplxfrac.siegleDisk;
 		} else if (option === "julia1") {
-			selectedMap = cplxfrac.juliaMap1;
-		} else if (option === "julia2") {
-			selectedMap = cplxfrac.juliaMap2;
-		} else if (option === "julia3") {
-			selectedMap = cplxfrac.juliaMap3;
-		} else if (option === "julia4") {
-			selectedMap = cplxfrac.juliaMap4;
+			selectedMap = cplxfrac.julia1;
+		}
+		if (selectedMap != currentMap) {
+			currentMap = selectedMap;
+			resetCanvas();
+		}
+		var newSize = $('input[name=size]:checked').val();
+		if (currentSize != newSize) {
+			currentSize = newSize;
+			resetCanvas();
 		}
 	});
 });
@@ -75,7 +118,7 @@ $(document).ready(function(){
 	$("#zoom").on('input change',function(e){
 		zoom = e.currentTarget.value;
 		console.log("zoom: " + zoom);
-		
+		resetCanvas();
 	});
 });
 
@@ -102,13 +145,30 @@ $(document).ready(function(){
 	<h1>Cplxfrac <small>Some Mandelbrot and Julia Set Fractals</small></h1>
 </div> 	
 
+<div class="buttonDiv">
+<form>
+  <label class="radio-inline">
+  <input type="radio" name="size" value="sm" checked> small<br>
+  </label>
+  <lable class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="md"> medium<br>
+  </lable>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="lrg"> large<br>
+  </label>
+</form>
+</div>
+<br>
+<hr>
+<div class="canvasDiv">
 <canvas id="canvas" width="300" height="300" align="center" style="border:1px solid #000000;">
 </canvas>
+</div>
 <br>
 
 <div class="sliderDiv" width ="300">
 <form>
-Iteration depth: <input type="range" id="depth" min="2" max="50" step="2" value="4"></input>
+Iteration depth: <input type="range" id="depth" min="2" max="100" step="2" value="8"></input> 
 </form>
 </div>
 <br>
@@ -118,16 +178,16 @@ Iteration depth: <input type="range" id="depth" min="2" max="50" step="2" value=
   <input type="radio" name="options" value="mandelbrot" checked> mandelbrot <br>
   </label>
   <lable class="radio-inline">
-  <input type="radio" class="radio-inline" name="options" value="julia1"> julia 1 <br>
+  <input type="radio" class="radio-inline" name="options" value="dendrite"> dendrite <br>
   </lable>
   <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="options" value="julia2"> julia 2<br>
+  <input type="radio" class="radio-inline" name="options" value="rabbit"> rabbit <br>
   </label>
   <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="options" value="julia3"> julia 3<br>
+  <input type="radio" class="radio-inline" name="options" value="siegleDisk"> siegle disk <br>
   </label>
   <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="options" value="julia4"> julia 4<br>
+  <input type="radio" class="radio-inline" name="options" value="julia1"> another julia<br>
   </label>
 </form>
 </div>

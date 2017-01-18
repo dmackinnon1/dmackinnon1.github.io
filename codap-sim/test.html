@@ -11,7 +11,7 @@
 
 <body>
 
-<button id='testButton' onclick='check(event)'>check for codap</button>
+<button id='testButton' onclick='roll10Dice(event)'>check for codap</button>
 </body>
 
 
@@ -21,6 +21,39 @@ function check(event) {
 	codapHelper.checkForCODAP();
 };
 
+function randomInt(lessThan){
+	var selection = Math.floor(Math.random()*(lessThan));
+	return selection;
+};
+
+function randomRange(greaterThan, lessThan){
+	var shifted = randomInt(lessThan - greaterThan);
+	return lessThan - shifted; 
+}
+
+
+var sampleNumber = 1;
+function roll10Dice() {
+	if( !codapHelper.checkForCODAP()) return;
+           
+	//generates child case
+	var doSample = function( iResult) {
+		var tID = iResult.caseID;
+              	var tHowMany = 10;
+                var addOneNumber = function() {
+                    if( tHowMany > 0) {
+                        var tRandom = randomRange(1,6);
+                        // Tell CODAP to create a case in the child collection
+                        codapHelper.createCase('numbers', tRandom, tID, addOneNumber);
+                        tHowMany--;
+                    } else codapHelper.closeCase('samples', null, tID);
+		};
+		addOneNumber(); //calls the child generator
+	}
+	codapHelper.openCase( 'samples', sampleNumber, doSample);
+	sampleNumber ++;
+};
+	
 codapHelper.initSim({
         name: 'Test',
         dimensions: {width: 300, height: 150},
@@ -42,7 +75,6 @@ codapHelper.initSim({
             }
         ]
     });
-
 </script>
 
 </html>

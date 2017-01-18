@@ -42,7 +42,7 @@ function drawPoints() {
 	var ctx = canvas.getContext("2d");
 	for (var i = 0; i < 10000; i ++) {
 		var cpoint = randomCPNoscale();
-		var value = selectedMap.evaluate(cpoint, depth);
+		var value = selectedMap.evaluate(cpoint, depth*5); //magnify scale
 		ctx.fillStyle = hslColorChooser(value);
 		var xShift;
 		var yShift;
@@ -56,7 +56,7 @@ function drawPoints() {
 			xShift = lrgShiftx;
 			yShift = lrgShifty;
 		}
-		ctx.fillRect(xShift + zoom*cpoint.xvalue, yShift + zoom*cpoint.yvalue, 0.2, 0.2);	
+		ctx.fillRect(xShift + zoom*cpoint.xvalue, yShift + zoom*cpoint.yvalue, 0.1, 0.1);	
 	}
 };
 
@@ -105,34 +105,32 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$("#depth").on('input change',function(e){
 		depth = e.currentTarget.value;
-		console.log("depth: " + depth);
-		
 	});
 });
 
 $(document).ready(function(){
 	$("#zoom").on('input change',function(e){
 		zoom = e.currentTarget.value;
-		console.log("zoom: " + zoom);
 		resetCanvas();
 	});
 });
 
 </script>
 <body>
+
 <nav class="navbar navbar-default" style="margin-bottom:0px">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="..">
-        <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
-      </a>
-	<p class="navbar-text navbar-right">
-	<a href=".." class="navbar-link">dmackinnon1.github.io</a>
-	</p>
-	</div>
-	</div>
-      </div>
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
 </nav>
+
 <div class="container-fluid">
 <div class='row'>
 <div class='col-sm-1'>

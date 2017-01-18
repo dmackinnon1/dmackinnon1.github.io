@@ -14,6 +14,28 @@ function check(event) {
 	codapHelper.checkForCODAP();
 };
 
+codapHelper.initSim({
+        name: 'Test',
+        dimensions: {width: 300, height: 150},
+        collections: [ 
+            {
+                name: 'samples',
+                // The parent collection has just one attribute
+                attrs: [ {name: "sample", type: 'categorical'}],
+                childAttrName: "sample"
+            },
+            {
+                name: 'numbers',
+                labels: {
+                    pluralCase: "numbers",
+                    setOfCasesWithArticle: "a sample"
+                },
+                // The child collection also has just one attribute
+                attrs: [{name: "number", type: 'numeric', precision: 1}]
+            }
+        ]
+    });
+
 </script>
 
 <body>

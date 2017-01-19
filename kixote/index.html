@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Kixote</title>
 </head>
 
 <style>
@@ -23,7 +24,8 @@ svg {
 
 </style>
 </head>
-<script src="js/bldrs.js"></script>
+<script src="js/evnts.js"></script> <!-- required for callback registration-->
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
 <script src="js/kixote.js"></script>
 <script>
 
@@ -37,11 +39,6 @@ function loadBoard() {
 	return htmlForBoard(game.getBoard());
 };
 
-$(document).ready(function(){
-	console.log("initialization called");
-    $("#boardDisplay").html(loadBoard());
-    game.startGame();
-});
 
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
@@ -50,6 +47,34 @@ $(document).ready(function(){
 		game.startGame();
 	});	
 });
+
+/*
+* The page registers callbacks to have its elements
+* refreshed when things change. These pull what they
+* require from the gameDisplay object.
+*/
+$(document).ready(function(){
+   
+    evnts.addCallback("refreshMap", function() {
+		$("#mapDisplay").html(gameDisplay.map);
+    });
+
+
+    evnts.addCallback("refreshStatus", function() {
+		$("#finish").html(gameDisplay.statusMessage);
+    });
+
+
+    evnts.addCallback("refreshSteps", function() {
+		$("#missteps").html(gameDisplay.missteps);
+    });
+    //after callbacks are registered, we start the game
+
+    $("#boardDisplay").html(loadBoard());
+    game.startGame();
+
+});
+
 
 </script>
 

@@ -1,23 +1,11 @@
 // classes and functions for generating celtic knot/plait patterns using tiles.
-
+// note: evnts.js is required for callback handling
 var quiltic = {};
-quiltic.callbacks = [];
 quiltic.sizeFactor = 5;
 quiltic.strokeWidth = 3;
 quiltic.color = "grey";
 quiltic.crossings = 0;
 quiltic.tileSet = "set 1";
-
-quiltic.fireEvent = function() {
-
-	for(var i=0; i< quiltic.callbacks.length; i++) {
-		quiltic.callbacks[i]();
-	}
-};
-
-quiltic.addCallback = function (callback) {
-	quiltic.callbacks.push(callback);
-}
 
 quiltic.tile = function(t,l,b,r) {
 	if (quiltic.tileSet === "set 1") {
@@ -33,7 +21,7 @@ quiltic.tile = function(t,l,b,r) {
 quiltic.toggleTileSet = function(toggle) {
 	quiltic.tileSet = toggle;
 	quiltic.display = htmlTable(quiltic.board);
-	quiltic.fireEvent();
+	evnts.fireEvent("refresh");
 }
 
 quiltic.set1= function(t,l,b,r) {
@@ -428,7 +416,7 @@ quiltic.randomize = function () {
 	quiltic.board.countCrossings();
 	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
-	quiltic.fireEvent();
+	evnts.fireEvent("refresh");
 };
 
 quiltic.setup = function(rows, cols){
@@ -436,7 +424,7 @@ quiltic.setup = function(rows, cols){
 	quiltic.board.init();
 	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
-	quiltic.fireEvent();
+	evnts.fireEvent("refresh");
 };
 
 //board display
@@ -474,7 +462,7 @@ function cellClick(event) {
 	quiltic.board.countCrossings();
 	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
-	quiltic.fireEvent();
+	evnts.fireEvent("refresh");
 	
 };
 

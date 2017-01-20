@@ -39,6 +39,7 @@ $(document).ready(function(){
 		$("#tileDisplay").html(quiltic.display);
 		$("#crossingDisplay").html("<h3> crossings: " + quiltic.crossings + "</h3>");
 	});
+	$("#availableDisplay").html(quiltic.available)
 	resetClicked();
 });
 
@@ -59,15 +60,21 @@ function randomizeClicked(event) {
 		quiltic.randomize();
 };
 
+function clearClicked(event) {
+		console.log("clear clicked");
+		quiltic.clear();
+};
+
+//button registrations
 $(document).ready(function(){
     $("#resetButton").on("click", function(event){
 		resetClicked(event);
 	});	
-});
-
-$(document).ready(function(){
-    $("#randomizeButton").on("click", function(event){
+	$("#randomizeButton").on("click", function(event){
 		randomizeClicked(event);
+	});	
+	$("#clearButton").on("click", function(event){
+		clearClicked(event);
 	});	
 });
 
@@ -120,7 +127,8 @@ About </button>
   </a>
   <div class="media-body">
     <h4 class="media-heading">Quiltic</h4>
-The plaited pattern below is inspired by celtic design motifs and formed by a set of square tiles. You can alter the pattern by clicking on the tiles. Clicking on a tile will cause it to rotate, and the tiles bordering it will be updated so that they continue to fit together. 
+The plaited pattern below is inspired by celtic design motifs and formed by a set of square tiles. You can alter the pattern by clicking on the tiles. Clicking on a tile will cause it to rotate, and the tiles bordering it will be updated so that they continue to fit together. You can drag and drop tiles from the area below
+the pattern onto the design.
  </div>
 </div>
 <br>
@@ -143,8 +151,9 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
 <br>
 <br>
 <div class="btn-group">
-  <button type="button" class="btn btn-primary" id="resetButton" >Reset</button>
-  <button type="button" class="btn btn-primary" id="randomizeButton" onclick="randomizeClicked">Randomize</button>
+  <button type="button" class="btn btn-primary" id="clearButton">Clear</button>
+  <button type="button" class="btn btn-primary" id="resetButton" >Fill</button>
+  <button type="button" class="btn btn-primary" id="randomizeButton">Randomize</button>
 </div>
 <br>
 <br>
@@ -166,7 +175,8 @@ The plaited pattern below is inspired by celtic design motifs and formed by a se
 <hr>
 <div id='crossingDisplay' align='center'> </div>
 <hr>
-
+<div id='availableDisplay'> </div>
+<hr>
 </div>
 <div class='col-sm-1'>
 </div>

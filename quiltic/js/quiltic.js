@@ -14,8 +14,7 @@ quiltic.tile = function(t,l,b,r) {
 	if (quiltic.tileSet === "set 2"){
 		return quiltic.set2(t,l,b,r);
 	}
-	return quiltic.set3(t,l,b,r);
-	
+	return quiltic.set3(t,l,b,r);	
 }
 
 quiltic.toggleTileSet = function(toggle) {
@@ -24,9 +23,10 @@ quiltic.toggleTileSet = function(toggle) {
 	evnts.fireEvent("refresh");
 }
 
-quiltic.set1= function(t,l,b,r) {
+quiltic.set3= function(t,l,b,r) {
 	var baseSize = 8;
 	var img = "<svg align='center' width='" + (quiltic.sizeFactor*baseSize) + "' height='" + (quiltic.sizeFactor*baseSize) +"'>";
+	img += quiltic.wpoly([quiltic.point(0,0), quiltic.point(8,0), quiltic.point(8,8), quiltic.point(0,8)]);	
 	//corners
 	img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);
 	img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
@@ -69,51 +69,20 @@ quiltic.set2 = function(t,l,b,r) {
 		img += "</svg>";
 		return img;	
 	}
+	img += quiltic.wpoly([quiltic.point(0,0), quiltic.point(8,0), quiltic.point(8,8), quiltic.point(0,8)]);	
 	//corners
 	img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);
 	img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
 	img += quiltic.poly([quiltic.point(0,6), quiltic.point(0,8), quiltic.point(2,8)]);
 	img += quiltic.poly([quiltic.point(8,6), quiltic.point(6,8), quiltic.point(8,8)]);
 	
-	/*
-	//corners
-	if (t||l||!r||!b) {
-		img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);	
-	} else {
-		img += quiltic.line(quiltic.lpoints(0,0,2,0));
-		img += quiltic.line(quiltic.lpoints(0,0,0,2));
-	}
-	if (t||!l||r||!b) {	
-		img += quiltic.poly([quiltic.point(6,0), quiltic.point(8,0), quiltic.point(8,2)]);
-	} else {
-		img += quiltic.line(quiltic.lpoints(6,0,8,0));
-		img += quiltic.line(quiltic.lpoints(8,0,8,2));
-	}		
-	if (!t||l||!r||b) {	
-		img += quiltic.poly([quiltic.point(0,6), quiltic.point(0,8), quiltic.point(2,8)]);
-	} else {
-		img += quiltic.line(quiltic.lpoints(0,6,0,8));
-		img += quiltic.line(quiltic.lpoints(0,8,2,8));
-	}
-	if (!t||!l||r||b) {	
-		img += quiltic.poly([quiltic.point(8,6), quiltic.point(6,8), quiltic.point(8,8)]);
-	} else {
-		img += quiltic.line(quiltic.lpoints(8,6,8,8));
-		img += quiltic.line(quiltic.lpoints(6,8,8,8));
-	}
-	*/
-
 	//midlines
 	img +=  quiltic.fline(quiltic.lpoints(1,3,3,1));
 	img +=  quiltic.fline(quiltic.lpoints(5,1,7,3));
 	img +=  quiltic.fline(quiltic.lpoints(7,5,5,7));
 	img +=  quiltic.fline(quiltic.lpoints(1,5,3,7));
-
-
 	//center
 	img += quiltic.poly([quiltic.point(2,4), quiltic.point(4,2), quiltic.point(6,4), quiltic.point(4,6)]);
-	
-	//img += quiltic.poly([quiltic.point(3,3), quiltic.point(5,3), quiltic.point(5,5), quiltic.point(3,5)]);
 	//open and closed paths
 	if(l) {	
 		img += quiltic.line(quiltic.lpoints(0,2,2,4));
@@ -164,18 +133,16 @@ quiltic.set2 = function(t,l,b,r) {
 	return img;
 };
 
-quiltic.set3 = function(t,l,b,r) {
+quiltic.set1 = function(t,l,b,r) {
 	var baseSize = 8;
 	var img = "<svg align='center' width='" + (quiltic.sizeFactor*baseSize) + "' height='" + (quiltic.sizeFactor*baseSize) +"'>";
-	
 	//handle blank
 	if(!t&&!l&&!r&&!b) { 
 		img += quiltic.poly([quiltic.point(0,0), quiltic.point(8,0), quiltic.point(8,8), quiltic.point(0,8)]);
 		img += "</svg>";
 		return img;	
 	}
-	
-	
+	img += quiltic.wpoly([quiltic.point(0,0), quiltic.point(8,0), quiltic.point(8,8), quiltic.point(0,8)]);
 	//corners
 	if (t||l||!r||!b) {
 		img += quiltic.poly([quiltic.point(0,0), quiltic.point(2,0), quiltic.point(0,2)]);	
@@ -201,13 +168,8 @@ quiltic.set3 = function(t,l,b,r) {
 		img += quiltic.line(quiltic.lpoints(8,6,8,8));
 		img += quiltic.line(quiltic.lpoints(6,8,8,8));
 	}
-	
-
 	//center
 	img += quiltic.poly([quiltic.point(2,4), quiltic.point(4,2), quiltic.point(6,4), quiltic.point(4,6)]);
-	
-	//img += quiltic.poly([quiltic.point(3,3), quiltic.point(5,3), quiltic.point(5,5), quiltic.point(3,5)]);
-	//open and closed paths
 	if(l) {	
 		img += quiltic.line(quiltic.lpoints(0,2,2,4));
 		img += quiltic.poly([quiltic.point(3,3), quiltic.point(2,4), quiltic.point(3,5)]);
@@ -258,6 +220,16 @@ quiltic.poly = function(list) {
 		poly += " ";
 	}
 	poly += "' style='fill:"+ quiltic.color +";stroke:" + quiltic.color + ";stroke-width:" + quiltic.strokeWidth + "'/>";
+	return poly;
+};
+
+quiltic.wpoly = function(list) {
+	var poly = "<polygon points='";
+	for (var i = 0; i < list.length; i ++){
+		poly += list[i];
+		poly += " ";
+	}
+	poly += "' style='fill:white;stroke:white;stroke-width:0'/>";
 	return poly;
 };
 
@@ -319,7 +291,6 @@ class QuilticTile {
 	west(){
 		return this.neighbor(0,-1);
 	}
-
 
 	neighbors() {
 		var list = [];
@@ -406,6 +377,19 @@ class QuilticBoard {
 		}
 		this.crossings = cross;
 	}
+	
+	clear() {
+		for (var i = 0; i < this.rows; i ++) {
+			for (var j = 0; j < this.cols; j++) {
+				var tile =  this.tiles[i][j];
+				tile.b = 0;
+				tile.t = 0;
+				tile.l = 0;
+				tile.r = 0;
+			}
+		}
+		this.crossings = 0;
+	}
 
 };
 
@@ -417,6 +401,14 @@ quiltic.randomize = function () {
 	quiltic.crossings = quiltic.board.crossings;
 	quiltic.display = htmlTable(quiltic.board);
 	evnts.fireEvent("refresh");
+};
+
+quiltic.clear = function() {
+	
+	quiltic.board.clear();
+	quiltic.crossings = quiltic.board.crossings;
+	quiltic.display = htmlTable(quiltic.board);
+	evnts.fireEvent("refresh");	
 };
 
 quiltic.setup = function(rows, cols){
@@ -433,29 +425,153 @@ function htmlTable(quilticBoard) {
 	for (var i = 0; i < quilticBoard.rows; i++){
 		html += "<tr>";
 		for (var j = 0; j < quilticBoard.cols; j ++) {
-			html += "<td><div id='cell" + i +""+ j +"' class='quilticCell' onclick='cellClick(event)'";
+			html += "<td><div id='cell" + i +""+ j +"' class='quilticCell'";
+			html +=" onclick='cellClick(event)' onDragover='dragOverCell(event)' ondragleave='exitDrag(event)' onDrop='dropCell(event)'";
 			html += " data-row='"+ i + "' data-col='" + j + "'>";
 			var tile = quilticBoard.tiles[i][j];
 			html +=  quiltic.tile(tile.t,tile.l,tile.b,tile.r);
 			html += "</div></td>";
-		}
+		} 
 		html += "</tr>";
 	}
 	html += "</table>";
 	return html;	
 };
 
+//available tile display
+
+function availableTiles() {
+	var html = "<table align='center'>";
+	html += "<tr>";
+	html += "<td><div id='available1' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-b=1 data-t=1 data-l=1 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(1,1,1,1);
+	html += "</td>";
+	html += "<td><div id='available1' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-b=0 data-t=0 data-l=0 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(0,0,0,0);
+	html += "</td>";
+	html += "</tr>";
+	html += "</table>";
+	html += "<br>";
+	html += "<table align='center'>";
+	html += "<tr>";
+	html += "<td><div id='available1a' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=0 data-b=0 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(1,0,0,0);
+	html += "</td>";
+	html += "<td><div id='available1b' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=1 data-b=0 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(0,1,0,0);
+	html += "</td>";
+	html += "<td><div id='available1c' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=0 data-b=1 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(0,0,1,0);
+	html += "</td>";
+	html += "<td><div id='available1d' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=0 data-b=0 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(0,0,0,1);
+	html += "</td>";
+	html += "</tr>";
+	html += "</table>";
+	html += "<br>";
+	html += "<table align='center'>";
+	html += "<tr>";
+	html += "<td><div id='available2a' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=1 data-b=0 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(1,1,0,0);
+	html += "</td>";
+	html += "<td><div id='available2b' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=1 data-b=1 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(0,1,1,0);
+	html += "</td>";
+	html += "<td><div id='available2c' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=0 data-b=1 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(0,0,1,1);
+	html += "</td>";
+	html += "<td><div id='available2d' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=0 data-b=0 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(1,0,0,1);
+	html += "</td>";
+	html += "<td><div id='available2e' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=0 data-b=1 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(1,0,1,0);
+	html += "</td>";
+	html += "<td><div id='available2f' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=1 data-b=0 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(0,1,0,1);
+	html += "</td>";
+	html += "</tr>";
+	html += "</table>";
+	html += "<br>";
+	html += "<table align='center'>";
+	html += "<tr>";
+	html += "<td><div id='available3a' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=1 data-b=1 data-r=0 style='border: 1px solid black'>";
+	html += quiltic.tile(1,1,1,0);
+	html += "</td>";
+	html += "<td><div id='available3b' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=0 data-l=1 data-b=1 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(0,1,1,1);
+	html += "</td>";
+	html += "<td><div id='available3c' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=0 data-b=1 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(1,0,1,1);
+	html += "</td>";
+	html += "<td><div id='available3d' class='quilticCell' draggable=true ondragstart=startDrag(event)";
+	html += " data-t=1 data-l=1 data-b=0 data-r=1 style='border: 1px solid black'>";
+	html += quiltic.tile(1,1,0,1);
+	html += "</td>";
+	html += "</tr>";
+	html += "</table>";
+	return html;	
+};
+
+quiltic.available = availableTiles();
 
 function randomInt(lessThan){
 	var selection = Math.floor(Math.random()*(lessThan));
 	return selection;
 };
 
+function dragOverCell(event) {
+	event.preventDefault();
+	event.currentTarget.setAttribute("style","border: 1px solid black");
+};
+
+function exitDrag(event) {
+	event.currentTarget.setAttribute("style","");	
+};
+
+function startDrag(event) {
+	var trbl = "" + event.target.getAttribute('data-t') + event.target.getAttribute('data-l');
+	trbl += event.target.getAttribute('data-b') + event.target.getAttribute('data-r');
+	event.dataTransfer.setData('text/plain', trbl);
+	effectAllowed = "copy";
+}
+
+function dropCell(event) {
+	var i = parseInt(event.currentTarget.getAttribute("data-row"));
+	var j = parseInt(event.currentTarget.getAttribute("data-col"));
+	var data =  event.dataTransfer.getData("text");
+	var cell = quiltic.board.tiles[i][j];
+	cell.t = parseInt(data.charAt(0));
+	cell.l = parseInt(data.charAt(1));
+	cell.b = parseInt(data.charAt(2));
+	cell.r = parseInt(data.charAt(3));
+	cell.enforceBorders();
+	cell.updateNeighbors();
+	
+	quiltic.board.countCrossings();
+	quiltic.crossings = quiltic.board.crossings;
+	quiltic.display = htmlTable(quiltic.board);
+	evnts.fireEvent("refresh");
+
+};
+
 function cellClick(event) {
 	var i = parseInt(event.currentTarget.getAttribute("data-row"));
 	var j = parseInt(event.currentTarget.getAttribute("data-col"));
-	//console.log("clicked cell: " + i + "," + j);	
-	//console.log(event.target);
 	quiltic.board.tiles[i][j].rotate();
 	quiltic.board.tiles[i][j].enforceBorders();
 	quiltic.board.tiles[i][j].updateNeighbors();

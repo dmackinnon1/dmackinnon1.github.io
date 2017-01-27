@@ -43,9 +43,10 @@ function roll100Dice() {
                 var rollDice = function() {
                     if( tHowMany > 0) {
                         var die1 = randomRange(0,6);
-			//var die2 = randomRange(0,6);
+                        var die2 = randomRange(0,6);
+                        var sum = die1 + die2;
                         // Tell CODAP to create a case in the child collection
-                        codapHelper.createCase('dice', die1, tID, rollDice);
+                        codapHelper.createCase('dice',[die1, die2, sum], tID, rollDice);
                         tHowMany--;
                     } else codapHelper.closeCase('samples', null, tID);
 		};
@@ -72,7 +73,9 @@ codapHelper.initSim({
                     setOfCasesWithArticle: "a sample"
                 },
                 // The child collection also has just one attribute
-                attrs: [{name: "die1", type: 'numeric', precision: 1}]
+                attrs: [{name: "die1", type: 'numeric', precision: 1},
+                {name: "die2", type: 'numeric', precision: 1},
+                {name: "sum", type: 'numeric', precision: 1} ]
             }
         ]
     });

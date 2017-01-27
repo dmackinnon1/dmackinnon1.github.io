@@ -35,16 +35,15 @@ td {
 </head>
 <script src="js/evnts.js"></script> <!-- required for callback registration-->
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
-<script src="js/kixote.js"></script>
+<script src="js/kixote_base.js"></script>
+<script src="js/ktour.js"></script>
+
 <script>
 
 function loadBoard() {
 	var isKixote = true;
 	game= new Tourist(gameBoard,isKixote);
 	game.init();
-	if (game.isIncomplete()) {
-		console.log("debug: " + game);
-	}
 	return htmlForBoard(game.getBoard());
 };
 

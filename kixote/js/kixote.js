@@ -687,6 +687,14 @@ class Tourist {
 			for (var j = 0; j < this.board.colNum; j++) {
 				var cell = this.board.cells[i][j];
 				var div = this.getDiv(i, j);
+				cell.decoration = this.path.freeDegree(cell);
+				if (!cell.isEqual(current)) {
+					if (this.path.contains(cell)) {
+						div.html(this.checkGlyph(i,j));
+					} else {
+						div.html(cell.decoration);
+					}
+				}
 				if (cell.isNeighbor(current) && !this.path.contains(cell)){
 					div.css("color","#004d00");
 					div.css("background","#99ff99");					
@@ -760,10 +768,10 @@ class Tourist {
 		}
 		
 		this.path.add(targetCell);
-		this.resetWrongs();
+		//this.resetWrongs();
 		
 		parentTarget.innerHTML = this.knightGlyph(i,j);
-		currentDiv.html(this.checkGlyph(i,j));
+		//currentDiv.html(this.checkGlyph(i,j));
 		//currentDiv.css("color","black");
 		//this.decorateCells();
 		this.colourCells();
@@ -773,6 +781,7 @@ class Tourist {
 		if (this.getIsDone()){
 				gameDisplay.statusMessage = new Bldr("h2").att("align","center").text("Finished!").build();
 				evnts.fireEvent("refreshStatus");
+				return;
 		}
 
 		if (this.path.freeDegree(targetCell) == 0) {

@@ -72,7 +72,9 @@ class Tourist {
 				if (cell.isNeighbor(current) && !this.path.contains(cell)){
 					div.css("color","#004d00");
 					div.css("background","#99ff99");					
-				} else {
+				} else if (cell.isEqual(current)) {
+					div.attr("style", "color:black");
+				} else {				
 					div.attr("style", "color:grey");
 				}	
 			}

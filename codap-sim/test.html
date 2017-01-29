@@ -11,8 +11,26 @@
 
 <body>
 <h1> Dice Rolling Simulation </h1>
-Clicking the button below will simulate rolling a pair of dice 100 times.
+Clicking the button below will simulate rolling a pair of dice 100 times. <br>
 <button id='testButton' onclick='roll100Dice(event)'>roll a pair of dice 100 times</button>
+<h2> Instructions </h2>
+<ol>
+<li> Click on the button to generate an initial data set. </li>
+<li> Open a case table to view the data that has been generated. </li>
+<li> Create a graph that displays the frequency for the die1 attribute, and a similar graph for die2.</l1>
+<li> Create a graph that displays the frequency of the 'sum' attribute. </li>
+<li> Click on the button to add additional cases. </li>
+</ol>
+<hr>
+<h2> Observations</h2>
+<ol>
+<li> What distribution were you expecting for die1 and die2? </li>
+<li> What distribution were you expecting for the sum? </li>
+<li> Did the frequency graphs match the expected distributions the first time you clicked on the button?</li>
+<li> How many cases were required before the frequency graphs closely resembled the expected distributions? </li>
+</ol>
+
+
 </body>
 
 
@@ -59,7 +77,7 @@ function roll100Dice() {
 	
 codapHelper.initSim({
         name: 'Test',
-        dimensions: {width: 300, height: 150},
+        dimensions: {width: 300, height: 500},
         collections: [ 
             {
                 name: 'samples',

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Sandpile</title>
+</head>
+
+<style>
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid grey;
+}
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+</style>
+</head>
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/svgpixel.js"></script>
+
+<script>
+
+<!-- initialize the svg -->
+var row = 61; // should be odd
+var col = 61;
+var display; 
+var cells; 
+
+function setup() {
+	console.log("setup called");
+	display = new SVGPixel(350, 350, row, col);
+	cells = new CellArray(display);
+	cells.init();
+	$("#pixelDisplay").html(loadSVG()); 
+	setRules(); 
+	var timedDraw = setInterval(doIt, 20);
+};
+
+<!-- the sandpile rules -->
+
+var mainRule = function (cell){
+	if(cell.value >= 8) {
+		cell.decrementBy(8);
+		var nbs = cell.neighbors();
+		for (var i = 0; i < nbs.length; i++) {
+			nbs[i].increment();
+		}
+	}
+};
+
+var centerRule = function (cell) {
+	if (cell.rowNum == (row-1)/2 && cell.colNum == (col-1)/2){
+		cell.increment();	
+	}
+};
+
+var cornerRule = function(cell) {
+	if ((cell.rowNum == 0 || cell.rowNum == col-1) && (cell.colNum ==0 || cell.colNum == col -1)){
+		cell.increment();
+	}
+};
+
+var offCenterRule = function(cell) {
+	if ((cell.rowNum == ((row-1)/2 - 10)) && cell.colNum == (col-1)/2){
+		cell.increment();	
+	} else if (cell.rowNum == ((row-1)/2 + 10) && cell.colNum == (col-1)/2){
+		cell.increment();	
+	} else if (cell.rowNum == ((row-1)/2) && cell.colNum == (col-1)/2 - 10){
+		cell.increment();	
+	} else if (cell.rowNum == ((row-1)/2) && cell.colNum == (col-1)/2 + 10){
+		cell.increment();	
+	}
+};
+
+<!-- the functions to call to display -->
+function loadSVG() {
+	return display.svg();
+};
+
+function doIt() {
+	cells.applyRules();
+	cells.transition();
+}
+
+function setRules() {
+	var corner = $('#cornerBox').prop('checked');
+	var center = $('#centerBox').prop('checked');
+	var offCenter = $('#offCenterBox').prop('checked');
+	cells.rules = [];
+	cells.addRule(mainRule);
+	if (corner) {
+		cells.addRule(cornerRule);
+	}
+	if (center) {
+		cells.addRule(centerRule);
+	}
+	if (offCenter) {
+		cells.addRule(offCenterRule);
+	}
+}
+
+$(document).ready(function(){
+	setup();
+});
+
+
+$(document).ready(function(){
+    $("#refresh").on("click", function(event){
+		setup();
+	});
+	$('#cornerBox').change(function() {
+  		setRules();
+	});
+
+	$('#centerBox').change(function() {
+  		setRules();
+	});	
+
+	$('#offCenterBox').change(function() {
+  		setRules();
+	});	
+});
+
+
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+	<h1>Sandpile <small>a simple cellular automata</small></h1>
+</div> 	
+
+<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
+About </button>
+<div id='full' class='collapse '>
+<br><hr>
+<div class="media">
+  <a class="media-left media-middle" href="#">
+    <img class="media-object" src="imgs/sandpile.png" alt="Sandpile" width="100" height="100">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">Sandpile Cellular Automata</h4>
+The area below displays a 'sandpile' cellular automata. A cellular automata is an array of cells that change colors based on a set of rules. 
+For sandpile automata, there are two rules: First, there is 'sand' pouring into one (or more) of the cells. The second rule is that once a cell fills up with sand, the sand pours out eavenly into the cell's neighbors. In this case, if eight or more grains of sand fall into a cell, it empties out into the cells surrounding it. The amount of sand in a cell determines its color. From these simple rules emerges a constantly changing cascading pattern.
+ </div>
+</div>
+<br>
+</div>
+<hr>
+
+<button id="refresh" class="btn btn-default">Clear</button>
+<div class="buttonDiv">
+ <form>
+    <div class="checkbox">
+    	Sand will be pouring in at: 
+      <label><input id="centerBox" type="checkbox" checked=true>center</label>
+      <label><input id="cornerBox" type="checkbox" >corners</label>   
+      <label><input id="offCenterBox" type="checkbox" >four off-center</label> 
+    </div>
+   </form>
+</div>
+
+<hr>
+<br>
+
+<div id="pixelDisplay" style="text-align=center">
+</div>
+<hr>
+</div>
+
+<div class='col-sm-1'>
+</div>
+
+
+</body>
+
+</html>

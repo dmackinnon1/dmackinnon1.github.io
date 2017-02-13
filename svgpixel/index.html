@@ -24,7 +24,6 @@ svg {
 </head>
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
 <script src="js/svgpixel.js"></script>
-
 <script>
 
 <!-- initialize the svg -->
@@ -46,11 +45,11 @@ function setup() {
 <!-- the sandpile rules -->
 
 var mainRule = function (cell){
-	if(cell.value >= 8) {
-		cell.decrementBy(8);
+	if(cell.value >= cell.maxNeighbors()) {		
 		var nbs = cell.neighbors();
-		for (var i = 0; i < nbs.length; i++) {
-			nbs[i].increment();
+		for (var i = 0; i < nbs.length; i++) {		
+				nbs[i].increment();
+				cell.decrement();			
 		}
 	}
 };
@@ -62,8 +61,9 @@ var centerRule = function (cell) {
 };
 
 var cornerRule = function(cell) {
-	if ((cell.rowNum == 0 || cell.rowNum == col-1) && (cell.colNum ==0 || cell.colNum == col -1)){
+	if ((cell.rowNum == 1 || cell.rowNum == col-2) && (cell.colNum == 1 || cell.colNum == col -2)){
 		cell.increment();
+		//cell.increment(); //pour into corners twice as fast
 	}
 };
 
@@ -76,6 +76,14 @@ var offCenterRule = function(cell) {
 		cell.increment();	
 	} else if (cell.rowNum == ((row-1)/2) && cell.colNum == (col-1)/2 + 10){
 		cell.increment();	
+	}
+};
+
+var overEdgesRule = function(cell){
+	if (cell.value < cell.maxNeighbors()) return;
+	var edgeCount = cell.maxNeighbors() - cell.neighbors().length;
+	for (var i = 0; i < edgeCount; i++) {
+		cell.decrement();
 	}
 };
 
@@ -93,6 +101,7 @@ function setRules() {
 	var corner = $('#cornerBox').prop('checked');
 	var center = $('#centerBox').prop('checked');
 	var offCenter = $('#offCenterBox').prop('checked');
+	var overEdges = $('#overEdgesBox').prop('checked');
 	cells.rules = [];
 	cells.addRule(mainRule);
 	if (corner) {
@@ -104,12 +113,20 @@ function setRules() {
 	if (offCenter) {
 		cells.addRule(offCenterRule);
 	}
+	if (overEdges) {
+		cells.addRule(overEdgesRule);
+	}
 }
 
+function checkDiagonal() {
+	var diag = $('#diagonalsBox').prop('checked');
+	cellBehavior.includeDiagonals = diag;
+};
+
+<!-- initialization -->
 $(document).ready(function(){
 	setup();
 });
-
 
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
@@ -126,11 +143,14 @@ $(document).ready(function(){
 	$('#offCenterBox').change(function() {
   		setRules();
 	});	
+	$('#overEdgesBox').change(function() {
+  		setRules();
+	});	
+	$('#diagonalsBox').change(function() {
+  		checkDiagonal();
+	});	
 });
-
-
 </script>
-
 <body>
 
 <nav class="navbar navbar-default" style="margin-bottom:0px">
@@ -182,6 +202,15 @@ For sandpile automata, there are two rules: First, there is 'sand' pouring into 
       <label><input id="centerBox" type="checkbox" checked=true>center</label>
       <label><input id="cornerBox" type="checkbox" >corners</label>   
       <label><input id="offCenterBox" type="checkbox" >four off-center</label> 
+    </div>
+   </form>
+</div>
+<br>
+<div class="buttonDiv">
+ <form>
+    <div class="checkbox">
+      <label><input id="overEdgesBox" type="checkbox" checked=false> sand pours over grid edges</label>
+      <label><input id="diagonalsBox" type="checkbox" checked=true> sand pours along diagonals</label>   
     </div>
    </form>
 </div>

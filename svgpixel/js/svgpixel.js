@@ -1,6 +1,9 @@
 
 var displayCount = 0;
 
+var cellBehavior = {};
+cellBehavior.includeDiagonals = true;
+
 /*
 * SVGPixel is a grid of pixels.
 */
@@ -49,7 +52,7 @@ class SVGPixel {
 	}
 
 	value(i,j, value) {
-		this.element(i,j).attr("fill", hslColorChooser(value,8));
+		this.element(i,j).attr("fill", value);
 	}	
 	
 };
@@ -74,6 +77,11 @@ class Cell {
 		this.cellArray = cellArray;
 	}
 
+	maxNeighbors() {
+		if (cellBehavior.includeDiagonals) return 8;
+		return 4;
+	}
+
 	on() {
 		this.nextValue = 1;
 	}
@@ -89,6 +97,13 @@ class Cell {
 	decrementBy(amount) {
 		this.nextValue -= amount;
 	}
+	
+	decrement() {
+		if (this.nextValue > 0) {
+			this.nextValue --;
+		}
+	}
+
 	transition() {
 		this.value = this.nextValue;
 		this.cellArray.update(this);
@@ -143,10 +158,12 @@ class Cell {
 		if(this.east() != null) list.push(this.east());
 		if(this.west() != null) list.push(this.west());
 		
-		if(this.northEast() != null) list.push(this.northEast());
-		if(this.northWest() != null) list.push(this.northWest());
-		if(this.southEast() != null) list.push(this.southEast());
-		if(this.southWest() != null) list.push(this.southWest());				
+		if (cellBehavior.includeDiagonals) {
+			if(this.northEast() != null) list.push(this.northEast());
+			if(this.northWest() != null) list.push(this.northWest());
+			if(this.southEast() != null) list.push(this.southEast());
+			if(this.southWest() != null) list.push(this.southWest());				
+		}
 		return list;
 	}
 
@@ -197,26 +214,8 @@ class CellArray {
 		}
 	}
 	
-	/*
-	on(i,j){
-		this.cells[i][j].on();
-	}
-
-	off(i,j) {
-		this.cells[i][j].off();
-	}
-
-	increment(i,j) {
-		this.cells[i][j].increment();
-	}
-
-	decrementBy(i,j,amount) {
-		this.cells[i,j].decrementBy(amount);
-	}
-	*/
-
 	update(cell) {
-		this.svgPixel.value(cell.rowNum,cell.colNum, cell.value);
+		this.svgPixel.value(cell.rowNum,cell.colNum, hslColorChooser(cell.value,cell.maxNeighbors()));
 		
 	}
 

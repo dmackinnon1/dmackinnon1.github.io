@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Sandpile</title>
+</head>
+
+<style>
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid grey;
+}
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+h3.centered {
+	text-align: center;
+}
+
+</style>
+</head>
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/svgpixel.js"></script>
+<script src="js/sandpile.js"></script>
+<script>
+
+<!-- initialize the svg -->
+var sandpile;
+var sandpile2;
+cellBehavior.includeDiagonals = false;
+
+function setup() {
+	console.log("setup called");
+	sandpile = new Sandpile(400, 1000, 21, 53);
+	sandpile.init();
+	$("#pixelDisplay").html(sandpile.svg()); 
+	sandpile2 = new Sandpile(200, 1000, 11, 53);
+	sandpile2.init();
+	$("#pixelDisplay2").html(sandpile2.svg()); 
+	
+
+	setRules(); 
+	var timedDraw = setInterval(run, 40);
+};
+
+function run() {
+	sandpile.doIt();
+	sandpile2.doIt();
+}
+
+<!-- the functions to call to display -->
+
+function setRules() {
+	sandpile.clearRules();
+	sandpile.addMainRule();
+	sandpile.addCornerRule();
+	sandpile.addCenterRule();
+	sandpile.addOffCenterRule();
+	sandpile.addOverEdgesRule();
+
+	sandpile2.clearRules();
+	sandpile2.addMainRule();
+	sandpile2.addCenterRule();
+}
+
+
+<!-- initialization -->
+$(document).ready(function(){
+	setup();
+});
+
+$(document).ready(function(){
+    $("#refresh").on("click", function(event){
+		setup();
+	});
+	
+});
+</script>
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+	<h1>Sandpile <small>a simple cellular automata</small></h1>
+</div> 	
+
+<button id="refresh" class="btn btn-default">Clear</button>
+
+<hr>
+<br>
+
+<div id="pixelDisplay" style="text-align=center">
+</div>
+<hr>
+<div id="pixelDisplay2" style="text-align=center">
+<hr>
+<br>
+
+</div>
+
+<div class='col-sm-1'>
+</div>
+
+<hr>
+<br>
+
+</body>
+
+</html>

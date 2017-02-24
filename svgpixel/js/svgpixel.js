@@ -77,6 +77,14 @@ class Cell {
 		this.cellArray = cellArray;
 	}
 
+	maxRows() {
+		return this.cellArray.getRowSize();
+	}
+
+	maxCols() {
+		return this.cellArray.getColumnSize();
+	}
+
 	maxNeighbors() {
 		if (cellBehavior.includeDiagonals) return 8;
 		return 4;

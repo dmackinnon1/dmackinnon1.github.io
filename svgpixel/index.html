@@ -20,101 +20,54 @@ svg {
 	padding: 2px;
 	border: 2px;
 }
+h3.centered {
+	text-align: center;
+}
+
 </style>
 </head>
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
 <script src="js/svgpixel.js"></script>
+<script src="js/sandpile.js"></script>
 <script>
 
 <!-- initialize the svg -->
-var row = 61; // should be odd
-var col = 61;
-var display; 
-var cells; 
+var sandpile;
 
 function setup() {
 	console.log("setup called");
-	display = new SVGPixel(350, 350, row, col);
-	cells = new CellArray(display);
-	cells.init();
-	$("#pixelDisplay").html(loadSVG()); 
+	sandpile = new Sandpile(350, 350, 61, 61);
+	sandpile.init();
+	$("#pixelDisplay").html(sandpile.svg()); 
 	setRules(); 
-	var timedDraw = setInterval(doIt, 20);
+	var timedDraw = setInterval(run, 40);
 };
 
-<!-- the sandpile rules -->
-
-var mainRule = function (cell){
-	if(cell.value >= cell.maxNeighbors()) {		
-		var nbs = cell.neighbors();
-		for (var i = 0; i < nbs.length; i++) {		
-				nbs[i].increment();
-				cell.decrement();			
-		}
-	}
-};
-
-var centerRule = function (cell) {
-	if (cell.rowNum == (row-1)/2 && cell.colNum == (col-1)/2){
-		cell.increment();	
-	}
-};
-
-var cornerRule = function(cell) {
-	if ((cell.rowNum == 1 || cell.rowNum == col-2) && (cell.colNum == 1 || cell.colNum == col -2)){
-		cell.increment();
-		//cell.increment(); //pour into corners twice as fast
-	}
-};
-
-var offCenterRule = function(cell) {
-	if ((cell.rowNum == ((row-1)/2 - 10)) && cell.colNum == (col-1)/2){
-		cell.increment();	
-	} else if (cell.rowNum == ((row-1)/2 + 10) && cell.colNum == (col-1)/2){
-		cell.increment();	
-	} else if (cell.rowNum == ((row-1)/2) && cell.colNum == (col-1)/2 - 10){
-		cell.increment();	
-	} else if (cell.rowNum == ((row-1)/2) && cell.colNum == (col-1)/2 + 10){
-		cell.increment();	
-	}
-};
-
-var overEdgesRule = function(cell){
-	if (cell.value < cell.maxNeighbors()) return;
-	var edgeCount = cell.maxNeighbors() - cell.neighbors().length;
-	for (var i = 0; i < edgeCount; i++) {
-		cell.decrement();
-	}
-};
+function run() {
+	sandpile.doIt();
+	$("#generationDisplay").html("<h3 class='centered'> generation: " + sandpile.generation + "</h3>");
+}
 
 <!-- the functions to call to display -->
-function loadSVG() {
-	return display.svg();
-};
-
-function doIt() {
-	cells.applyRules();
-	cells.transition();
-}
 
 function setRules() {
 	var corner = $('#cornerBox').prop('checked');
 	var center = $('#centerBox').prop('checked');
 	var offCenter = $('#offCenterBox').prop('checked');
 	var overEdges = $('#overEdgesBox').prop('checked');
-	cells.rules = [];
-	cells.addRule(mainRule);
+	sandpile.clearRules();
+	sandpile.addMainRule();
 	if (corner) {
-		cells.addRule(cornerRule);
+		sandpile.addCornerRule();
 	}
 	if (center) {
-		cells.addRule(centerRule);
+		sandpile.addCenterRule();
 	}
 	if (offCenter) {
-		cells.addRule(offCenterRule);
+		sandpile.addOffCenterRule();
 	}
 	if (overEdges) {
-		cells.addRule(overEdgesRule);
+		sandpile.addOverEdgesRule();
 	}
 }
 
@@ -221,6 +174,9 @@ For sandpile automata, there are two rules: First, there is 'sand' pouring into 
 <div id="pixelDisplay" style="text-align=center">
 </div>
 <hr>
+
+<div id="generationDisplay"></div>
+
 </div>
 
 <div class='col-sm-1'>

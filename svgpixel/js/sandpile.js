@@ -11,6 +11,15 @@ class Sandpile {
 		this.cells = new CellArray(this.display);
 	}
 
+	includeDiagonals(value) {
+		this.cells.setIncludeDiagonals(value);
+		if (value == true) {
+			this.cells.colorRange = 8;
+		} else {
+			this.cells.colorRange = 4;
+		}
+	}
+
 	init() {
 		this.cells.init();
 
@@ -83,7 +92,6 @@ class Sandpile {
 	svg() {
 		return this.display.svg();
 	}
-
 
 };
 

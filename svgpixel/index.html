@@ -1,80 +1,79 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
+<!--
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title>Sandpile</title>
+-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<title>dmackinnon1.github.io</title>
 </head>
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/svgpixel.js"></script>
+<script src="js/sandpile.js"></script>
 
 <style>
 svg {
 	display: block; 
 	margin: auto ;
-	border: 1px solid grey;
+	border: 0px;
 }
 .buttonDiv {
 	display: inline-block;
 	padding: 2px;
-	border: 2px;
+	border: px;
 }
+
 h3.centered {
 	text-align: center;
 }
-
 </style>
-</head>
-<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
-<script src="js/svgpixel.js"></script>
-<script src="js/sandpile.js"></script>
 <script>
+<!-- sizing utility -->
+function isBreakpoint( alias ) {
+    return $('.device-' + alias).is(':visible');
+}
 
 <!-- initialize the svg -->
 var sandpile;
 
 function setup() {
 	console.log("setup called");
-	sandpile = new Sandpile(350, 350, 61, 61);
+if (isBreakpoint("xs")) {
+		sandpile = new Sandpile(200, 300, 21, 31);
+		console.log("xs chosen");
+	} else if (isBreakpoint("sm") || isBreakpoint("md")) {
+		sandpile = new Sandpile(200, 400, 21, 43);
+		console.log("sm or md chosen");
+	} else {
+		sandpile = new Sandpile(200, 900, 21, 93);
+			console.log("lg chosen");
+	}
 	sandpile.init();
-	$("#pixelDisplay").html(sandpile.svg()); 
+	sandpile.includeDiagonals(false);
 	setRules(); 
-	var timedDraw = setInterval(run, 40);
-};
+	var timedDraw = setInterval(run, 500);
+	$("#pixelDisplay").html(sandpile.svg()); 
+}
 
 function run() {
 	sandpile.doIt();
-	$("#generationDisplay").html("<h3 class='centered'> generation: " + sandpile.generation + "</h3>");
 }
 
 <!-- the functions to call to display -->
 
 function setRules() {
-	var corner = $('#cornerBox').prop('checked');
-	var center = $('#centerBox').prop('checked');
-	var offCenter = $('#offCenterBox').prop('checked');
-	var overEdges = $('#overEdgesBox').prop('checked');
 	sandpile.clearRules();
 	sandpile.addMainRule();
-	if (corner) {
-		sandpile.addCornerRule();
-	}
-	if (center) {
-		sandpile.addCenterRule();
-	}
-	if (offCenter) {
-		sandpile.addOffCenterRule();
-	}
-	if (overEdges) {
-		sandpile.addOverEdgesRule();
-	}
+	sandpile.addCenterRule();
+	sandpile.addOverEdgesRule();
 }
-
-function checkDiagonal() {
-	var diag = $('#diagonalsBox').prop('checked');
-	cellBehavior.includeDiagonals = diag;
-};
 
 <!-- initialization -->
 $(document).ready(function(){
@@ -85,27 +84,17 @@ $(document).ready(function(){
     $("#refresh").on("click", function(event){
 		setup();
 	});
-	$('#cornerBox').change(function() {
-  		setRules();
-	});
-
-	$('#centerBox').change(function() {
-  		setRules();
-	});	
-
-	$('#offCenterBox').change(function() {
-  		setRules();
-	});	
-	$('#overEdgesBox').change(function() {
-  		setRules();
-	});	
-	$('#diagonalsBox').change(function() {
-  		checkDiagonal();
-	});	
 });
 </script>
 <body>
+<!-- just to facilitate sizing changes -->
+<div class="device-xs hidden-sm-up"></div>
+<div class="device-sm hidden-md-up hidden-xs-down"></div>
+<div class="device-md hidden-lg-up hidden-sm-down"></div>
+<div class="device-lg hidden-lg-down"></div>
+<!-- -->
 
+<!-- needs update for bootstrap 4
 <nav class="navbar navbar-default" style="margin-bottom:0px">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -118,71 +107,58 @@ $(document).ready(function(){
 		</div>
 		</div>
 </nav>
+-->
+<div class="container">
+	<div class='row'>
+		<div class='col-lg-12'>
+			<div id="jumbo" class="jumbotron"><h1>Some Cellular Automata</h1>
+			</div> 	<!-- class='page-header' -->
+		  
+		</div>
+	</div>
+<div class='row'>	
+<div class='col-lg-12 '>
+Some experiments in cellular automata. Source <a href="https://github.com/dmackinnon1/svgpixel">here</a>.
+<br>
+<hr>
+</div>
+</div>
+	<div class='row'>	
+	<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			<!--<img class="card-img-top" src="./imgs/sandpile.png" alt="sandpile image"  
+	  				style="width: 75px; height: 75px; padding: 5px;"> -->
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="sand.html">Sandpiles</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">Abelian Sandpile Cellular Automata</h6>
+    				</div>
+			</div>
+			<br>
+		</div>
 
+		<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			<!--<img class="card-img-top" src="./imgs/gol5.png"  alt="fractal image"  
+	  				style="width: 100px; height: 75px;padding: 5px;"> -->
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="gol.html">Game of Life</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">Conway's Game of Life</h6>
+				</div>
+			</div>
+			<br>
+		</div>
+	</div>
 
-<div class="container-fluid">
 <div class='row'>
-<div class='col-sm-1'>
+	<div class='col-lg-12'>
+		<div id="pixelDisplay" style="text-align=center"></div>
+		<hr>
+	</div>
+	</div>
 </div>
-<div class='col-sm-10'>
-<div class="page-header">
-	<h1>Sandpile <small>a simple cellular automata</small></h1>
-</div> 	
-
-<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
-About </button>
-<div id='full' class='collapse '>
-<br><hr>
-<div class="media">
-  <a class="media-left media-middle" href="#">
-    <img class="media-object" src="imgs/sandpile.png" alt="Sandpile" width="100" height="100">
-  </a>
-  <div class="media-body">
-    <h4 class="media-heading">Sandpile Cellular Automata</h4>
-The area below displays a 'sandpile' cellular automata. A cellular automata is an array of cells that change colors based on a set of rules. 
-For sandpile automata, there are two rules: First, there is 'sand' pouring into one (or more) of the cells. The second rule is that once a cell fills up with sand, the sand pours out eavenly into the cell's neighbors. In this case, if eight or more grains of sand fall into a cell, it empties out into the cells surrounding it. The amount of sand in a cell determines its color. From these simple rules emerges a constantly changing cascading pattern.
- </div>
-</div>
-<br>
-</div>
-<hr>
-
-<button id="refresh" class="btn btn-default">Clear</button>
-<div class="buttonDiv">
- <form>
-    <div class="checkbox">
-    	Sand will be pouring in at: 
-      <label><input id="centerBox" type="checkbox" checked=true>center</label>
-      <label><input id="cornerBox" type="checkbox" >corners</label>   
-      <label><input id="offCenterBox" type="checkbox" >four off-center</label> 
-    </div>
-   </form>
-</div>
-<br>
-<div class="buttonDiv">
- <form>
-    <div class="checkbox">
-      <label><input id="overEdgesBox" type="checkbox" checked=false> sand pours over grid edges</label>
-      <label><input id="diagonalsBox" type="checkbox" checked=true> sand pours along diagonals</label>   
-    </div>
-   </form>
-</div>
-
-<hr>
-<br>
-
-<div id="pixelDisplay" style="text-align=center">
-</div>
-<hr>
-
-<div id="generationDisplay"></div>
-
-</div>
-
-<div class='col-sm-1'>
-</div>
-
-
 </body>
-
 </html>

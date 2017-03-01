@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Sandpile</title>
+</head>
+
+<style>
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid grey;
+}
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+h3.centered {
+	text-align: center;
+}
+
+</style>
+</head>
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/svgpixel.js"></script>
+<script src="js/sandpile.js"></script>
+<script>
+
+<!-- initialize the svg -->
+var sandpile;
+
+function setup() {
+	console.log("setup called");
+	sandpile = new Sandpile(300, 300, 101, 101);
+	sandpile.init();
+	$("#pixelDisplay").html(sandpile.svg()); 
+	setRules(); 
+	var timedDraw = setInterval(run, 20);
+};
+
+function run() {
+	sandpile.doIt();
+	$("#generationDisplay").html("<h3 class='centered'> generation: " + sandpile.generation + "</h3>");
+}
+
+<!-- the functions to call to display -->
+
+function setRules() {
+	var corner = $('#cornerBox').prop('checked');
+	var center = $('#centerBox').prop('checked');
+	var offCenter = $('#offCenterBox').prop('checked');
+	var overEdges = $('#overEdgesBox').prop('checked');
+	sandpile.clearRules();
+	sandpile.addMainRule();
+	if (corner) {
+		sandpile.addCornerRule();
+	}
+	if (center) {
+		sandpile.addCenterRule();
+	}
+	if (offCenter) {
+		sandpile.addOffCenterRule();
+	}
+	if (overEdges) {
+		sandpile.addOverEdgesRule();
+	}
+}
+
+function checkDiagonal() {
+	var diag = $('#diagonalsBox').prop('checked');
+	sandpile.includeDiagonals(diag);
+};
+
+<!-- initialization -->
+$(document).ready(function(){
+	setup();
+});
+
+$(document).ready(function(){
+    $("#refresh").on("click", function(event){
+		setup();
+	});
+	$('#cornerBox').change(function() {
+  		setRules();
+	});
+
+	$('#centerBox').change(function() {
+  		setRules();
+	});	
+
+	$('#offCenterBox').change(function() {
+  		setRules();
+	});	
+	$('#overEdgesBox').change(function() {
+  		setRules();
+	});	
+	$('#diagonalsBox').change(function() {
+  		checkDiagonal();
+	});	
+});
+</script>
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+	<form> <h1> Abelian Sandpile <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
+</div>	
+<div class="buttonDiv">
+ <form>
+    <div class="checkbox">
+    	Sand will be pouring in at: 
+      <label><input id="centerBox" type="checkbox" checked=true>center</label>
+      <label><input id="cornerBox" type="checkbox" >corners</label>   
+      <label><input id="offCenterBox" type="checkbox" >four off-center</label> 
+    </div>
+   </form>
+</div>
+<br>
+<div class="buttonDiv">
+ <form>
+    <div class="checkbox">
+      <label><input id="overEdgesBox" type="checkbox" checked=false> sand pours over grid edges</label>
+      <label><input id="diagonalsBox" type="checkbox" checked=true> sand pours along diagonals</label>   
+    </div>
+   </form>
+</div>
+
+<hr>
+<br>
+
+<div id="pixelDisplay" style="text-align=center">
+</div>
+<hr>
+
+<div id="generationDisplay"></div>
+
+<hr>
+<div class="media">
+  <a class="media-left media-middle" href="#">
+    <img class="media-object" src="imgs/sandpile.png" alt="Sandpile" width="100" height="100">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">Sandpile Cellular Automata</h4>
+The area above displays a 'sandpile' cellular automata. A cellular automata is an array of cells that change colors based on a set of rules. 
+For sandpile automata, there are two rules: First, there is 'sand' pouring into one (or more) of the cells. The second rule is that once a cell fills up with sand, the sand pours out eavenly into the cell's neighbors. A cell is full if the amount of sand in it is greater than the number of cells surrounding it. The amount of sand in a cell determines its color. From these simple rules emerges a constantly changing cascading pattern.
+ </div>
+</div>
+<br>
+</div>
+
+
+<div class='col-sm-1'>
+</div>
+
+
+</body>
+
+</html>

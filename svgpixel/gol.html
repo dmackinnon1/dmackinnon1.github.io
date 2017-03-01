@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Game Of Life</title>
+</head>
+
+<style>
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid grey;
+}
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+	text-align: center;
+}
+
+h3.centered {
+	text-align: center;
+}
+
+</style>
+</head>
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/svgpixel.js"></script>
+<script src="js/sandpile.js"></script>
+<script src="js/gol.js"></script>
+
+<script>
+
+<!-- sizing utility -->
+function isBreakpoint( alias ) {
+    return $('.device-' + alias).is(':visible');
+}
+
+<!-- initialize the svg -->
+var gameOfLife;
+var selectedBeastie = "glider";
+
+function setup() {
+	console.log("setup called");
+	if (isBreakpoint("xs")) {
+		gameOfLife = new GameOfLife(300, 300, 61, 61);
+		console.log("xs chosen");
+	} else if (isBreakpoint("sm") || isBreakpoint("md")) {
+		gameOfLife = new GameOfLife(300, 400, 61, 83);
+		console.log("sm or md chosen");
+	} else {
+		gameOfLife = new GameOfLife(300, 900, 61, 93);
+		console.log("lag chosen");
+	}
+	gameOfLife.init();
+	svgPixel.cellFunctions.push(addCell);
+	var timedDraw = setInterval(run, 500);
+	$("#pixelDisplay").html(gameOfLife.svg()); 	
+};
+
+function run() {
+	gameOfLife.doIt();
+	$("#generationDisplay").html("<h3 class='centered'> generation: " + gameOfLife.generation + "</h3>");
+}
+
+function addCell(i,j) {
+	if (selectedBeastie == "glider") {
+		gameOfLife.glider(i,j);
+	} else if (selectedBeastie == "r-pentomino") {
+		gameOfLife.rPentomino(i,j);
+	} else {
+		gameOfLife.toad(i,j);
+	}
+}
+
+
+<!-- the functions to call to display -->
+
+<!-- initialization -->
+$(document).ready(function(){
+	setup();
+});
+
+$(document).ready(function(){
+    $("#refresh").on("click", function(event){
+		setup();
+	});
+});
+
+
+$(document).ready(function(){
+	$("form input:radio").on('click',function(e){
+		selectedBeastie = $('input[name=beastie]:checked').val();
+	});
+});
+
+</script>
+<body>
+<!-- just to facilitate sizing changes -->
+<div class="device-xs visible-xs"></div>
+<div class="device-sm visible-sm"></div>
+<div class="device-md visible-md"></div>
+<div class="device-lg visible-lg"></div>
+<!-- -->
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+
+<form> <h1> Conway's Game of Life <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
+
+</div> 	
+<br>
+<h3><div class="buttonDiv">
+<form>
+  Clicking will drop: 
+  <label class="radio-inline">
+  <input type="radio" name="beastie" value="glider" checked> glider<br>
+  </label>
+  <lable class="radio-inline">
+  <input type="radio" class="radio-inline" name="beastie" value="r-pentomino"> r-pentomino<br>
+  </lable>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="beastie" value="toad"> toad<br>
+  </label>
+</form>
+</div>
+</h3>
+<div id="pixelDisplay" style="text-align=center"></div>
+<hr>
+<div id="generationDisplay"></div><hr>
+
+</div>
+
+<div class='col-sm-1'>
+</div>
+
+<br>
+
+</body>
+
+</html>

@@ -1,8 +1,7 @@
 
 var displayCount = 0;
-
-var cellBehavior = {};
-cellBehavior.includeDiagonals = true;
+var svgPixel = {};
+svgPixel.cellFunctions = [];
 
 /*
 * SVGPixel is a grid of pixels.
@@ -15,7 +14,10 @@ class SVGPixel {
 		this.rows = rows;
 		this.cols = cols;
 		this.count = displayCount ++;
+		this.clickFunctions = [];
+		this.useCircles = true;
 	}
+
 
 	svg() {
 		var radius = Math.min(this.height/this.rows, this.width/this.cols)/2;
@@ -26,8 +28,14 @@ class SVGPixel {
 			for (var j = 0; j < this.cols; j ++) {
 				var x = radius*(2*j+1);
 				var y = radius*(2*i+1);				
-				var c0 = new Bldr("circle").att("cx",x).att("cy", y);
-				c0.att("r",radius).att("stroke-width",0).att("fill","none");
+				var c0; 
+				if (this.useCircles) {
+					c0 = new Bldr("circle").att("cx",x).att("cy", y);
+					c0.att("r",radius).att("stroke-width",0).att("fill","none");
+				} else {
+					c0 = new Bldr("rect").att("x", x - radius).att("y",y - radius);
+					c0.att("width", radius*2).att("height", radius*2).att("fill", "none"); 	
+				}
 				c0.att("onclick", "elementClick(event)");	
 				c0.att("id", this.count + "pixel_"+i+"_"+j);
 				c0.att("data-row", i);
@@ -62,6 +70,9 @@ function elementClick(event) {
 	var j = parseInt(event.target.getAttribute("data-col"));	
 	var d = parseInt(event.target.getAttribute("data-count"));	
 	console.log("clicked pixel: " + d+" " + i +" " + j);
+	for (var k =0; k < svgPixel.cellFunctions.length; k++) {
+		svgPixel.cellFunctions[k](i,j);
+	}
 };
 
 /*
@@ -86,7 +97,7 @@ class Cell {
 	}
 
 	maxNeighbors() {
-		if (cellBehavior.includeDiagonals) return 8;
+		if (this.cellArray.includeDiagonals) return 8;
 		return 4;
 	}
 
@@ -159,6 +170,15 @@ class Cell {
 		return this.neighbor(-1,-1);
 	}
 	
+	neighborSum() {
+		var sum = 0;
+		var list = this.neighbors();
+		for (var i=0; i< list.length; i++) {
+			sum += list[i].value;
+		}
+		return sum;
+	}
+
 	neighbors(){
 		var list = [];
 		if(this.north() != null) list.push(this.north());
@@ -166,7 +186,7 @@ class Cell {
 		if(this.east() != null) list.push(this.east());
 		if(this.west() != null) list.push(this.west());
 		
-		if (cellBehavior.includeDiagonals) {
+		if (this.cellArray.includeDiagonals) {
 			if(this.northEast() != null) list.push(this.northEast());
 			if(this.northWest() != null) list.push(this.northWest());
 			if(this.southEast() != null) list.push(this.southEast());
@@ -193,15 +213,35 @@ class Cell {
 class CellArray {
 
 	constructor(svgPixel) {
+		this.includeDiagonals = true;
 		this.rowNum = svgPixel.rows;
 		this.colNum = svgPixel.cols;
 		this.cells = [];
 		this.svgPixel = svgPixel;
 		this.rules = [];
+		this.colorRange = 8;
+	}
+
+	setIncludeDiagonals(value) {
+		this.includeDiagonals = value;
 	}
 
 	addRule(rule){
 		this.rules.push(rule);
+	}
+
+	on(i,j){
+		if (i > this.rowNum -1 || j > this.colNum -1) {
+			return;
+		}
+		this.cells[i][j].on();
+	}
+
+	cell(i,j) {
+		if (i > this.rowNum -1 || j > this.colNum -1) {
+			return;
+		}
+		return this.cells[i][j];
 	}
 
 	applyRules() {		
@@ -223,7 +263,8 @@ class CellArray {
 	}
 	
 	update(cell) {
-		this.svgPixel.value(cell.rowNum,cell.colNum, hslColorChooser(cell.value,cell.maxNeighbors()));
+		//this.svgPixel.value(cell.rowNum,cell.colNum, hslColorChooser(cell.value,1));
+		this.svgPixel.value(cell.rowNum,cell.colNum, hslColorChooser(cell.value,this.colorRange));
 		
 	}
 

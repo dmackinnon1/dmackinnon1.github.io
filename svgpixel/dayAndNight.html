@@ -4,59 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/gol.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>Day and Night</title>
 </head>
 
-<style>
-svg {
-	display: block; 
-	margin: auto ;
-	border: 1px solid grey;
-}
-.buttonDiv {
-	display: inline-block;
-	padding: 2px;
-	border: 2px;
-	text-align: center;
-}
-
-h3.centered {
-	text-align: center;
-}
-
-</style>
-</head>
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
 <script src="js/svgpixel.js"></script>
 <script src="js/gol.js"></script>
+<script src="js/gol_ui.js"></script>
 
 <script>
 
-<!-- sizing utility -->
-function isBreakpoint( alias ) {
-    return $('.device-' + alias).is(':visible');
-}
-
-<!-- initialize the svg -->
-var gameOfLife;
 var selectedBeastie = "glider";
-
-function setup() {
-	console.log("setup called");	
-	gameOfLife = new GameOfLife(300, 300, 61, 61);
-	gameOfLife.init();
+function init() {
+	setup(); // calls to js/gol_ui.js
 	gameOfLife.dayAndNightRules();
-	svgPixel.cellFunctions.push(addCell);
-	var timedDraw = setInterval(run, 150);
-	$("#pixelDisplay").html(gameOfLife.svg()); 	
-};
-
-function run() {
-	gameOfLife.doIt();
-	$("#generationDisplay").html("<h3 class='centered'> generation: " + gameOfLife.generation + "</h3>");
+	svgPixel.cellFunctions.push(addCell);	
 }
+
+$(document).ready(function(){
+	init();
+});
+
+$(document).ready(function(){
+    $("#refresh").on("click", function(event){
+		init();
+	});
+	$("#start-btn").on("click", function(event){
+		startClicked();
+	});
+	$("#stop-btn").on("click", function(event){
+		stopClicked();
+	});
+	$("#step-btn").on("click", function(event){
+		stepClicked();
+	});
+});
+
+$(document).ready(function(){
+	$("form input:radio").on('click',function(e){
+		selectedBeastie = $('input[name=beastie]:checked').val();
+	});
+});
 
 function addCell(i,j) {
 	if (selectedBeastie == "glider") {
@@ -65,24 +56,17 @@ function addCell(i,j) {
 		gameOfLife.rPentomino(i,j);
 	} else if (selectedBeastie =="toad") {
 		gameOfLife.toad(i,j);
-	} else {
+	} else if (selectedBeastie =="square"){
 		gameOfLife.square(i,j);
+	} else if (selectedBeastie =="pants") {
+		gameOfLife.explodingPants(i,j);
+	} else {
+		gameOfLife.pixel(i,j);
+	}
+	if (!isRunning) {
+		gameOfLife.forceFlushQueue();
 	}
 }
-
-
-<!-- the functions to call to display -->
-
-<!-- initialization -->
-$(document).ready(function(){
-	setup();
-});
-
-$(document).ready(function(){
-    $("#refresh").on("click", function(event){
-		setup();
-	});
-});
 
 
 $(document).ready(function(){
@@ -138,12 +122,26 @@ $(document).ready(function(){
   <input type="radio" class="radio-inline" name="beastie" value="toad"> toad<br>
   </label>
   <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="beastie" value="pants"> pants<br>
+  </label>
+  <label class="radio-inline">
   <input type="radio" class="radio-inline" name="beastie" value="square"> square<br>
+  </label>
+  </label>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="beastie" value="pixel"> pixel<br>
   </label>
 </form>
 </div>
 </h4>
 <div id="pixelDisplay" style="text-align=center"></div>
+<div class="btn-wrap">
+<div class="btn-group btn-group-lg" role="group">
+  <button type="button" id="start-btn" class="btn btn-secondary">Start</button>
+  <button type="button" id="stop-btn" class="btn btn-secondary">Stop</button>
+  <button type="button" id="step-btn" class="btn btn-secondary">Step</button>
+</div>
+</div>
 <hr>
 <div id="generationDisplay"></div><hr>
 

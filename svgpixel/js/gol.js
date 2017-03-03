@@ -121,6 +121,18 @@ class GameOfLife {
 		this.cellqueue = [];
 	}
 	
+	forceFlushQueue() {
+		for (var i = 0; i< this.cellqueue.length; i++) {
+			var cell = this.cellqueue[i];
+			if (cell != null) {
+				this.cellqueue[i].onNow();
+			}
+		}
+		this.cellqueue = [];
+
+
+	}
+
 	// some beasties
 	rPentomino(i,j) {
 		this.cellqueue.push(this.cells.cell(i,j));
@@ -202,6 +214,10 @@ class GameOfLife {
 		this.cellqueue.push(this.cells.cell(i+1,j-1));
 
 		this.cellqueue.push(this.cells.cell(i-1,j));
+	}
+
+	pixel(i,j) {
+		this.cellqueue.push(this.cells.cell(i,j));
 	}
 
 };

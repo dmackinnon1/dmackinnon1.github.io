@@ -21,7 +21,6 @@ class SVGPixel {
 
 	svg() {
 		var radius = Math.min(this.height/this.rows, this.width/this.cols)/2;
-		console.log('computed radius = ' + radius);
 		var svg = new Bldr("svg");
 		svg.att("align", "center").att("width", this.width).att("height", this.height);
 		for (var i = 0; i < this.rows; i ++) {
@@ -69,7 +68,6 @@ function elementClick(event) {
 	var i = parseInt(event.target.getAttribute("data-row"));
 	var j = parseInt(event.target.getAttribute("data-col"));	
 	var d = parseInt(event.target.getAttribute("data-count"));	
-	console.log("clicked pixel: " + d+" " + i +" " + j);
 	for (var k =0; k < svgPixel.cellFunctions.length; k++) {
 		svgPixel.cellFunctions[k](i,j);
 	}
@@ -105,6 +103,11 @@ class Cell {
 		this.nextValue = 1;
 	}
 	
+	onNow() {
+		this.nextValue = 1;
+		this.transition();
+	}
+
 	off(){
 		this.nextValue = 0;
 	}

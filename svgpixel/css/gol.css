@@ -1,0 +1,21 @@
+
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid grey;
+}
+
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+	text-align: center;
+}
+
+.btn-wrap {
+	text-align: center;
+}
+
+h3.centered {
+	text-align: center;
+}

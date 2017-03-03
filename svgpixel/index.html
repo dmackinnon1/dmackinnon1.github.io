@@ -45,7 +45,7 @@ var sandpile;
 
 function setup() {
 	console.log("setup called");
-if (isBreakpoint("xs")) {
+	if (isBreakpoint("xs")) {
 		sandpile = new Sandpile(200, 300, 21, 31);
 		console.log("xs chosen");
 	} else if (isBreakpoint("sm") || isBreakpoint("md")) {
@@ -158,7 +158,39 @@ Some experiments in cellular automata. Source <a href="https://github.com/dmacki
 		<div id="pixelDisplay" style="text-align=center"></div>
 		<hr>
 	</div>
+</div>
+
+	<div class='row'>	
+	<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			<!--<img class="card-img-top" src="./imgs/sandpile.png" alt="sandpile image"  
+	  				style="width: 75px; height: 75px; padding: 5px;"> -->
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="highlife.html">HighLife</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">Amped up Life</h6>
+    				</div>
+			</div>
+			<br>
+		</div>
+
+		<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			<!--<img class="card-img-top" src="./imgs/gol5.png"  alt="fractal image"  
+	  				style="width: 100px; height: 75px;padding: 5px;"> -->
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="seeds.html">Seeds</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">Explosive Life</h6>
+				</div>
+			</div>
+			<br>
+		</div>
 	</div>
+
+
 </div>
 </body>
 </html>

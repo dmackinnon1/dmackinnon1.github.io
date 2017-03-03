@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title>Game Of Life</title>
+<title>HighLife</title>
 </head>
 
 <style>
@@ -44,16 +44,16 @@ var gameOfLife;
 var selectedBeastie = "glider";
 
 function setup() {
-	if (isBreakpoint("xs")) {
+if (isBreakpoint("xs")) {
 		gameOfLife = new GameOfLife(300, 300, 61, 61);
 		console.log("xs chosen");
 	} else {
 		gameOfLife = new GameOfLife(600, 600, 121, 121);
 	}
 	gameOfLife.init();
-	gameOfLife.addConwayLifeRules();
+	gameOfLife.addHighLifeRules();
 	svgPixel.cellFunctions.push(addCell);
-	var timedDraw = setInterval(run, 100);
+	var timedDraw = setInterval(run, 1000);
 	$("#pixelDisplay").html(gameOfLife.svg()); 	
 };
 
@@ -69,10 +69,10 @@ function addCell(i,j) {
 		gameOfLife.rPentomino(i,j);
 	} else if (selectedBeastie =="toad") {
 		gameOfLife.toad(i,j);
-	} else if (selectedBeastie =="square") {
+	} else if (selectedBeastie == "square"){
 		gameOfLife.square(i,j);
-	} else {
-		gameOfLife.explodingPants(i,j);
+	} else{
+		gameOfLife.highReplicator(i,j);
 	}
 }
 
@@ -127,7 +127,7 @@ $(document).ready(function(){
 <div class='col-sm-10'>
 <div class="page-header">
 
-<form> <h1> Conway's Game of Life <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
+<form> <h1> Highlife <small> A variation on Conway's Game of Life </small> <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
 
 </div> 	
 <br>
@@ -147,7 +147,7 @@ $(document).ready(function(){
   <input type="radio" class="radio-inline" name="beastie" value="square"> square<br>
   </label>
   <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="pants"> pants<br>
+  <input type="radio" class="radio-inline" name="beastie" value="replicator"> replicator<br>
   </label>
 </form>
 </div>

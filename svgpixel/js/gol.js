@@ -12,6 +12,7 @@ class GameOfLife {
 		this.cellqueue = [];
 		this.cells.colorRange = 1;
 		this.display.useCircles = false;
+		this.cells.setIncludeDiagonals(true);
 	}
 
 	includeDiagonals(value) {
@@ -20,46 +21,83 @@ class GameOfLife {
 
 	init() {
 		this.cells.init();
-		this.addUnderPopulationRule();
-		this.addContinueToLiveRule();
-		this.addOverPopulationRule();
-		this.addReproductionRule();
 	}
-		
+	
 	clearRules() {
 		this.cells.rules = [];
-	}	
+	}
 
-	addUnderPopulationRule() {
+	addConwayLifeRules(){
 		this.cells.addRule(function (cell){
-			if(cell.neighborSum()  < 2 ){
-						cell.off();
-			}
+			var count = cell.neighborSum();
+			if(cell.value === 1 ){
+				if (count == 2 || count ==3) {
+					cell.on();
+				} else {
+					cell.off();
+				}
+			} else {
+				if (count == 3 ) {
+					cell.on();
+				} else {
+					cell.off();
+				}
+			}	
 		});
 	}	
 
-	addContinueToLiveRule() {
+	
+	addHighLifeRules(){
 		this.cells.addRule(function (cell){
-			if(cell.neighborSum() === 2 && cell.value === 1 ){
-						cell.on();
+			var count = cell.neighborSum();
+			if(cell.value === 1 ){
+				if (count == 2 || count == 3) {
+					cell.on();
+				} else {
+					cell.off();
+				}
+			} else {
+				if (count == 3 || count == 6) {
+					cell.on();
+				} else {
+					cell.off();
+				}
 			}	
 		});
 	}
 
-	addOverPopulationRule() {
+	dayAndNightRules(){
 		this.cells.addRule(function (cell){
-			if(cell.neighborSum() > 3 ){
-						cell.off();
+			var count = cell.neighborSum();
+			if(cell.value === 1 ){
+				if (count == 3 || count == 4|| count > 5) {
+					cell.on();
+				} else {
+					cell.off();
+				}
+			} else {
+				if (count == 3 || count > 5 ) {
+					cell.on();
+				} else {
+					cell.off();
+				}
 			}	
 		});
 	}
 
-	addReproductionRule() {
-		this.cells.addRule(function (cell){
-			if(cell.neighborSum() === 3 ){
-						cell.on();
+	seedsRule(){
+	this.cells.addRule(function (cell){
+			var count = cell.neighborSum();
+			if(cell.value === 0 ){
+				if (count == 2 ) {
+					cell.on();
+				} else {
+					cell.off();
+				}
+			} else {
+				cell.off();
 			}	
-		});
+		});	
 	}
 
 	doIt() {
@@ -109,6 +147,64 @@ class GameOfLife {
 		this.cellqueue.push(this.cells.cell(i+1,j+3));		
 		
 	}
+
+	square(i,j) {		
+		var nbs = this.cells.cell(i,j).neighbors();
+		for (var k = 0; k < nbs.length; k++) {
+			this.cellqueue.push(nbs[k]);	
+		}		
+	}
+
+	fullSquare(i,j) {		
+		this.square(i,j);
+		this.square(i+2,j+2);
+		this.square(i-2,j-2);
+	}
+
+
+	highReplicator(i,j) {
+		this.cellqueue.push(this.cells.cell(i+1,j+1));
+		this.cellqueue.push(this.cells.cell(i-1,j-1));
+		
+		this.cellqueue.push(this.cells.cell(i+2,j));
+		this.cellqueue.push(this.cells.cell(i-2,j));
+		this.cellqueue.push(this.cells.cell(i,j-2));
+		this.cellqueue.push(this.cells.cell(i,j+2));
+		
+		this.cellqueue.push(this.cells.cell(i+2,j-2));
+		this.cellqueue.push(this.cells.cell(i-2,j+2));
+		
+		this.cellqueue.push(this.cells.cell(i+2,j-1));
+		this.cellqueue.push(this.cells.cell(i-2,j+1));
+		
+		this.cellqueue.push(this.cells.cell(i-1,j+2));
+		this.cellqueue.push(this.cells.cell(i+1,j-2));
+	}
+
+
+	highReplicator(i,j) {
+		this.cellqueue.push(this.cells.cell(i+1,j));
+		this.cellqueue.push(this.cells.cell(i+2,j));
+		this.cellqueue.push(this.cells.cell(i+3,j));
+		
+		this.cellqueue.push(this.cells.cell(i,j+1));
+		this.cellqueue.push(this.cells.cell(i,j+2));
+		this.cellqueue.push(this.cells.cell(i,j+3));
+	}
+
+	explodingPants(i,j) {
+		this.cellqueue.push(this.cells.cell(i,j+1));
+		this.cellqueue.push(this.cells.cell(i+1,j+1));
+		this.cellqueue.push(this.cells.cell(i-1,j+1));
+		
+		this.cellqueue.push(this.cells.cell(i,j-1));
+		this.cellqueue.push(this.cells.cell(i-1,j-1));
+		this.cellqueue.push(this.cells.cell(i+1,j-1));
+
+		this.cellqueue.push(this.cells.cell(i-1,j));
+	}
+
+
 
 };
 

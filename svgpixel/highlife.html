@@ -44,7 +44,7 @@ var gameOfLife;
 var selectedBeastie = "glider";
 
 function setup() {
-if (isBreakpoint("xs")) {
+	if (isBreakpoint("xs")) {
 		gameOfLife = new GameOfLife(300, 300, 61, 61);
 		console.log("xs chosen");
 	} else {
@@ -53,7 +53,7 @@ if (isBreakpoint("xs")) {
 	gameOfLife.init();
 	gameOfLife.addHighLifeRules();
 	svgPixel.cellFunctions.push(addCell);
-	var timedDraw = setInterval(run, 1000);
+	var timedDraw = setInterval(run, 100);
 	$("#pixelDisplay").html(gameOfLife.svg()); 	
 };
 

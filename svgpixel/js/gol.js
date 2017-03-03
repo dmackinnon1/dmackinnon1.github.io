@@ -204,11 +204,7 @@ class GameOfLife {
 		this.cellqueue.push(this.cells.cell(i-1,j));
 	}
 
-
-
 };
-
-
 
 
 

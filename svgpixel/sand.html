@@ -37,8 +37,8 @@ var sandpile;
 function setup() {
 	console.log("setup called");
 	sandpile = new Sandpile(300, 300, 101, 101);
-	sandpile.init();
 	$("#pixelDisplay").html(sandpile.svg()); 
+	sandpile.init();
 	setRules(); 
 	var timedDraw = setInterval(run, 20);
 };

@@ -330,6 +330,11 @@ class GameOfLife {
 		this.cellqueue.push(this.cells.cell(i,j));
 	}
 
+	center() {
+		var cell = this.cells.cell((this.cells.rowNum -1)/2, (this.cells.colNum -1)/2);	
+		this.cellqueue.push(cell);
+	}
+
 };
 
 

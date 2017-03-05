@@ -55,11 +55,11 @@ function setup() {
 		sandpile = new Sandpile(200, 900, 21, 93);
 			console.log("lg chosen");
 	}
+	$("#pixelDisplay").html(sandpile.svg());
 	sandpile.init();
 	sandpile.includeDiagonals(false);
 	setRules(); 
-	var timedDraw = setInterval(run, 200);
-	$("#pixelDisplay").html(sandpile.svg()); 
+	var timedDraw = setInterval(run, 200);	 
 }
 
 function run() {

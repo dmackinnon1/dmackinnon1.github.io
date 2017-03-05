@@ -25,6 +25,7 @@ function init() {
 	svgPixel.cellFunctions.push(addCell);	
 };
 
+
 function addCell(i,j) {
 	gameOfLife.pixel(i,j);	
 	if (!isRunning) {
@@ -48,6 +49,12 @@ $(document).ready(function(){
 	});
 	$("#step-btn").on("click", function(event){
 		stepClicked();
+	});
+	$("#center-btn").on("click", function(event){
+		gameOfLife.center();
+		if (!isRunning) {
+			gameOfLife.forceFlushQueue();
+		}		
 	});
 });
 
@@ -85,7 +92,7 @@ $(document).ready(function(){
 
 </div> 	
 <br>
-<h3 class="centered"> Click to drop a pixel </h3>
+<h3 class="centered"> Click to drop a pixel or  <button id="center-btn" class="btn btn-default">drop in center</button> </h3>
 <div id="pixelDisplay" style="text-align=center"></div>
 
 <div class="btn-wrap">

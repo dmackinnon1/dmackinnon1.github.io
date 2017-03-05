@@ -58,7 +58,7 @@ function setup() {
 	sandpile.init();
 	sandpile.includeDiagonals(false);
 	setRules(); 
-	var timedDraw = setInterval(run, 500);
+	var timedDraw = setInterval(run, 200);
 	$("#pixelDisplay").html(sandpile.svg()); 
 }
 
@@ -156,7 +156,7 @@ Some experiments in cellular automata. Source <a href="https://github.com/dmacki
 <div class='row'>
 	<div class='col-lg-12'>
 		<div id="pixelDisplay" style="text-align=center"></div>
-		<hr>
+		<br>
 	</div>
 </div>
 
@@ -198,8 +198,46 @@ Some experiments in cellular automata. Source <a href="https://github.com/dmacki
 			</div>
 			<br>
 		</div>
+
+		<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="fredkin.html">Fredkin's Self-Replicator</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">clones!</h6>
+				</div>
+			</div>
+			<br>
+		</div>
+	</div>
+
+	<div class='row'>	
+		<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="ulam.html">Ulam's Two Step</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">a snowflake becomes a storm</h6>
+				</div>
+			</div>
+			<br>
+		</div>
+	<div class='col-md-12 col-lg-6'>
+			<div class="card">
+				<div class="text-center">
+	  			</div>
+				<div class="card-block">
+    				<h4 class="card-title"><a href="langton.html">Langton's Ant</a></h4>
+    				<h6 class="card-subtitle mb-2 text-muted">crawling life</h6>
+				</div>
+			</div>
+			<br>
+		</div>
 	</div>
 
 </div>
+
 </body>
 </html>

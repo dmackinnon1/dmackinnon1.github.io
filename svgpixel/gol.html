@@ -48,7 +48,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
-		init();
+		reset();
 	});
 	$("#start-btn").on("click", function(event){
 		startClicked();
@@ -101,7 +101,7 @@ $(document).ready(function(){
 
 </div> 	
 <br>
-<h4><div class="buttonDiv">
+<h3 class="centered"><div class="buttonDiv">
 <form>
   Clicking will drop: 
   <label class="radio-inline">
@@ -124,7 +124,7 @@ $(document).ready(function(){
   </label>
 </form>
 </div>
-</h4>
+</h3>
 <div id="pixelDisplay" style="text-align=center"></div>
 
 <div class="btn-wrap">
@@ -141,9 +141,15 @@ $(document).ready(function(){
 
 <div class='col-sm-1'>
 </div>
-
+</div>
 <br>
+<div class='row'>
+<div class='col-sm-1'></div>
+<div class='col-sm-10'>
+<p>In Conway's Game of Life (for <a href="https://en.wikipedia.org/wiki/John_Horton_Conway">John H. Conway</a>) a rectangular grid has cells that are either on (alive) or off (dead). A cell will become, or stay, alive if it has two or three living neighbors. A cell will die (or stay dead) if it has less than two or more than three living neighbors. The neighbors of the cell are all eight cells immediately surrounding it (sometimes called the Moore neighborhood, after <a href="https://en.wikipedia.org/wiki/Edward_F._Moore">Edward F. Moore</a>).</p>
 
+</div>
+<div class='col-sm-1'></div>
 </body>
 
 </html>

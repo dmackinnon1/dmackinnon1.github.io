@@ -13,6 +13,7 @@ class GameOfLife {
 		this.cells.colorRange = 1;
 		this.display.useCircles = false;
 		this.cells.setIncludeDiagonals(true);
+		this.onValue = 1;
 	}
 
 	includeDiagonals(value) {
@@ -27,7 +28,7 @@ class GameOfLife {
 		this.cells.rules = [];
 	}
 
-	addConwayLifeRules(){
+	addConwayLifeRules() {
 		this.cells.addRule(function (cell){
 			var count = cell.neighborSum();
 			if(cell.value === 1 ){
@@ -47,7 +48,7 @@ class GameOfLife {
 	}	
 
 	
-	addHighLifeRules(){
+	addHighLifeRules() {
 		this.cells.addRule(function (cell){
 			var count = cell.neighborSum();
 			if(cell.value === 1 ){
@@ -66,7 +67,7 @@ class GameOfLife {
 		});
 	}
 
-	dayAndNightRules(){
+	dayAndNightRules() {
 		this.cells.addRule(function (cell){
 			var count = cell.neighborSum();
 			if(cell.value === 1 ){
@@ -85,8 +86,8 @@ class GameOfLife {
 		});
 	}
 
-	seedsRule(){
-	this.cells.addRule(function (cell){
+	seedsRule() {
+		this.cells.addRule(function (cell){
 			var count = cell.neighborSum();
 			if(cell.value === 0 ){
 				if (count == 2 ) {
@@ -99,6 +100,116 @@ class GameOfLife {
 			}	
 		});	
 	}
+
+	fredkinRule() {
+		this.cells.addRule(function (cell){
+			if (cell.onEdge()) {cell.off();
+				return;
+			}
+			var count = cell.neighborSum();
+			if(count %2 == 0){
+				cell.off();
+			} else {
+				cell.on();			
+			}
+		});
+	}
+
+	ulamRule() {
+		this.cells.addRule(function (cell){
+			if (cell.neighborLiveCount() == 1) {
+				cell.on();
+				cell.increment();
+				return;
+			}
+			if (cell.value > 0) {
+				cell.decrement();		
+			}
+		});
+	}
+
+	langtonRule() {	
+		this.cells.addRule(function (cell){
+			var val = cell.value;
+			if (val < 2) return;
+			var nextCell;
+			
+			if (val == 2 || val == 6){
+				if (val == 2) { 
+					cell.nextValue = 1;
+				} else {
+					cell.nextValue = 0;
+				}
+				nextCell = cell.north();
+				if(nextCell != null){
+					if (nextCell.value == 0) {
+						nextCell.nextValue = 3;
+					} else if (nextCell.value == 1){
+						nextCell.nextValue = 9;
+					} else if (nextCell.value < 6) {
+						nextCell.nextValue = 9;;
+					} else {
+						nextCell.nextValue = 3;
+					}
+				}
+			} else if (val == 3 || val == 7){				
+				if (val == 3) { 
+					cell.nextValue = 1;
+				} else {
+					cell.nextValue = 0;
+				}
+				nextCell = cell.east();
+				if(nextCell != null){
+					if (nextCell.value == 0) {
+						nextCell.nextValue = 4;
+					} else if (nextCell.value == 1){
+						nextCell.nextValue = 6;
+					} else if (nextCell.value < 6) {
+						nextCell.nextValue = 6;
+					} else {
+						nextCell.nextValue = 4;
+					}
+				}
+			} else if (val == 4 || val == 8){				
+				if (val == 4) { 
+					cell.nextValue = 1;
+				} else {
+					cell.nextValue = 0;
+				}
+				nextCell = cell.south();
+				if(nextCell != null){
+					if (nextCell.value == 0) {
+						nextCell.nextValue = 5;
+					} else if (nextCell.value == 1){
+						nextCell.nextValue = 7;
+					} else if (nextCell.value < 6) {
+						nextCell.nextValue = 7;
+					} else {
+						nextCell.nextValue = 5;
+					}
+				}
+			} else if (val == 5 || val == 9){				
+				if (val == 5) { 
+					cell.nextValue = 1;
+				} else {
+					cell.nextValue = 0;
+				}
+				nextCell = cell.west();
+				if(nextCell != null){
+					if (nextCell.value == 0) {
+						nextCell.nextValue = 2;
+					} else if (nextCell.value == 1){
+						nextCell.nextValue = 8;
+					} else if (nextCell.value < 6) {
+						nextCell.nextValue = 8;
+					} else {
+						nextCell.nextValue = 2;
+					}
+				}
+			}
+		});
+	}
+
 
 	doIt() {
 		this.generation ++;
@@ -115,22 +226,21 @@ class GameOfLife {
 		for (var i = 0; i< this.cellqueue.length; i++) {
 			var cell = this.cellqueue[i];
 			if (cell != null) {
-				this.cellqueue[i].on();
+				this.cellqueue[i].nextValue = this.onValue;
 			}
 		}
 		this.cellqueue = [];
 	}
+
 	
 	forceFlushQueue() {
 		for (var i = 0; i< this.cellqueue.length; i++) {
 			var cell = this.cellqueue[i];
 			if (cell != null) {
-				this.cellqueue[i].onNow();
+				this.cellqueue[i].onNow(this.onValue);
 			}
 		}
 		this.cellqueue = [];
-
-
 	}
 
 	// some beasties

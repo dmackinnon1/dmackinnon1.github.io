@@ -10,15 +10,19 @@ function isBreakpoint( alias ) {
 
 var gameOfLife;
 
+function reset() {
+	gameOfLife.cells.reset();	
+}
+
 function setup() {
 	if (isBreakpoint("xs")) {
 		gameOfLife = new GameOfLife(300, 300, 61, 61);
 		console.log("xs chosen");
 	} else {
-		gameOfLife = new GameOfLife(600, 600, 121, 121);
+		gameOfLife = new GameOfLife(400, 400, 81, 81);
 	}
-	gameOfLife.init();
 	$("#pixelDisplay").html(gameOfLife.svg()); 	
+	gameOfLife.init();
 	stepClicked();
 };
 
@@ -28,7 +32,7 @@ var timedDraw;
 function startClicked(){
 	if (!isRunning) {
 		isRunning = true;
-		timedDraw = setInterval(run, 100);
+		timedDraw = setInterval(run, 1);
 	}
 };
 

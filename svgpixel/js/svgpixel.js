@@ -103,8 +103,9 @@ class Cell {
 		this.nextValue = 1;
 	}
 	
-	onNow() {
-		this.nextValue = 1;
+	onNow(n) {
+		if (n == null) 	this.nextValue = 1;
+		else  this.nextValue = n;
 		this.transition();
 	}
 
@@ -139,6 +140,12 @@ class Cell {
 			return this.cellArray.cells[this.rowNum + i][this.colNum + j];
 		}
 		return null;
+	}
+
+	onEdge() {
+		if (this.rowNum == 0 || this.colNum ==0) return true;
+		if (this.rowNum == this.cellArray.getRowSize()-1 || this.colNum == this.cellArray.getColumnSize() -1) return true;
+		return false;
 	}
 
 	north(){
@@ -180,6 +187,17 @@ class Cell {
 			sum += list[i].value;
 		}
 		return sum;
+	}
+
+	neighborLiveCount(){
+		var count = 0;
+		var list = this.neighbors();
+		for (var i=0; i< list.length; i++) {
+			if(list[i].value > 0) {
+				count ++;
+			}
+		}
+		return count;
 	}
 
 	neighbors(){
@@ -245,6 +263,15 @@ class CellArray {
 			return;
 		}
 		return this.cells[i][j];
+	}
+
+	reset() {
+		for (var i = 0; i < this.rowNum; i++) {
+			for (var j = 0; j < this.colNum; j++) {		
+				this.cells[i][j].value = 0;
+				this.cells[i][j].nextValue = 0;	
+			}
+		}
 	}
 
 	applyRules() {		

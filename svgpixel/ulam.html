@@ -7,21 +7,29 @@
 <link rel="stylesheet" type="text/css" href="css/gol.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title>Seeds</title>
+<title>Ulam's Two Step</title>
 </head>
+
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
 <script src="js/svgpixel.js"></script>
 <script src="js/gol.js"></script>
 <script src="js/gol_ui.js"></script>
-
 <script>
 
-var selectedBeastie = "glider";
 function init() {
 	setup(); // calls to js/gol_ui.js
-	gameOfLife.seedsRule();
-	gameOfLife.display.useCircles = true; //for variety
+	gameOfLife.ulamRule();
+	gameOfLife.includeDiagonals(false);
+	gameOfLife.cells.colorRange = 3;
+	gameOfLife.onValue = 2;
 	svgPixel.cellFunctions.push(addCell);	
+};
+
+function addCell(i,j) {
+	gameOfLife.pixel(i,j);	
+	if (!isRunning) {
+		gameOfLife.forceFlushQueue();
+	}
 }
 
 $(document).ready(function(){
@@ -30,7 +38,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
-		init();
+		reset();
 	});
 	$("#start-btn").on("click", function(event){
 		startClicked();
@@ -42,33 +50,6 @@ $(document).ready(function(){
 		stepClicked();
 	});
 });
-
-$(document).ready(function(){
-	$("form input:radio").on('click',function(e){
-		selectedBeastie = $('input[name=beastie]:checked').val();
-	});
-});
-
-function addCell(i,j) {
-	if (selectedBeastie == "glider") {
-		gameOfLife.glider(i,j);
-	} else if (selectedBeastie == "r-pentomino") {
-		gameOfLife.rPentomino(i,j);
-	} else if (selectedBeastie =="toad") {
-		gameOfLife.toad(i,j);
-	} else if (selectedBeastie == "square"){
-		gameOfLife.square(i,j);
-	} else if (selectedBeastie == "pants"){
-		gameOfLife.explodingPants(i,j);
-	}  else if(selectedBeastie == "fsquare") {
-		gameOfLife.fullSquare(i,j);
-	} else {
-		gameOfLife.pixel(i,j);
-	}
-	if (!isRunning) {
-		gameOfLife.forceFlushQueue();
-	}
-}
 
 </script>
 <body>
@@ -100,39 +81,13 @@ function addCell(i,j) {
 <div class='col-sm-10'>
 <div class="page-header">
 
-<form> <h1> Seeds <small> A variation on Conway's Game of Life </small> <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
+<form> <h1> Ulam's Two Step <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
 
 </div> 	
 <br>
-<h3 class="centered"><div class="buttonDiv">
-<form>
-  Clicking will drop: 
-  <label class="radio-inline">
-  <input type="radio" name="beastie" value="glider" checked> glider<br>
-  </label>
-  <lable class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="r-pentomino"> r-pentomino<br>
-  </lable>
-  <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="toad"> toad<br>
-  </label>
-  <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="square"> square<br>
-  </label>
-  <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="pants"> pants<br>
-  </label>
-  <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="fsquare"> three squares<br>
-  </label>
-  </label>
-  <label class="radio-inline">
-  <input type="radio" class="radio-inline" name="beastie" value="pixel"> pixel<br>
-  </label>
-</form>
-</div>
-</h3>
+<h3 class="centered"> Click to drop a pixel </h3>
 <div id="pixelDisplay" style="text-align=center"></div>
+
 <div class="btn-wrap">
 <div class="btn-group btn-group-lg" role="group">
   <button type="button" id="start-btn" class="btn btn-secondary">Start</button>
@@ -147,19 +102,16 @@ function addCell(i,j) {
 
 <div class='col-sm-1'>
 </div>
-</div>
 
+<br>
+</div>
 <div class='row'>
 <div class='col-sm-1'></div>
 <div class='col-sm-10'>
-<p>Seeds is another cellular automata in the same family as <a href="./gol.html"> Conway's Game of Life</a>. Cells that are off will turn on if they have exactly two neighbors, and all cells die after one turn. Compare with <a href="./ulam.html">Ulam's Two-Step</a>.</p>
+<p> This cellular automata, devised by <a href="https://en.wikipedia.org/wiki/Stanislaw_Ulam">Stanislaw Ulam</a>, considers the four neighbors along the north, south, east and west directions (the "von Neumann neighborhood"). If a cell has single live neighbor the cell will turn on. Once alive, a cell will die in two steps. </p>
 
 </div>
 <div class='col-sm-1'></div>
-</div>
-
-</div>
-
 </body>
 
 </html>

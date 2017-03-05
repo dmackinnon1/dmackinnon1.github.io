@@ -84,6 +84,7 @@ class Cell {
 		this.value = 0;
 		this.nextValue = 0;
 		this.cellArray = cellArray;
+		this.pixel= null;
 	}
 
 	maxRows() {
@@ -293,8 +294,7 @@ class CellArray {
 	}
 	
 	update(cell) {
-		//this.svgPixel.value(cell.rowNum,cell.colNum, hslColorChooser(cell.value,1));
-		this.svgPixel.value(cell.rowNum,cell.colNum, hslColorChooser(cell.value,this.colorRange));
+		cell.pixel.attr("fill", hslColorChooser(cell.value,this.colorRange));
 		
 	}
 
@@ -302,7 +302,9 @@ class CellArray {
 		for (var i = 0; i < this.rowNum; i ++) {
 			this.cells[i] = [];
 			for (var j = 0; j < this.colNum; j ++){
-				this.cells[i].push (new Cell(i, j, this));
+				var cell = new Cell(i, j, this);
+				this.cells[i].push (cell);
+				cell.pixel = this.svgPixel.element(cell.rowNum, cell.colNum);
 			}
 		}
 	}

@@ -117,7 +117,7 @@ class GameOfLife {
 
 	ulamRule() {
 		this.cells.addRule(function (cell){
-			if (cell.neighborLiveCount() == 1) {
+			if (cell.neighborLiveCount() == 1 && cell.value == 0) {
 				cell.on();
 				cell.increment();
 				return;

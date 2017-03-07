@@ -32,7 +32,7 @@ var timedDraw;
 function startClicked(){
 	if (!isRunning) {
 		isRunning = true;
-		timedDraw = setInterval(run, 1);
+		timedDraw = setInterval(run, 200);
 	}
 };
 

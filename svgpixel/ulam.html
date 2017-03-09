@@ -15,14 +15,32 @@
 <script src="js/gol.js"></script>
 <script src="js/gol_ui.js"></script>
 <script>
+var gridSize = "5";
 
 function init() {
-	setup(); // calls to js/gol_ui.js
+	setupUlam();	
 	gameOfLife.ulamRule();
 	gameOfLife.includeDiagonals(false);
 	gameOfLife.cells.colorRange = 3;
 	gameOfLife.onValue = 2;
 	svgPixel.cellFunctions.push(addCell);	
+};
+
+function setupUlam() {
+	var canvasdimension;
+	var gridDimension;	
+	if (isBreakpoint("xs")) {
+		canvasDimension = 300;		
+	} else {
+		canvasDimension = 400;
+	}
+	gridDimension = parseInt(gridSize);
+	
+	gameOfLife = new GameOfLife(canvasDimension, canvasDimension, gridDimension, gridDimension);	
+
+	$("#pixelDisplay").html(gameOfLife.svg()); 	
+	gameOfLife.init();
+	stepClicked();
 };
 
 
@@ -39,7 +57,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
-		reset();
+		resetUlam();
 	});
 	$("#start-btn").on("click", function(event){
 		startClicked();
@@ -55,6 +73,16 @@ $(document).ready(function(){
 		if (!isRunning) {
 			gameOfLife.forceFlushQueue();
 		}		
+	});
+});
+
+$(document).ready(function(){
+	$("form input:radio").on('click',function(e){
+		var option = $('input[name=size]:checked').val();
+		if (option != gridSize) {
+			gridSize = option;
+			init();
+		}
 	});
 });
 
@@ -90,8 +118,25 @@ $(document).ready(function(){
 
 <form> <h1> Ulam's Two Step <button id="refresh" class="btn btn-default">Restart</button> <a class="btn btn-default" href="/svgpixel">Back</a></h1></form>
 
+<div class="centered">
+<div class="buttonDiv">
+<form>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="5" checked> 5 by 5<br>
+  </label>
+  <lable class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="9"> 9 by 9<br>
+  </lable>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="21"> 21 by 21<br>
+  </label>
+  <label class="radio-inline">
+  <input type="radio" class="radio-inline" name="size" value="61"> 61 by 61<br>
+  </label>
+</form>
+</div>
+
 </div> 	
-<br>
 <h3 class="centered"> Click to drop a pixel or  <button id="center-btn" class="btn btn-default">drop in center</button> </h3>
 <div id="pixelDisplay" style="text-align=center"></div>
 

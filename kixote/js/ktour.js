@@ -8,14 +8,13 @@
 */
 class Tourist {
 	
-	constructor(board, isKixote) {
+	constructor(board) {
 		this.board = board;
 		board.init();
 		this.path = new Path(this.board, this.board.randomStart());
 		//this.solution = [];
 		this.wrong = [];
 		this.backtracks = 0;
-		this.isKixote = isKixote;
 	}
 
 	toString(){

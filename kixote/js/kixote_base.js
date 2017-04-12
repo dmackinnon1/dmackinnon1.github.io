@@ -1,4 +1,15 @@
+var gameType ={};
+gameType.type = "kixote";
 
+gameType.isKixote = function() {
+	return gameType.type === "kixote";
+}
+gameType.isNumbrix = function() {
+	return gameType.type === "numbrix";
+}
+gameType.isHidato = function() {
+	return gameType.type === "hidato";
+}
 //Classes for generating knight tours, and kings tours
 /*
 * A Cell is a square on the chessboard.
@@ -106,12 +117,23 @@ class Cell {
 	}
 	
 	neighbors(){
-		if (game.isKixote) { //reference to the global, not great.
+		if (gameType.isKixote()) { //reference to the global, not great.
 			return this.knightNeighbors();
-		} else {
+		} else if (gameType.isHidato()) {
 			return this.kingNeighbors();
+		} else if (gameType.isNumbrix()) {
+			return this.neumannNeighbors();
 		}
 
+	}
+
+	neumannNeighbors(){
+		var list = [];
+		if(this.north() != null) list.push(this.north());
+		if(this.south() != null) list.push(this.south());
+		if(this.east() != null) list.push(this.east());
+		if(this.west() != null) list.push(this.west());
+		return list;
 	}
 
 	kingNeighbors() {

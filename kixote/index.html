@@ -31,8 +31,8 @@ svg {
 <script>
 
 function loadBoard() {
-	var isKixote = true;
-	game= new Game(gameBoard,isKixote);
+	gameType.type = "kixote";
+	game= new Game(gameBoard);
 	game.init();
 	if (game.isIncomplete()) {
 		console.log("debug: " + game);

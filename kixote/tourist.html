@@ -41,8 +41,8 @@ td {
 <script>
 
 function loadBoard() {
-	var isKixote = true;
-	game= new Tourist(gameBoard,isKixote);
+	gameType.type = "kixote";
+	game= new Tourist(gameBoard);
 	game.init();
 	return htmlForBoard(game.getBoard());
 };

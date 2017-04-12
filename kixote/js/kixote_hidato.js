@@ -1,15 +1,26 @@
 
+gameType.isKixote = function() {
+	return gameType.type === "kixote";
+}
+gameType.isNumbrix = function() {
+	return gameType.type === "numbrix";
+}
+gameType.isHidato = function() {
+	return gameType.type === "hidato";
+}
+gameType.difficulty = 3;
+
+
 //this is the Kixote and Hidato game.
 class Game {
 	
-	constructor(board, isKixote) {
+	constructor(board) {
 		this.board = board;
 		board.init();
 		this.path = new Path(this.board, this.board.randomStart());
 		this.solution = [];
 		this.wrong = [];
 		this.misstep = 0;
-		this.isKixote = isKixote;
 	}
 
 	toString(){
@@ -29,7 +40,7 @@ class Game {
 	}
 	
 	init () {
-		var difficulty = 3; //2 
+		var difficulty = gameType.difficulty;
 		this.path.initPath();	
 		while (!this.path.isTour()) {c
 			this.path.initPath();

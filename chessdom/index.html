@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Chess Domination</title>
+</head>
+
+<style>
+table, th, td {
+	padding: 4px;
+	text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse; 
+}
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid black;
+}
+
+td {
+	width: 35px;	
+}
+
+.backtrackDisplay {
+	display: block;
+	text-align: center;	
+}
+
+</style>
+</head>
+<script src="js/evnts.js"></script> <!-- required for callback registration-->
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/chess_base.js"></script>
+<script src="js/chess_domination.js"></script>
+
+<script>
+
+function loadBoard() {
+	gameType.type = "kixote";
+	game= new Domination(gameBoard);
+	return htmlForBoard(game.getBoard());
+};
+
+
+$(document).ready(function(){
+    $("#refresh").on("click", function(event){
+		console.log("refresh button clicked");
+		$("#boardDisplay").html(loadBoard());
+		game.startGame();
+	});	
+
+});
+
+/*
+* The page registers callbacks to have its elements
+* refreshed when things change. These pull what they
+* require from the gameDisplay object.
+*/
+$(document).ready(function(){
+   
+    evnts.addCallback("refreshMap", function() {
+		$("#mapDisplay").html(gameDisplay.map);
+    });
+
+    evnts.addCallback("refreshScore", function() {
+		$("#scoreDisplay").html(gameDisplay.score);
+    });
+
+    $("#boardDisplay").html(loadBoard());
+    
+    game.startGame();
+
+});
+
+
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+<div class="container-fluid">
+	<div class='row'>
+		<div class='col-sm-1'></div>
+		<div class='col-sm-10'>
+			<div class="page-header">
+				<h1>Chess Domination <small></small></h1>
+			</div> 	
+			<button id="refresh" class="btn btn-default">Restart</button>
+			<div id="finish" style="text-align=center"></div>
+			<hr>
+			<h3><div id="boardDisplay" style="text-align=center"></div></h3>
+			
+			<hr>
+			
+			<h3><div id="scoreDisplay" style="text-align=center"></div></h3>
+			<hr>
+			<div id="mapDisplay" style="text-align=center"></div>
+			<hr>
+	</div>
+	<div class='col-sm-1'>
+</div>
+</body>
+</html>

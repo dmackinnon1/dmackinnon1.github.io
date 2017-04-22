@@ -22,13 +22,14 @@ svg {
 	border: 1px solid black;
 }
 
-td {
-	width: 35px;	
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
 }
 
-.backtrackDisplay {
-	display: block;
-	text-align: center;	
+.centered {
+	text-align: center;
 }
 
 </style>
@@ -39,21 +40,73 @@ td {
 <script src="js/chess_domination.js"></script>
 
 <script>
+var size = 8;
+gameType.type = "knight";
 
-function loadBoard() {
-	gameType.type = "kixote";
-	game= new Domination(gameBoard);
-	return htmlForBoard(game.getBoard());
-};
-
+function refresh() {
+	var gameBoard = new Board(size);
+	gameBoard.init();
+	game = new Domination(gameBoard);
+	console.log('board size is now ' + size);
+	$("#boardDisplay").html(htmlForBoard(game.getBoard()));
+	game.startGame();
+}
 
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
-		console.log("refresh button clicked");
-		$("#boardDisplay").html(loadBoard());
-		game.startGame();
+		refresh();
 	});	
 
+	$("#b5x5").on("click", function(event){
+		size = 5;
+		refresh();
+	});
+	$("#b7x7").on("click", function(event){
+		size = 7;
+		refresh();
+	});	
+	
+	$("#b8x8").on("click", function(event){
+		size = 8;
+		refresh();
+	});	
+	
+	$("#b9x9").on("click", function(event){
+		size = 9;
+		refresh();
+	});	
+	 $("#b10x10").on("click", function(event){
+		size = 10;
+		refresh();
+	});	
+	$("#b12x12").on("click", function(event){
+		size = 12;
+		refresh();
+	});
+	$("#king").on("click", function(event){
+		gameType.type = "king";
+		refresh();
+	});
+
+	$("#knight").on("click", function(event){
+		gameType.type = "knight";
+		refresh();
+	});
+	
+	$("#rook").on("click", function(event){
+		gameType.type = "rook";
+		refresh();
+	});
+
+	$("#bishop").on("click", function(event){
+		gameType.type = "bishop";
+		refresh();
+	});
+
+	$("#queen").on("click", function(event){
+		gameType.type = "queen";
+		refresh();
+	});
 });
 
 /*
@@ -70,11 +123,7 @@ $(document).ready(function(){
     evnts.addCallback("refreshScore", function() {
 		$("#scoreDisplay").html(gameDisplay.score);
     });
-
-    $("#boardDisplay").html(loadBoard());
-    
-    game.startGame();
-
+    refresh();
 });
 
 
@@ -100,10 +149,50 @@ $(document).ready(function(){
 		<div class='col-sm-1'></div>
 		<div class='col-sm-10'>
 			<div class="page-header">
-				<h1>Chess Domination <small></small></h1>
+				<h1>Chess <small>domination and independence</small></h1>
 			</div> 	
+			<!--
 			<button id="refresh" class="btn btn-default">Restart</button>
-			<div id="finish" style="text-align=center"></div>
+			-->
+<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
+About </button>
+<div id='full' class='collapse '>
+<br>
+<div class="media">
+  <a class="media-left media-middle" href="#">
+    <img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">Domination and Independence</h4>
+In the mathematical chess problem of domination, you are tasked with finding an arrangement of several pieces of the same type so that every square on the board is reachable in a single move by at least one of the pieces. For example, what arrangement of knights will ensure that every square is on the path of at least one knight? In the problem of independence, your goal is to place the maximum number of pieces of the same type so that none of the pieces lie in the path of another. For example, can you place eight queens on a standard 8x8 board so that none of the queens is in another's path? You can combine both questions to ask: what is the minimal independent set of a given piece that dominates a board of a given size? 
+</div>
+</div>
+<br>
+</div>
+<hr>			
+<div class="centered">
+<div class="btn-group btn-group-lg " role="group">
+  <button type="button" id="b5x5" class="btn btn-secondary">5x5</button>
+  <button type="button" id="b7x7" class="btn btn-secondary">7x7</button>
+  <button type="button" id="b8x8" class="btn btn-secondary">8x8</button>
+  <button type="button" id="b9x9" class="btn btn-secondary">9x9</button>
+  <button type="button" id="b10x10" class="btn btn-secondary">10x10</button>
+  <button type="button" id="b12x12" class="btn btn-secondary">12x12</button>
+</div>
+</div>
+<br>
+<div class="centered">
+<div class="btn-group btn-group-lg " role="group">
+  <button type="button" id="king" class="btn btn-secondary"><span class='glyphicon glyphicon-king'></span></button>
+  <button type="button" id="knight" class="btn btn-secondary"><span class='glyphicon glyphicon-knight'></span></button>
+  <button type="button" id="rook" class="btn btn-secondary"><span class='glyphicon glyphicon-tower'></span></button>
+  <button type="button" id="bishop" class="btn btn-secondary"><span class='glyphicon glyphicon-bishop'></span></button>
+   <button type="button" id="queen" class="btn btn-secondary"><span class='glyphicon glyphicon-queen'></span></button>
+
+
+</div>
+</div>
+
 			<hr>
 			<h3><div id="boardDisplay" style="text-align=center"></div></h3>
 			

@@ -29,7 +29,7 @@ class Domination {
 	}
 
 	startGame() {
-		gameDisplay.map = svgMap(this.pieces, this.cover);
+		gameDisplay.map = svgMap(this.pieces, this.cover, this.board.size);
 		gameDisplay.score = scoreDisplay(0,this.dominationScore(), this.independenceScore()); 	
 		evnts.fireEvent("refreshMap");
 		evnts.fireEvent("refreshScore");
@@ -43,23 +43,21 @@ class Domination {
 			}
 		}
 		this.cover = [];
-		for (var i = 0; i < this.board.rowNum; i++) {
-			for (var j = 0; j < this.board.colNum; j++) {
-				var cell = this.board.cells[i][j];
-				var div = getDiv(i, j);
-				for (var k = 0; k < this.pieces.length; k++) {
-					var current = this.pieces[k];	
-					if (cell.isNeighbor(current)){
-						//div.css("color","#004d00");
+		for (var k = 0; k < this.pieces.length; k++)  {
+			var selected = this.pieces[k];
+			var nbs = selected.neighbors();
+			for (var l = 0; l < nbs.length; l++){
+				var nbCell = nbs[l];
+				var i = nbCell.rowNum;
+				var j = nbCell.colNum;
+				if (!this.isInSet(i,j,this.cover)){
+						this.cover.push(nbCell);
+						var div = getDiv(i, j);
 						div.css("background","#99ff99");
-						if (!this.isInSet(i,j,this.cover)){
-							this.cover.push(cell);
-						}
-
-					} 
-				}	
+				}
 			}
 		}
+
 	}
 	
 	dominationScore() {
@@ -130,10 +128,10 @@ class Domination {
 			parentTarget.innerHTML = emptyCell(i,j);	
 		} else {
 			this.pieces.push(targetCell);
-			parentTarget.innerHTML = knightGlyph(i,j);
+			parentTarget.innerHTML = gameGlyph(i,j);
 		}
 		this.colourCells();
-		gameDisplay.map = svgMap(this.pieces, this.cover);
+		gameDisplay.map = svgMap(this.pieces, this.cover, this.board.size);
 		evnts.fireEvent("refreshMap");
 		gameDisplay.score = scoreDisplay(this.pieces.length, this.dominationScore(), this.independenceScore()); 
 		evnts.fireEvent("refreshScore");
@@ -145,7 +143,7 @@ function scoreDisplay(pieces, domination, independence) {
 	console.log("domination score: " + domination);
 	console.log("independence score: " + independence);		
 	var html = new Bldr("h4").att("align","center");
-	html.text("" + pieces + " pieces have been placed.")
+	html.text("" + pieces + " " + gameType.type +"s have been placed.")
 	html.elem(new Bldr("br"));
 	if (domination == 0) {
 		html.text("Board is dominated.");
@@ -161,8 +159,3 @@ function scoreDisplay(pieces, domination, independence) {
 	}
 	return html.build();
 }
-
-//the game instance
-var gameBoard = new Board(8,8);
-gameBoard.init();
-var game = null;

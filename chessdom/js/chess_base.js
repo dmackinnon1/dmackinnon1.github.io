@@ -18,10 +18,6 @@ gameType.isBishop = function() {
 gameType.isQueen = function() {
 	return gameType.type === "queen";
 }
-//Classes for generating knight tours, and kings tours
-/*
-* A Cell is a square on the chessboard.
-*/
 class Cell {
 		
 	constructor(rowNum, colNum, board) {
@@ -166,24 +162,24 @@ class Cell {
 		return diag;
 	}
 
-
+	//refactor this and glyph to be functional
 	neighbors(){
-		if (gameType.isKnight()) { //reference to the global, not great.
+		if (this.decoration == "knight") { 
 			return this.knightNeighbors();
 		} 
 
-		if (gameType.isKing()) {
+		if (this.decoration == "king") {
 			return this.kingNeighbors();
 		} 
 
-		if (gameType.isRook()) {
+		if (this.decoration == "rook") {
 			return this.rookNeighbors();
 		}
 
-		if (gameType.isBishop()) {
+		if (this.decoration == "bishop") {
 			return this.bishopNeighbors();
 		}
-		if (gameType.isQueen()) {
+		if (this.decoration == "queen") {
 			return this.queenNeighbors();
 		}
 
@@ -258,9 +254,6 @@ class Cell {
 	}
 };
 
-/*
-* A chessboard of configurable size.
-*/
 class Board {
 
 	constructor(size) {
@@ -346,22 +339,7 @@ function getDiv(i,j) {
 var gameDisplay = {};
 gameDisplay.map = "";
 gameDisplay.score = "";
-/**
-* Some events are fired when these elements are updated
-* refreshStatus - called when status is updated
-* refreshMap - called when map is updated
-* refreshSteps - called when misstep count is updated
-* 
-* These use the 'evnts' object to invoke any registered callbacks
-*/
 
-/**
-* utilities
-*/
-function randomInt(lessThan){
-	var selection = Math.floor(Math.random()*(lessThan));
-	return selection;
-};
 
 function svgMap(pieces, cover, size) {
 	var svg = new Bldr("svg");
@@ -440,20 +418,20 @@ function queenGlyph(i,j){
 	return glyph;	
 };
 
-function gameGlyph(i,j) {
-	if (gameType.isKnight()){
+function gameGlyph(i,j, type) {
+	if (type == "knight"){
 		return knightGlyph(i,j);
 	}
-	if (gameType.isKing()){
+	if (type == "king"){
 		return kingGlyph(i,j);
 	}
-	if (gameType.isRook()) {
+	if (type == "rook") {
 		return rookGlyph(i,j);
 	}
-	if (gameType.isBishop()) {
+	if (type == "bishop") {
 		return bishopGlyph(i,j);
 	}
-	if (gameType.isQueen()) {
+	if (type == "queen") {
 		return queenGlyph(i,j);
 	}
 }

@@ -32,6 +32,7 @@ svg {
 	text-align: center;
 }
 
+
 </style>
 </head>
 <script src="js/evnts.js"></script> <!-- required for callback registration-->
@@ -49,7 +50,19 @@ function refresh() {
 	game = new Domination(gameBoard);
 	console.log('board size is now ' + size);
 	$("#boardDisplay").html(htmlForBoard(game.getBoard()));
+	setButtons();
 	game.startGame();
+}
+
+function setButtons() {
+	$(".btn-primary").addClass("btn-secondary");
+	$(".btn-primary").removeClass("btn-primary");
+
+	$("#" + gameType.type).removeClass("btn-secondary");	
+	$("#" + gameType.type).addClass("btn-primary");
+	$("#b" + size +"x" + size).removeClass("btn-secondary");	
+	$("#b" + size +"x" + size).addClass("btn-primary");
+	
 }
 
 $(document).ready(function(){
@@ -57,63 +70,18 @@ $(document).ready(function(){
 		refresh();
 	});	
 
-	$("#b5x5").on("click", function(event){
-		size = 5;
-		refresh();
-	});
-	$("#b7x7").on("click", function(event){
-		size = 7;
-		refresh();
-	});	
-	
-	$("#b8x8").on("click", function(event){
-		size = 8;
-		refresh();
-	});	
-	
-	$("#b9x9").on("click", function(event){
-		size = 9;
-		refresh();
-	});	
-	 $("#b10x10").on("click", function(event){
-		size = 10;
-		refresh();
-	});	
-	$("#b12x12").on("click", function(event){
-		size = 12;
-		refresh();
-	});
-	$("#king").on("click", function(event){
-		gameType.type = "king";
+	$(".sizeButton").on("click", function(event){
+		size = parseInt(event.currentTarget.getAttribute("data-value"));
 		refresh();
 	});
 
-	$("#knight").on("click", function(event){
-		gameType.type = "knight";
-		refresh();
-	});
-	
-	$("#rook").on("click", function(event){
-		gameType.type = "rook";
-		refresh();
-	});
 
-	$("#bishop").on("click", function(event){
-		gameType.type = "bishop";
-		refresh();
-	});
-
-	$("#queen").on("click", function(event){
-		gameType.type = "queen";
-		refresh();
+	$(".typeButton").on("click", function(event){
+		gameType.type = event.currentTarget.id;
+		setButtons();
 	});
 });
 
-/*
-* The page registers callbacks to have its elements
-* refreshed when things change. These pull what they
-* require from the gameDisplay object.
-*/
 $(document).ready(function(){
    
     evnts.addCallback("refreshMap", function() {
@@ -164,7 +132,17 @@ About </button>
   </a>
   <div class="media-body">
     <h4 class="media-heading">Domination and Independence</h4>
-In the mathematical chess problem of domination, you are tasked with finding an arrangement of several pieces of the same type so that every square on the board is reachable in a single move by at least one of the pieces. For example, what arrangement of knights will ensure that every square is on the path of at least one knight? In the problem of independence, your goal is to place the maximum number of pieces of the same type so that none of the pieces lie in the path of another. For example, can you place eight queens on a standard 8x8 board so that none of the queens is in another's path? You can combine both questions to ask: what is the minimal independent set of a given piece that dominates a board of a given size? 
+In the mathematical chess problem of <b>domination</b>, 
+you are tasked with finding an arrangement of several pieces 
+of the same type so that every square on the board is reachable in a 
+single move by at least one of the pieces. 
+In the problem of <b>independence</b>, your goal is to place the maximum 
+number of pieces of the same type so that none of the pieces lie in the 
+path of another. For example, try to find: 
+<ul>
+<li> for each board size, a smallest arrangement of knights that dominates the board;</li>
+<li> a way to place 5 independent queens on a 5x5 board, and a way to place 8 independent queens on an 8x8 board.</li>
+</ul> 
 </div>
 </div>
 <br>
@@ -172,22 +150,22 @@ In the mathematical chess problem of domination, you are tasked with finding an 
 <hr>			
 <div class="centered">
 <div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="b5x5" class="btn btn-secondary">5x5</button>
-  <button type="button" id="b7x7" class="btn btn-secondary">7x7</button>
-  <button type="button" id="b8x8" class="btn btn-secondary">8x8</button>
-  <button type="button" id="b9x9" class="btn btn-secondary">9x9</button>
-  <button type="button" id="b10x10" class="btn btn-secondary">10x10</button>
+  <button type="button" id="b5x5" class="btn btn-secondary sizeButton" data-value = "5">5x5</button>
+  <button type="button" id="b7x7" class="btn btn-secondary sizeButton" data-value = "7">7x7</button>
+  <button type="button" id="b8x8" class="btn btn-secondary sizeButton" data-value = "8">8x8</button>
+  <button type="button" id="b9x9" class="btn btn-secondary sizeButton" data-value = "9">9x9</button>
+  <button type="button" id="b10x10" class="btn btn-secondary sizeButton" data-value = "10">10x10</button>
  <!-- <button type="button" id="b12x12" class="btn btn-secondary">12x12</button>-->
 </div>
 </div>
 <br>
 <div class="centered">
 <div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="king" class="btn btn-secondary"><span class='glyphicon glyphicon-king'></span></button>
-  <button type="button" id="knight" class="btn btn-secondary"><span class='glyphicon glyphicon-knight'></span></button>
-  <button type="button" id="rook" class="btn btn-secondary"><span class='glyphicon glyphicon-tower'></span></button>
-  <button type="button" id="bishop" class="btn btn-secondary"><span class='glyphicon glyphicon-bishop'></span></button>
-   <button type="button" id="queen" class="btn btn-secondary"><span class='glyphicon glyphicon-queen'></span></button>
+  <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
+  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
+  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
+  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
+   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
 
 
 </div>

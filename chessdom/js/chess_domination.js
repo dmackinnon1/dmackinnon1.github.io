@@ -1,16 +1,3 @@
-//references common framework from kixote_base.js
-
-/*
-* clicking on a cell will place a piece or remove a piece from the board.
-* for each piece all accessible cells will be highlighted (based on the piece type)
-* game will track all covered cells - goal is to cover all cells on the board
-* game will track all over-covered cells - secondary goal would be to minimize these
-* -- add a piece list
-* -- if a piece is a neighbor, it is covered... add it to the covered list
-* -- a function for determining which pieces are covered
-* -- a function for determining double/triple covered cells: over covered score
-*
-*/
 class Domination {	
 	
 	constructor(board) {
@@ -20,10 +7,6 @@ class Domination {
 		this.cover =[];
 	}
 
-	toString(){
-		return "" + this.path + ": " + this.path.isTour(); 
-	}
-	
 	getBoard() {
 		return this.board;
 	}
@@ -125,10 +108,12 @@ class Domination {
 		}	
 		if (this.isInSet(i, j, this.pieces)) {
 			this.remove(i,j);
+			targetCell.decoration = "";
 			parentTarget.innerHTML = emptyCell(i,j);	
 		} else {
+			targetCell.decoration = gameType.type;
 			this.pieces.push(targetCell);
-			parentTarget.innerHTML = gameGlyph(i,j);
+			parentTarget.innerHTML = gameGlyph(i,j, targetCell.decoration);
 		}
 		this.colourCells();
 		gameDisplay.map = svgMap(this.pieces, this.cover, this.board.size);
@@ -143,7 +128,7 @@ function scoreDisplay(pieces, domination, independence) {
 	console.log("domination score: " + domination);
 	console.log("independence score: " + independence);		
 	var html = new Bldr("h4").att("align","center");
-	html.text("" + pieces + " " + gameType.type +"s have been placed.")
+	html.text("" + pieces + " pieces have been placed.")
 	html.elem(new Bldr("br"));
 	if (domination == 0) {
 		html.text("Board is dominated.");

@@ -178,7 +178,7 @@ class Cell {
 	}
 	
 	toString() {
-		return "Cell [" + this.rowNum + "][" + this.colNum +"]: " + this.decoration;
+		return "(" + this.rowNum + "," + this.colNum +")";
 	}
 	
 	isEqual(other) {
@@ -321,16 +321,9 @@ class Path {
 		}	
 	}	
 	
-	decorateCells(hideFrequency) {
+	decorateCells() {
 		for (var i = 0; i < this.cells.length; i ++) {
 			this.cells[i].decoration = (i+1);
-		}
-		if (hideFrequency > 0) {
-			for (var i = 0; i < this.cells.length; i ++) {
-				if (i % hideFrequency == 1) {
-					this.cells[i].hideIt();
-				}
-			}
 		}
 	}
 	

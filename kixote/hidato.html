@@ -30,15 +30,19 @@ svg {
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
 <script src="js/kixote_base.js"></script>
 <script src="js/kixote_hidato.js"></script>
+<script src="js/solver.js"></script>
 <script>
 
 function loadBoard() {
-	gameType.type = "hidato"; //for hidato board, isKixote = false
+	gameType.type = "hidato"; 
+	gameType.hideStrategy = strategyB;
 	game= new Game(gameBoard);
 	game.init();
 	if (game.isIncomplete()) {
 		console.log("debug: " + game);
 	}
+	var fixer = new Fixer(game);
+	fixer.fix();
 	return htmlForBoard(game.getBoard());
 };
 
@@ -88,7 +92,7 @@ $(document).ready(function(){
 
 <br>
 <div class="centered">
-<div class="btn-group btn-group-lg " role="group">
+<div class="btn-group btn-group-md " role="group">
 <a class="btn btn-default" href=".">Kixote</a>
 <a class="btn btn-primary" href="./hidato.html">Hidato</a>
 <a class="btn btn-default" href="./numbrix.html">Numbrix</a>

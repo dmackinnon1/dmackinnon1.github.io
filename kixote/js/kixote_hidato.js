@@ -1,17 +1,54 @@
+gameType.hideStrategy = null;
 
-gameType.isKixote = function() {
-	return gameType.type === "kixote";
+//a little more hidden here - seems to work well for kixote
+function strategyA(path) {
+	var last = 63;
+	for (var i = 0; i < path.cells.length; i ++) {
+		if (i%2 == 1) {
+			path.cells[i].hideIt();
+		}
+		if (i%7 == 1) {
+			path.cells[i].hideIt();
+		}
+	}
+	path.cells[last].showIt();			
 }
-gameType.isNumbrix = function() {
-	return gameType.type === "numbrix";
-}
-gameType.isHidato = function() {
-	return gameType.type === "hidato";
-}
-gameType.difficulty = 3;
 
+//a little less hidden here - hidato 
+function strategyB(path) {
+	var last = 63;
+	for (var i = 0; i < path.cells.length; i ++) {
+		if (i%2 == 1) {
+			path.cells[i].hideIt();
+		}
+		if (i%11 == 1) {
+			path.cells[i].hideIt();
+		}
+	}
+	path.cells[last].showIt();			
+}
 
-//this is the Kixote and Hidato game.
+//more hidden here - kixote 
+function strategyC(path) {
+	var last = 63;
+	for (var i = 0; i < path.cells.length; i ++) {
+		if (i%2 == 1) {
+			path.cells[i].hideIt();
+		}
+		if (i%3 == 1) {
+			path.cells[i].hideIt();
+		}
+		if (i%7 == 1) {
+			path.cells[i].hideIt();
+		}
+		if (i%13 == 1) {
+			path.cells[i].hideIt();
+		}
+		
+	}
+	path.cells[last].showIt();			
+}
+
 class Game {
 	
 	constructor(board) {
@@ -40,7 +77,6 @@ class Game {
 	}
 	
 	init () {
-		var difficulty = gameType.difficulty;
 		this.path.initPath();	
 		while (!this.path.isTour()) {c
 			this.path.initPath();
@@ -48,7 +84,8 @@ class Game {
 			this.path = new Path(board, board.randomStart());
 			this.path.initPath();
 		}		
-		this.path.decorateCells(difficulty);
+		this.path.decorateCells();
+		gameType.hideStrategy(this.path);
 	}
 
 	startGame() {

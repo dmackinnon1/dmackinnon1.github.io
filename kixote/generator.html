@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title>Hidato</title>
+<title>Generator</title>
 </head>
 
 <style>
@@ -17,13 +17,17 @@ table, th, td {
     border-collapse: collapse; 
 }
 svg {
-	display: block; 
+	//display: block;
 	margin: auto ;
 	border: 1px solid black;
 }
 .centered {
 	text-align: center;
 }
+.blocked {
+	display: block ;
+}
+
 </style>
 </head>
 <script src="js/evnts.js"></script> <!-- required for callback registration-->
@@ -31,24 +35,34 @@ svg {
 <script src="js/chess_base.js"></script>
 <script src="js/puzzles.js"></script>
 <script src="js/solver.js"></script>
-<script>
 
+<script>
 function loadBoard() {
-	
-	game = new Hidato();
+	game= new Generator();
 	game.init();
 	var fixer = new Fixer(game);
 	fixer.fix();
 	return htmlForBoard(game.getBoard());
 };
 
+
 $(document).ready(function(){
     $("#refresh").on("click", function(event){
-		console.log("refresh button clicked");
 		$("#boardDisplay").html(loadBoard());
 		game.start();
 	});	
 });
+
+CellType = "knight";
+function setButtons() {
+
+		$(".btn-primary").addClass("btn-secondary");
+		$(".btn-primary").removeClass("btn-primary");		
+		$("#" + CellType).removeClass("btn-secondary");	
+		$("#" + CellType).addClass("btn-primary");	
+		$("#boardDisplay").html(loadBoard());
+		game.start();
+};
 
 /*
 * The page registers callbacks to have its elements
@@ -56,22 +70,36 @@ $(document).ready(function(){
 * require from the gameDisplay object.
 */
 $(document).ready(function(){
+   
     evnts.addCallback("refreshMap", function() {
 		$("#mapDisplay").html(gameDisplay.map);
     });
+
+
     evnts.addCallback("refreshStatus", function() {
 		$("#finish").html(gameDisplay.statusMessage);
     });
+
+
     evnts.addCallback("refreshSteps", function() {
 		$("#missteps").html(gameDisplay.missteps);
     });
     //after callbacks are registered, we start the game
+
     $("#boardDisplay").html(loadBoard());
-    game.start();
+   
+	$(".typeButton").on("click", function(event){
+		CellType = event.currentTarget.id;
+		setButtons();
+	});
+
+	game.start();
+	
 });
 
-
 </script>
+
+<body>
 
 <nav class="navbar navbar-default" style="margin-bottom:0px">
 	<div class="container-fluid">
@@ -87,46 +115,23 @@ $(document).ready(function(){
 </nav>
 
 <br>
-<div class="centered">
-<div class="btn-group btn-group-md " role="group">
-<a class="btn btn-default" href=".">Kixote</a>
-<a class="btn btn-primary" href="./hidato.html">Hidato</a>
-<a class="btn btn-default" href="./numbrix.html">Numbrix</a>
-<a class="btn btn-default" href="./tourist.html">Tourist</a>
-</div>
-</div>
-
-
 <div class="container-fluid">
 <div class='row'>
 <div class='col-sm-1'>
 </div>
 <div class='col-sm-10'>
 <div class="page-header">
-	<h1>Hidato <small>King's Tour Puzzles</small></h1>
+	<h1>Tour Generator</small></h1>
 </div> 	
 
-<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
-About </button>
-<div id='full' class='collapse '>
-<br><hr>
-<div class="media">
-  <a class="media-left media-middle" href="#">
-    <img class="media-object" src="imgs/alice_picks_up_king.jpg" alt="Knight Moves" width="150" height="150">
-  </a>
-  <div class="media-body">
-    <h4 class="media-heading">Hidato Puzzles</h4>
-When a king has traveled around a chessboard touching every square exactly once, it has complted a "king's tour."
-A king's tour has been completed on the 8x8 board below, and the numbers show the order in which the tour was completed.
-Some of the numbers have been hidden. Your task is to reveal the hidden numbers in the correct order to complete the tour.
- </div>
-</div>
-<br>
-<hr><br>
-</div>
+<button id="refresh" class="btn btn-default">New Base Tour</button>
 
-<button id="refresh" class="btn btn-default">New Puzzle</button>
-<div id="finish" style="text-align=center"></div>
+<div class="centered">
+<div class="btn-group btn-group-lg " role="group">
+  <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
+  <button type="button" id="knight" class="btn btn-primary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
+  </div>
+</div>
 <hr>
 <h3><div id="boardDisplay" style="text-align=center">
 </div>
@@ -134,9 +139,10 @@ Some of the numbers have been hidden. Your task is to reveal the hidden numbers 
 <hr>
 <div id="missteps" style="text-align=center"></div>
 <hr>
-<div id="mapDisplay" style="text-align=center"></div>
+<div id="mapDisplay" display="block" style="text-align=center"></div>
 <hr>
 
+<br>
 </div>
 <div class='col-sm-1'>
 </div>

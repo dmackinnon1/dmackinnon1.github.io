@@ -7,6 +7,12 @@ class Move {
 		this.cell = null; //current option
 	}
 
+	copy() {
+		var copy = new Move(this.path, this.index);
+		copy.cell = this.cell.copy();
+		return copy; 
+	}
+
 	isFree() {
 		return this.path.cells[this.index].hide;
 	}
@@ -107,6 +113,7 @@ class Solver {
 					index = this.previousFree(index);
 				}
 			}
+
 			if (index == this.game.path.cells.length) {
 				this.solutions.push(this.solution());
 				index = this.previousFree(index);
@@ -116,23 +123,25 @@ class Solver {
 	}
 
 	solution() {
+		var solutionCopy = [];
 		var mismatches = [];
 		var delta = "";
 		for (var i = 0; i < this.solutionPath.length; i ++) {
+			solutionCopy.push(this.solutionPath[i].cell.copy());
 			if (this.solutionPath[i].cell != this.game.path.cells[i]){
 				mismatches.push(i);
 				delta += " " + this.solutionPath[i] +"!=" + this.game.path.cells[i];;
 			}
 		}
-		return new Solution(mismatches, delta);
-		
+		return new Solution(mismatches, delta, solutionCopy);		
 	}
 }
 
 class Solution {
-	constructor(mismatches, delta) {
+	constructor(mismatches, delta, solutionPath) {
 		this.mismatches = mismatches;
 		this.delta = delta;
+		this.solutionPath = solutionPath;
 	}
 
 	toString() {

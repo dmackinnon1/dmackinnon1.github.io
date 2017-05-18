@@ -1,19 +1,11 @@
-var gameType ={};
-gameType.type = "kixote";
 
-gameType.isKixote = function() {
-	return gameType.type === "kixote";
-}
-gameType.isNumbrix = function() {
-	return gameType.type === "numbrix";
-}
-gameType.isHidato = function() {
-	return gameType.type === "hidato";
-}
 //Classes for generating knight tours, and kings tours
 /*
 * A Cell is a square on the chessboard.
 */
+
+var CellType = "";
+
 class Cell {
 		
 	constructor(rowNum, colNum, board) {
@@ -22,6 +14,13 @@ class Cell {
 		this.board = board;
 		this.decoration = "*";
 		this.hide = false;
+	}
+
+	copy() {
+		var copy = new Cell(this.rowNum, this.colNum, this.board);
+		copy.decoration = this.decoration;
+		copy.hide = this.hide;
+		return copy;
 	}
 	
 	hideIt() {
@@ -117,14 +116,13 @@ class Cell {
 	}
 	
 	neighbors(){
-		if (gameType.isKixote()) { //reference to the global, not great.
+		if (CellType == "knight"){
 			return this.knightNeighbors();
-		} else if (gameType.isHidato()) {
+		} else if (CellType == "king") {
 			return this.kingNeighbors();
-		} else if (gameType.isNumbrix()) {
+		} else if (CellType == "pawn"){
 			return this.neumannNeighbors();
 		}
-
 	}
 
 	neumannNeighbors(){
@@ -403,9 +401,11 @@ function randomInt(lessThan){
 	return selection;
 };
 
+
 function svgMap(path) {
 	var svg = new Bldr("svg");
 	svg.att("align", "center").att("width","240").att("height","240");
+	svg.att("style","display:block");
 	//first the board
 	for (var i = 0; i < 8; i++) {
 		for (var j = 0; j < 8; j ++) {
@@ -458,6 +458,63 @@ function svgMap(path) {
 	}
 	return svg.build();
 };
+
+function svgMapSmall(path) {
+	var svg = new Bldr("svg");
+	svg.att("width","160").att("height","160");
+	//first the board
+	for (var i = 0; i < 8; i++) {
+		for (var j = 0; j < 8; j ++) {
+			var x = i*20;
+			var y = j*20;
+			if (i%2==0 && j%2==0){
+				var rect = new Bldr("rect").att("x", x).att("y",y);
+				rect.att("width", "20").att("height","20").att("fill", "#ccccb3"); 			
+				svg.elem(rect);
+			}
+			if (i%2!=0 && j%2!=0){
+				var rect = new Bldr("rect").att("x", x).att("y",y);
+				rect.att("width", "20").att("height","20").att("fill", "#ccccb3"); 			
+				svg.elem(rect);
+			}
+		}
+	}
+	//now the path
+	var prev = null;
+	for (var i=0; i< path.length; i++) {
+		var cell = path[i];
+		var x = (10 + cell.colNum*20);
+		var y = (10 + cell.rowNum*20);
+		if (prev !== null) {
+			var px = (10 + prev.colNum*20);
+			var py = (10 + prev.rowNum*20);
+			var line = new Bldr("line").att("x1", px).att("y1", py).att("x2", x).att("y2",y);
+			line.att("stroke", "black").att("stroke-width", 2);
+			svg.elem(line);
+		}
+		prev = cell;
+	}
+	//finally, the dots
+	for (var i=0; i< path.length; i++) {
+		var cell = path[i];
+		var x = (10 + cell.colNum*20);
+		var y = (10 + cell.rowNum*20);
+		var circle = new Bldr("circle").att("cx",x).att("cy", y);
+		circle.att("r",3).att("stroke", "black").att("stroke-width",1).att("fill","grey");
+		svg.elem(circle);
+		if (i === 0){
+			var c0 = new Bldr("circle").att("cx",x).att("cy", y);
+			c0.att("r",6).att("stroke", "black").att("stroke-width",1).att("fill","none");
+			svg.elem(c0);	
+		} else if (i === path.length - 1) {
+			var cn = new Bldr("circle").att("cx",x).att("cy", y);
+			cn.att("r",5).att("stroke", "black").att("stroke-width",1).att("fill","black");
+			svg.elem(cn);
+		}			
+	}
+	return svg.build();
+};
+
 
 function knightGlyph(i,j){
 	var glyph = "<span class='glyphicon glyphicon-knight' ";

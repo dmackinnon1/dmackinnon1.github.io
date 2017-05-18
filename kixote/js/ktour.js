@@ -2,17 +2,15 @@
 
 /*
 * Tourist is the implementation for the 'knighttourist' game, using the base classes and functions defined
-* in kixote_base.js.
+* in chess_base.js.
 *  
-*
 */
 class Tourist {
 	
-	constructor(board) {
-		this.board = board;
-		board.init();
+	constructor() {
+		this.board = new Board(8,8);
+		this.board.init();
 		this.path = new Path(this.board, this.board.randomStart());
-		//this.solution = [];
 		this.wrong = [];
 		this.backtracks = 0;
 	}
@@ -162,7 +160,3 @@ class Tourist {
 		
 };
 
-//the game instance
-var gameBoard = new Board(8,8);
-gameBoard.init();
-var game = null;

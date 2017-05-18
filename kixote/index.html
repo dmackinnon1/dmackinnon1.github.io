@@ -29,21 +29,15 @@ svg {
 </head>
 <script src="js/evnts.js"></script> <!-- required for callback registration-->
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
-<script src="js/kixote_base.js"></script>
-<script src="js/kixote_hidato.js"></script>
+<script src="js/chess_base.js"></script>
+<script src="js/puzzles.js"></script>
 <script src="js/solver.js"></script>
 
 <script>
 
 function loadBoard() {
-	gameType.type = "kixote";
-	gameType.hideStrategy = strategyA;
-	game= new Game(gameBoard);
+	game= new Kixote();
 	game.init();
-	if (game.isIncomplete()) {
-		console.log("debug: " + game);
-	}
-
 	var fixer = new Fixer(game);
 	fixer.fix();
 
@@ -55,7 +49,7 @@ $(document).ready(function(){
     $("#refresh").on("click", function(event){
 		console.log("refresh button clicked");
 		$("#boardDisplay").html(loadBoard());
-		game.startGame();
+		game.start();
 	});	
 });
 
@@ -82,7 +76,8 @@ $(document).ready(function(){
     //after callbacks are registered, we start the game
 
     $("#boardDisplay").html(loadBoard());
-    game.startGame();
+    
+    game.start();
 
 });
 

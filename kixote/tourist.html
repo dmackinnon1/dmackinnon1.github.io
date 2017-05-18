@@ -39,14 +39,14 @@ td {
 </head>
 <script src="js/evnts.js"></script> <!-- required for callback registration-->
 <script src="js/bldrs.js"></script> <!-- required for html/svg building -->
-<script src="js/kixote_base.js"></script>
+<script src="js/chess_base.js"></script>
 <script src="js/ktour.js"></script>
 
 <script>
 
 function loadBoard() {
-	gameType.type = "kixote";
-	game= new Tourist(gameBoard);
+	CellType = "knight";
+	game= new Tourist();
 	game.init();
 	return htmlForBoard(game.getBoard());
 };

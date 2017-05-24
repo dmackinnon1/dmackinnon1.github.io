@@ -122,7 +122,13 @@ class Cell {
 			return this.kingNeighbors();
 		} else if (CellType == "pawn"){
 			return this.neumannNeighbors();
+		} else if (CellType == "complete") {
+			return this.completeNeighbors();
 		}
+	}
+
+	completeNeighbors() {
+		return this.board.allBut(this.rowNum, this.colNum);
 	}
 
 	neumannNeighbors(){
@@ -204,6 +210,19 @@ class Board {
 			}
 		}
 	}
+
+	allBut(a,b) {
+		var allButIJ = [];
+		for (var i = 0; i < this.rowNum; i ++) {
+			for (var j = 0; j < this.colNum; j ++){
+				if (a != i && b !=j) {
+					allButIJ.push(this.cells[i][j]);
+				}
+			}
+		}
+		return allButIJ;
+	}
+	
 	randomStart() {
 		var i = randomInt(this.rowNum);
 		var j = randomInt(this.colNum);
@@ -283,6 +302,18 @@ class Path {
 		return this.isTour();
 	}
 
+	mostNeighbors() {
+		if (CellType == "knight") {
+			return 8;
+		} else if (CellType == "king"){
+			return 9;
+		} else if (CellType == "pawn") {
+			return 4;
+		} else if (CellType == "complete") {
+			return 63;
+		}
+	}
+
 	warnsdorffPath(){
 		var currentCell = this.start;
 		this.add(currentCell);
@@ -291,7 +322,7 @@ class Path {
 		var leasts = [];
 		var currentValue = null;
 		while(this.size() < boardSize){
-			var leastValue = 8; // magic number: most number of knight moves from a square on a 2d board is 8
+			var leastValue = this.mostNeighbors();
 			options = currentCell.neighbors();
 			leasts = [];
 			//first loop to find the least

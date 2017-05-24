@@ -39,10 +39,10 @@ class PathBuilder {
 	
 	init () {
 		this.path.initPath();	
-		while (!this.path.isTour()) {c
+		while (!this.path.isTour()) {
 			this.path.initPath();
-			if (path.isTour()) break;
-			this.path = new Path(board, board.randomStart());
+			if (this.path.isTour()) break;
+			this.path = new Path(this.board, this.board.randomStart());
 			this.path.initPath();
 		}		
 		this.path.decorateCells();

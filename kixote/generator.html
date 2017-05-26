@@ -132,7 +132,8 @@ Using this page, you can explore how new possible paths are opened up by hiding 
 When a value on a square is hidden, alternate paths that preserve the remaining exposed numbers will be calculated.
 You cannot hide the first square (square numbered 1), but you can hide any other cells. If you hide many cells, the 
 calculations to find alternate paths may start to take longer. The number of alternate paths varies depending on the
-chess piece type that you choose. An additional type is provided - the asterix (*) represents a piece that can move
+chess piece type that you choose. The piece represented by the circled "X" is a piece that follows the 'numbrix' movement
+rules - moving up, down, left, and right. An additional type is provided - the asterix (*) represents a piece that can move
 to any square - the graph of its available moves is the complete graph (K_64).
 </div>
 <br>
@@ -140,7 +141,7 @@ to any square - the graph of its available moves is the complete graph (K_64).
 <div class="btn-group btn-group-lg " role="group">
   <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
   <button type="button" id="knight" class="btn btn-primary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
-  <button type="button" id="pawn" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-pawn'></span></button>
+  <button type="button" id="numbrix" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-remove-circle'></span></button>
   <button type="button" id="complete" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-asterisk'></span></button>
 
   </div>

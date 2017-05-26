@@ -248,7 +248,7 @@ class Numbrix extends Puzzle {
 
 	constructor() {
 		super();
-		CellType = "pawn";
+		CellType = "numbrix";
 	}
 
 	hidePathElements() {

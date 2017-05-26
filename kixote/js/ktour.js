@@ -42,7 +42,7 @@ class Tourist {
 		var i = this.path.tail().rowNum;
 		var j = this.path.tail().colNum;
 		var last = getDiv(i, j);
-		last.html(knightGlyph(i,j));
+		last.html(cellTypeGlyph(i,j));
 		this.colourCells();
 		gameDisplay.statusMessage = "";
 		gameDisplay.backtracks = new Bldr("h3").att("align","center").text("backtracks: " + 0).build();
@@ -100,7 +100,7 @@ class Tourist {
 	
 		var current = this.path.tail();
 		var currentDiv = getDiv(current.rowNum,current.colNum);
-		currentDiv.html(knightGlyph(current.rowNum,current.colNum));
+		currentDiv.html(cellTypeGlyph(current.rowNum,current.colNum));
 		this.backtracks ++;	
 		
 		this.colourCells();
@@ -136,7 +136,7 @@ class Tourist {
 		
 		this.path.add(targetCell);
 		
-		parentTarget.innerHTML = knightGlyph(i,j);
+		parentTarget.innerHTML = cellTypeGlyph(i,j);
 		this.colourCells();
 		gameDisplay.map = svgMap(this.path.cells);
 		evnts.fireEvent("refreshMap");

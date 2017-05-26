@@ -120,10 +120,16 @@ class Cell {
 			return this.knightNeighbors();
 		} else if (CellType == "king") {
 			return this.kingNeighbors();
-		} else if (CellType == "pawn"){
+		} else if (CellType == "numbrix"){
 			return this.neumannNeighbors();
 		} else if (CellType == "complete") {
 			return this.completeNeighbors();
+		} else if (CellType == "queen") {
+			return this.queenNeighbors();
+		} else if (CellType == "rook") {
+			return this.rookNeighbors();
+		} else if (CellType == "bishop") {
+			return this.bishopNeighbors();
 		}
 	}
 
@@ -168,6 +174,79 @@ class Cell {
 		return list;
 	}
 
+	queenNeighbors() {
+		var queen = this.rookNeighbors();
+		Array.prototype.push.apply(queen, this.bishopNeighbors());
+		return queen;
+	}
+
+	rookNeighbors(){
+		var rook = this.column();
+		Array.prototype.push.apply(rook, this.row());
+		return rook;
+	}
+
+	bishopNeighbors(){
+		var bish = this.upDiagonal();
+		Array.prototype.push.apply(bish, this.downDiagonal());
+		return bish;
+	}
+
+	row(){
+		var row = [];
+		for (var i = 0; i < this.board.rowNum; i++) {
+			if (i !== this.colNum) row.push(this.board.cells[this.rowNum][i]);	
+		}
+		return row;
+	}
+
+	column(){
+		var col = [];
+		for (var i = 0; i < this.board.colNum; i++) {
+			if (i !== this.rowNum) col.push(this.board.cells[i][this.colNum]);	
+		}
+		return col;
+	}
+
+	downDiagonal(){
+		var diag = [];
+		var i = this.rowNum +1; 
+		var j = this.colNum +1;
+		while( i< this.board.rowNum && j<this.board.colNum){
+			diag.push(this.board.cells[i][j]);
+			i++;
+			j++;
+		}
+
+		i = this.rowNum -1; 
+		j = this.colNum -1;
+		while( i >= 0 && j >= 0){
+			diag.push(this.board.cells[i][j]);
+			i--;
+			j--;
+		}
+		return diag;
+	}
+
+	upDiagonal(){
+		var diag = [];
+		var i = this.rowNum -1; 
+		var j = this.colNum +1;
+		while( i >= 0 && j<this.board.colNum){
+			diag.push(this.board.cells[i][j]);
+			i--;
+			j++;
+		}
+
+		i = this.rowNum +1; 
+		j = this.colNum -1;
+		while( i < this.board.rowNum && j >= 0){
+			diag.push(this.board.cells[i][j]);
+			i++;
+			j--;
+		}
+		return diag;
+	}
 	
 	isNeighbor(cell) {
 		var nbrs = this.neighbors();
@@ -307,7 +386,7 @@ class Path {
 			return 8;
 		} else if (CellType == "king"){
 			return 9;
-		} else if (CellType == "pawn") {
+		} else if (CellType == "numbrix") {
 			return 4;
 		} else if (CellType == "complete") {
 			return 63;
@@ -553,11 +632,54 @@ function knightGlyph(i,j){
 	return glyph;	
 };
 
+function kingGlyph(i,j){
+	var glyph = "<span class='glyphicon glyphicon-king' ";
+	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
+	return glyph;	
+};
+
+function queenGlyph(i,j){
+	var glyph = "<span class='glyphicon glyphicon-queen' ";
+	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
+	return glyph;	
+};
+
+function rookGlyph(i,j){
+	var glyph = "<span class='glyphicon glyphicon-tower' ";
+	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
+	return glyph;	
+};
+
+function bishopGlyph(i,j){
+	var glyph = "<span class='glyphicon glyphicon-bishop' ";
+	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
+	return glyph;	
+};
+
 function checkGlyph(i,j){
 	var glyph = "<span class='glyphicon glyphicon-check' ";
 	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 	return glyph;		
 };
+
+function cellTypeGlyph(i,j) {
+	if (CellType == "knight"){
+			return knightGlyph(i,j);
+		} else if (CellType == "king") {
+			return kingGlyph(i,j);
+		} else if (CellType == "numbrix"){
+			return questionGlyph(i,j); //replace this
+		} else if (CellType == "complete") {
+			return questionGlyph(i,j); //replace this
+		} else if (CellType == "queen") {
+			return queenGlyph(i,j);
+		} else if (CellType == "rook") {
+			return rookGlyph(i,j);
+		} else if (CellType == "bishop") {
+			return bishopGlyph(i,j);
+		}
+
+}
 
 function exGlyph(i,j){
 	var glyph = "<span class='glyphicon glyphicon-remove-circle' ";

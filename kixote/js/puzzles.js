@@ -257,16 +257,13 @@ class Numbrix extends Puzzle {
 			if (i%2 == 1) {
 				this.path.cells[i].hideIt();
 			}
-			if (i%3 == 1) {
-				this.path.cells[i].hideIt();
-			}
-			if (i%7 == 1) {
-				this.path.cells[i].hideIt();
-			}
-			if (i%13 == 1) {
-				this.path.cells[i].hideIt();
-			}		
 		}
+		for (var i = 2; i < 6; i++) {
+			for (var j = 2; j < 6; j++) {
+				this.board.cells[i][j].hideIt();
+			}
+		}
+
 		this.path.cells[last].showIt();			
 	}
 

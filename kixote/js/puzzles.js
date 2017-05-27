@@ -258,12 +258,17 @@ class Numbrix extends Puzzle {
 				this.path.cells[i].hideIt();
 			}
 		}
-		for (var i = 2; i < 6; i++) {
-			for (var j = 2; j < 6; j++) {
-				this.board.cells[i][j].hideIt();
+		for (var i = 0; i < 8; i++) {
+			for (var j = 0; j < 8; j++) {
+				if (i == 0 || j == 0 || i == 7 || j == 7) {
+					this.board.cells[i][j].hideIt();
+				}
+				if (i > 2 && j >2 && i < 6 && j < 6) {
+					this.board.cells[i][j].hideIt();
+				}
 			}
 		}
-
+		this.path.cells[0].showIt();
 		this.path.cells[last].showIt();			
 	}
 

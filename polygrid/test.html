@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Polygrid QUnit Tests</title>
+  <!-- dependencies -->
+  <script src="js/polydiv.js"> </script>
+  <script src="js/polyparse.js"> </script>  
+  <script>
+
+  var p = new Parser("123");
+  p.tokenize();
+  p.reduce();
+  console.log("test 1:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("123x+-");
+  p.tokenize();
+  p.reduce();
+  console.log("test 2:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("x--123");
+  p.tokenize();
+  p.reduce();  
+  console.log("test 3:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("3*x + 1 - x^2 + 3x^4");
+  p.tokenize();
+  p.reduce();  
+  console.log("test 4:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("-1*x + -x^2");
+  p.tokenize();
+  p.reduce();  
+  console.log("test 5:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("1 + x +x^2 + x^3");
+  p.tokenize();
+  p.reduce();  
+  console.log("test 6:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("2");
+  p.parse();
+  console.log("test 7:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("-31");
+  p.parse();
+  console.log("test 8:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("2x");
+  console.log(p.parse().toString());
+  console.log("test 9:" + p.stack + " tokens: " + p.tokens)
+  
+  p = new Parser("2x^1");
+  console.log(p.parse().toString());
+  console.log("test 10:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("2x^2");
+  console.log(p.parse().toString());
+  console.log("test 11:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("1+2x^2");
+  console.log(p.parse().toString());
+  console.log("test 11:" + p.stack + " tokens: " + p.tokens)
+
+  p = new Parser("1+2x^2-3x");
+  console.log(p.parse().toString());
+  console.log("test 11:" + p.stack + " tokens: " + p.tokens)
+
+ p = new Parser("1+2x^2-3x + 1+2x^2-3x");
+  console.log(p.parse().toString());
+  console.log("test 12:" + p.stack + " tokens: " + p.tokens)
+
+  </script>
+</head>
+<body>
+See console
+</body>
+</html>

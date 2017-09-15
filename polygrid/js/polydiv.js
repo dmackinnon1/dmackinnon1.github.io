@@ -17,11 +17,19 @@ class Poly {
 	* var p = new Poly([1,2,3]); creates 1 + 2x + 3x^2.
 	*/
 	constructor(coefficients) {
-		this.coefficients = coefficients;
+		if (typeof coefficients === undefined ){//|| coefficients.length == 0) {
+			this.coefficents = [0];
+		} else {
+			this.coefficients = coefficients;
+		}
 	}
 	
 	static zero() {
-		return new Poly([0]);
+		return new Poly([]);
+	}
+
+	static term(index,coefficent) { //unfortunate reversal of order
+		return Poly.zero().addToTerm(coefficent, index);
 	}
 	
 	/*
@@ -43,6 +51,14 @@ class Poly {
 			}
 		}
 		return degree;
+	}
+
+	equals(other) {
+		if (other.degree()!= this.degree()) return false;
+		for(var i=0; i<=this.degree(); i++) {
+			if (this.coefficients[i] != other.coefficients[i]) return false;
+		}
+		return true;
 	}
 	
 	/*
@@ -102,7 +118,7 @@ class Poly {
 		if (i === 1) {
 			power = "x";
 		} else if (i > 1) {
-			power = "x^" + i;
+			power = "x^{" + i +"}";
 		}
 
 		var result = "";

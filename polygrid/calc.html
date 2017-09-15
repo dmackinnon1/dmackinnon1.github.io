@@ -31,28 +31,26 @@ table, th, td {
 </style>
 </head>
 <script src="js/polydiv.js"> </script>
-<!-- script src="polydiv_data.js"> </script -->
-<script src="js/polydiv_rand.js"> </script>
+<script src="js/polyparse.js"> </script>
 <script>
-var exampleCount = 1;
 PolyGrid.useGlyphQuestion = true;
 function displayQuestion(divisionResult){
 	return latexRemoteImage(divisionResult.latexShowQuestion());
 };
 function displayAnswer(divisionResult) {
 	var htmlString = "<button type='button' class='btn btn-info '";
-	htmlString += " data-toggle='collapse' data-target='#answer"+ count + "'>";
+	htmlString += " data-toggle='collapse' data-target='#answer'>";
 	htmlString += "Show Answer</button>";
-	htmlString += "<div id='answer" + count +"' class='collapse ' >";
+	htmlString += "<div id='answer' class='collapse ' >";
 	htmlString += "<br>";
 	htmlString += divisionResult.htmlLatexGrid();
 	htmlString += "<br>";
 	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
 	htmlString += "<br> " + latexRemoteImage("=" + divisionResult.latexShowSolution());
 	htmlString += "<button type='button' class='btn btn-info '";
-	htmlString += " data-toggle='collapse' data-target='#full"+ count + "'>";
+	htmlString += " data-toggle='collapse' data-target='#full'>";
 	htmlString += "Show Additional Steps</button>";
-	htmlString += "<div id='full" + count +"' class='collapse ' >";
+	htmlString += "<div id='full' class='collapse ' >";
 	htmlString += "<br>";
 	htmlString += "<div>" + divisionResult.htmlLatexHistory() + "</div>";
 	htmlString += "<br>";
@@ -64,61 +62,64 @@ function displayAnswer(divisionResult) {
 	return htmlString;
 };
 
-function nextButton(){
-	if (exampleCount === 1) {
-		return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>example</button>";
-	} else {
-		return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
-	}
+
+function div(numerator,denominator ){
+	return new Rational(numerator,denominator);
 };
-
-function resetButton(){
-	return "<br><br><button id='resetButton' class='nextButton btn btn-default' onclick='resetExamplesClicked(event)'>reset examples</button>";
-
-};
-
-function resetExamplesClicked(event) {
-	console.log("reset button clicked");
-	resetExamples();
-	exampleCount = 1;
-	$("#latexHolder").html(nextButton());
-	$("#bottomElement").html("<br>");	 			
-}
 
 function handleClick(event) {
-		var divisionResult = nextExample().simplify();
-		$("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
-		exampleCount ++;
-		$("#latexHolder").append(displayQuestion(divisionResult)); 
+		var numerator = $('#numInput').val();
+		var denominator = $('#denInput').val();
+
+		console.log("" + numerator + "/" + denominator);
+
+		var pnum = new Parser(numerator);
+		var pden = new Parser(denominator);
+
+		pnum.parse(); 
+		pden.parse();
+
+		//check for errors
+		var errorMessage = "<p> Please follow the suggestions above for formatting your polynomials."
+		if (pnum.hasError()) {
+			$("#latexHolder").html("<p><div>The calculator is having trouble parsing the dividend: " +pnum.showStack() + errorMessage+ "</div>");
+			return; 		
+		}
+
+		if (pden.hasError()) {
+			$("#latexHolder").html("<p><div>The calculator is having trouble parsing the divisor: " +pden.showStack() + errorMessage +"<div>");
+			return; 		
+		}
+
+		//validate polynomials
+		if (pnum.result.degree() < pden.result.degree()) {
+			$("#latexHolder").html("<p><div>The calculator can only divide polynomials where the divisor has a degree less than or equal to that of the dividend.</div>");
+			return;
+		}
+
+		var divisionResult = div(pnum.result,pden.result).simplify();
+		console.log(divisionResult);
+		$("#latexHolder").html(displayQuestion(divisionResult)); 
+
+		if (pden.result.equals(Poly.zero())) {
+			MathJax.Hub.Typeset();
+			$("#latexHolder").append("<p><div>The calculator does like dividing by zero. " + 
+				"Please follow the instructions above for providing a polynomial in the divisor.</div");
+			return;	
+		}
+
+		
 		$("#latexHolder").append(displayAnswer(divisionResult)); 
 		$("#latexHolder").append("<hr>"); 	
-		if (hasMoreExamples()) {
-			$("#latexHolder").append(nextButton()); 	
-		} else {
-			$("#bottomElement").append("To see more examples, reload the page, or click the button below.");
-			$("#bottomElement").append(resetButton());			
-		}
-		event.currentTarget.remove();
-		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
-};		
-	
+		//event.currentTarget.remove();
+		MathJax.Hub.Typeset(); 
+	};			
 $(document).ready(function(){
     $(".nextButton").on("click", function(event){
 		handleClick(event);
 	});	
 });
 
-$(document).ready(function(){
-	$(".checkbox").on('click',function(e){
-		var remainders = $('#remainderCheck:checked').val();
-		console.log("checkbox clicked: " + remainders);
-		if (remainders == 'yes') {
-			generateWithRemainders = true;
-		} else {
-			generateWithRemainders = false;
-		}
-	});
-});
 </script>
 
 <body>
@@ -143,11 +144,12 @@ $(document).ready(function(){
 <div class="page-header">
 	<h1>Polynomial Division using the Grid Method
 <div class="btn-group btn-group-md " role="group">
-<a class="btn btn-default" href="./calc.html">Calculator</a>
-<a class="btn btn-primary" href=".">Examples</a>
+<a class="btn btn-primary" href="./calc.html">Calculator</a>
+<a class="btn btn-default" href=".">Examples</a>
 </div>
 	</h1>
 </div> 	
+
 <div>
 Most students learn how to divide polynomials using the long division method, a process very similar to long division for numbers. 
 A less widely known method is the grid or tabular method, described 
@@ -156,21 +158,29 @@ A less widely known method is the grid or tabular method, described
 </div>
 <div>
 <br>
-<p>This page will randomly generate examples showing the completed grids.
+<p>
+Use this page to experiment with dividing polynomials using the grid method.
+Your input should be two polynomials - the dividend (numerator) and the divisor (denominator). Once you have provided the polynomials, click the <b>calculate</b> button to obtain the result.
+
+<p>
+This is not a very sophisticated calculator. Please provide single variable, fully expanded polynomials using the "standard" notation, using the hat (^) symbol to indicate exponents.
+<p>
+For example, 3x^2-x+1 is an example of a well-formed polynomial. Also, please use "x" as the variable name in all calculations.
+</div>
 <div>
-<p> If you want to try out the method on some polynomials of your own, click the <b>Calulator</b> button above.
+<p>To see a set of randomly generated examples, click on the <b>Examples</b> button above.
 </div>
 <br>
 <br>
-<div class="well well-sm">
- <form>
-    <div class="checkbox">
-      <label><input id="remainderCheck" type="checkbox" value="yes">generate examples with remainders</label>
-    </div>
-   </form>
+<div> 
+dividend (numerator): <input id="numInput" type="string"/>
+</div>
+<p>
+<div>
+divisor (denominator): <input id="denInput" type="string"/>
 </div>
 <hr>
-<button id="latexButton" class="nextButton btn btn-default"">example</button>
+<button id="latexButton" class="nextButton btn btn-default"">calculate</button>
 <br>
 <div id="latexHolder" style="text-align=center"></div>
 <br>

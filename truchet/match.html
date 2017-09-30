@@ -82,12 +82,11 @@ function reset() {
 $(document).ready(function(){
 	evnts.addCallback("refresh", function() {
 		var d = truchet.tiles.distance(tilesToMatch);
-		var message = "Success!";
-		if (d !== 0) {
-			message = " you have at least " + d + " to go.";
-		} else {
+		var message = "";
+		if (d === 0) {
 			truchet.tiles.static = true;
 			var delta = count - initialDistance;
+			message = "Success!";
 			if (delta >0) {
 				message += " You used " + delta + " moves more than needed.";
 			} 

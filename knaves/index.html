@@ -11,7 +11,9 @@
 <style>
 ul {
 	padding-left: 40px;
+	list-style-type: none;
 }
+
 
 .padSpan {
 	width: 100px;
@@ -54,8 +56,6 @@ ul {
 			var islandersDisplay = document.getElementById("islandersDisplay");
 			islandersDisplay.innerHTML = "";
 			$("#reset").addClass("btn-success");
-
-
 		});
 		$("#reset").on("click", function(event){
 			reset();
@@ -63,7 +63,6 @@ ul {
 	});
 
 	function reset() {
-
 		switch(puzzleType) {
 		case "easy":
 			island = new Islanders(4);
@@ -87,6 +86,9 @@ ul {
 		knavesList = [];
 		disabled = false;
 		$("#reset").removeClass("btn-success");
+		//experiments
+		var cset = connectedSets(island.islanders, island.islanders, island.statements, [],[]);
+		console.log(cset);
 	
 	};
 	

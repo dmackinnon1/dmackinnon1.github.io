@@ -38,6 +38,7 @@ class Islanders {
 			this.islanderControllers[islander.name] = new IslanderController(islander);
 		}
 		this.islanders = shuffle(this.knaves.concat(this.knights));
+		this.statements = this.generateStatements();
 	}
 
 	knaveNames() {
@@ -49,7 +50,7 @@ class Islanders {
 		return list;
 	}
 
-	statements() {
+	generateStatements() {
 		var x;
 		var statements = [];
 		for (x in this.islanders) {
@@ -58,6 +59,8 @@ class Islanders {
 			var source = randomElement(remainders);
 			statements.push(source.statementFor(target));	
 		}
+		statements = pruneStatements(statements);
+		statements = joinConnectedSets(this.islanders, statements);
 		return statements;
 	}
 
@@ -182,7 +185,7 @@ class IslandControllers {
 	accusationDisplay() {
 			var s = "<div> <ul>";
 		var i;
-		var statements = this.island.statements();
+		var statements = this.island.statements;
 		for (i in statements ) {
 			s += statements[i].fullStatement();
 			s += "</br>";
@@ -221,8 +224,102 @@ class StatementController {
 }
 
 /**
-* Utility functions
+* Utility functions - mostly managing arrays
 */
+
+function joinConnectedSets(islanders, listOfStatements) {
+	//1 calculate the connected sets
+	var cSets = connectedSets(islanders, islanders, listOfStatements, [], []);
+
+	//2 if there is only one connected set, then return
+	if (cSets.length == 1) {
+		console.log("the statments form a connected graph - no joins required");
+		return listOfStatements;
+	}
+	//3 otherwise, add statements that will connect the sets
+	// use a simple join based on the first element of the first set.
+	var joiner = cSets[0][0];
+	var remainingSets = removeElement(cSets, cSets[0]);
+	var newStatements = [];
+	var x;
+	for (x in remainingSets) {
+		var joinee = remainingSets[x][0];
+		newStatements.push(joinee.statementFor(joiner));
+		console.log("linking disjoint sets using " + joiner.name + " and " + joinee.name);
+	}
+	console.log("adding " + newStatements.length + " statements to connect the sets");
+	return listOfStatements.concat(newStatements);
+}
+
+
+function pruneStatements(listOfStatements) {
+	var x;
+	var extras = [];
+	for (x in listOfStatements) {
+		var e = listOfStatements[x];
+		if (arrayContains(extras, e)) continue;
+		var s = e.source;
+		var t = e.target;
+		var remainder = arrayWithoutElement(listOfStatements, e);
+		var y;
+		for (y in remainder){
+			var e1 = remainder[y];
+			var s1 = e1.source;
+			var t1 = e1.target;
+			if (s1 === t && t1 ===s) {
+				extras.push(e1);
+			}
+		}
+	}
+	console.log("pruning " + extras.length + " statments from original list of " + listOfStatements.length);
+	return arrayDifference(listOfStatements, extras);
+}
+
+//returns all islanders that are neighbors of the current islander
+function allSourcesAndTargets(islander, listOfStatements) {
+	var list = [];
+	list.push(islander);
+	var x;
+	for (x in listOfStatements) {
+		var source = listOfStatements[x].source;
+		var target = listOfStatements[x].target;
+		if (islander === source) {
+			list.push(target);
+		}
+		if(islander === target) {
+			list.push(source);
+		}
+	}
+	return list;
+};
+
+function allReachable(islander, listOfStatements, listSoFar) {
+	var reachable = copyArray(listSoFar);	
+	var immediateNeigbours = allSourcesAndTargets(islander, listOfStatements);
+	reachable = addAllUnique(reachable,immediateNeigbours);
+	//stop if we are not growing
+	if (arraysEquivalent(reachable, listSoFar)) return listSoFar;
+	//continue onto immediateNeighbors
+	for (x in immediateNeigbours) {
+		addAllUnique(reachable, allReachable(immediateNeigbours[x], listOfStatements, reachable));
+	}
+	return reachable;
+};
+
+function connectedSets(islanders, completeIslanders, listOfStatements, setList, soFar) {
+	//1 start with the first islander, and get the connected set.
+	var connect1 = allReachable(islanders[0], listOfStatements, []);
+	addAllUnique(soFar, connect1);
+	setList.push(connect1);
+	//2 end contition
+	if (arraysEquivalent(completeIslanders, soFar)) {
+		return setList;
+	}
+	//3 recurse down
+	var remainder = arrayDifference(islanders, soFar);
+	return connectedSets(remainder,completeIslanders, listOfStatements, setList, soFar);
+}
+
 
 function randomInt(lessThan){
 	return Math.floor(Math.random()*lessThan);
@@ -290,6 +387,43 @@ function addOrRemove(array, e) {
 		array.push(e);
 		return array;
 	}
+};
+
+function removeElement(array, e) {
+	var newArray = [];
+	var x;
+	for (x in array) {
+		if (e !== array[x]) {
+			newArray.push(array[x]);
+		}
+	}
+	return newArray;
+}
+
+function addUnique(array, e) {
+	if (arrayContains(array, e)){
+		return array;
+	} else {
+		array.push(e);
+		return array;
+	}
+};
+
+function addAllUnique(array1, array2) {
+	var x;
+	for (x in array2){
+		addUnique(array1, array2[x]);
+	}
+	return array1;
+};
+
+function arrayDifference(array1, array2) {
+	var newArray = copyArray(array1);
+	var x;
+	for (x in array2) {
+		newArray = removeElement(newArray, array2[x]);
+	}
+	return newArray;
 }
 
 function copyArray(array) {
@@ -299,8 +433,8 @@ function copyArray(array) {
 		newArray.push(array[x])
 	}
 	return newArray;
-}
+};
 
 function randomElement(array) {
 	return array[randomRange(0, array.length -1)];
-}
+};

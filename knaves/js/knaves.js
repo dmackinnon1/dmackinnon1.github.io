@@ -656,7 +656,7 @@ class Joint extends Statement {
 	reasoning(){
 		var s = "Because " + this.source + " said '"+ this.text +",'";
 		s += " we know " + this.source + " is not making a true statement."; 
-		s += " (If it was true, the speaker would be a knave, making the statmeent false, contradicting its being true.)"; 
+		s += " (If it was true, the speaker would be a knight claiming to be a knave, which cannot happen.)"; 
 		s += " Therefore, " + this.source + " is a knave and " + this.target;
 		s += " is a " + this.target.type() +".";
 		return "<br>" + s;			
@@ -722,6 +722,27 @@ class Solver {
 			str +="</li>";
 		}
 		str += "</ul>";
+		str += "For these reasons we know";
+		if (this.puzzle.knaveNames().length == 0) {
+				str += " there were no knaves. ";	
+			} else if (this.puzzle.knaveNames().length == 1) {
+				str += " the only knave was " 
+					+ prettyPrintList(this.puzzle.knaveNames());	
+			} else {
+				str += " the knaves were " 
+					+ prettyPrintList(this.puzzle.knaveNames());
+			}
+			str += ", and"
+			if (this.puzzle.knightNames().length == 0) {
+				str += " there were no knights";	
+			} else if (this.puzzle.knightNames().length == 1) {
+				str += " the only knight was " 
+					+ prettyPrintList(this.puzzle.knightNames());	
+			} else {
+				str += " the knights were " 
+					+ prettyPrintList(this.puzzle.knightNames());
+			}
+			str += ".";
 		return "<br>" + str;
 	}
 

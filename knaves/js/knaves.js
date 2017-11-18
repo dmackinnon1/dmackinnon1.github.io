@@ -34,29 +34,39 @@ class PuzzleGenerator {
 
 	easy() {
 		var choice = randomInt(3);
+		console.log("easy puzzle topology: " + choice);		
 		if (choice == 0) {
-			this.easy1();
+			this.easy0();
 		} else if (choice == 1){
-			this.easy2();		
+			this.easy1();		
 		} else {
-			this.easy3();
+			this.easy2();
 		}
 	}
 
 	medium() {
-		var choice = randomInt(2);
+		var choice = randomInt(3);
+		console.log("medium puzzle topology: " + choice);
 		if (choice == 0) {
-			this.medium1();
+			this.medium0();
 		} else if (choice == 1){
-			this.medium2();		
-		} 
+			this.medium1();		
+		}  else if (choice == 2){
+			this.medium2();
+		}
 	}
 
 	hard(){
-		this.hard1();
+		var choice = randomInt(2);
+		console.log("hard puzzle topology: " + choice);
+		if (choice == 0) {
+			this.hard0();
+		} else if (choice == 1){
+			this.hard1();		
+		}  
 	}
 
-	easy1(){
+	easy0(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		var basic1 = new SimplePuzzle(1, names);
@@ -67,7 +77,7 @@ class PuzzleGenerator {
 		return this.puzzle;
 	}
 
-	easy2(){
+	easy1(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		basic.completeWithMatch();
@@ -76,7 +86,7 @@ class PuzzleGenerator {
 		return this.puzzle;
 	}
 
-	easy3(){
+	easy2(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(1, names);
 		var basic1 = new SimplePuzzle(3, names);
@@ -86,7 +96,7 @@ class PuzzleGenerator {
 		return this.puzzle;
 	}
 
-	medium1() {
+	medium0() {
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		var basic2 = new SimplePuzzle(3,names);
@@ -117,7 +127,7 @@ class PuzzleGenerator {
 		this.puzzle.join(basic);	
 	}
 
-	hard1(){
+	hard0(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(2, names);
 		var basic2 = new SimplePuzzle(1, names);
@@ -129,6 +139,21 @@ class PuzzleGenerator {
 		this.puzzle.joinWithMatch(basic3);
 		this.puzzle.joinWithMatch(basic4);
 	}
+
+	hard1(){
+		var names = copyArray(nameSet());
+		var basic = new SimplePuzzle(2, names);
+		var basic2 = new SimplePuzzle(2, names);
+		var basic3 = new SimplePuzzle(1, names);
+		var basic4 = new SimplePuzzle(2, names);
+		basic4.completeWithMatch();
+		this.puzzle = new CompoundPuzzle();
+		this.puzzle.join(basic);
+		this.puzzle.joinWithCompound(basic2)		
+		this.puzzle.joinWithMatch(basic3);
+		this.puzzle.join(basic4);
+	}
+
 
 	controller() {
 		return new IslandControllers(this.puzzle);
@@ -387,6 +412,7 @@ class SimplePuzzle extends Puzzle {
 		} else {
 			target = randomElement(left);
 		}
+		this.statements = removeStatementWith(source, target, this.statements);
 		this.statements.push(source.compoundStatementFor(target));
 		shuffle(this.statements);	
 	}
@@ -491,6 +517,10 @@ class Statement {
 		return fs;
 	}
 
+	toString() {
+		return this.fullStatement();
+	}
+
 }
 
 /**
@@ -548,7 +578,7 @@ class Accusation extends TypeStatement {
 		islanders.push(this.target);
 		islanders = removeElement(islanders, known);
 		var unknown = islanders[0];
-		var s = "A knight or knave will call the opposite type a knave.";
+		var s = "All islanders will call a member of the opposite type a knave.";
 		s += " So when " + this.source +" says that " + this.target +" is a knave, we know that "
 		s += this.target + " and " + this.source + " are opposite types. "; 
 		s += " Since " + known + " is a " + known.type() + ", then " + unknown + " is a " + unknown.type() +"."; 
@@ -576,7 +606,7 @@ class Affirmation extends TypeStatement {
 		islanders.push(this.target);
 		islanders = removeElement(islanders, known);
 		var unknown = islanders[0];
-		var s = "A knight or knave will call one of their same kind a knight.";
+		var s = "All islanders will call one of their same kind a knight.";
 		s += " So when " + this.source +" says that " + this.target +" is a knight, we know that "
 		s += this.target + " and " + this.source + " are the same type. "; 
 		s += " Since " + known + " is a " + known.type() + ", then " + unknown + " is a " + unknown.type() +"."; 
@@ -995,6 +1025,23 @@ function pruneStatements(listOfStatements) {
 	}
 	console.log("pruning " + extras.length + " statments from original list of " + listOfStatements.length);
 	return arrayDifference(listOfStatements, extras);
+}
+// assumes list is already pruned
+// remove first statement involving these two, if it exists.
+function removeStatementWith(islander1, islander2, listOfStatements) {
+	var x;
+	for (x in listOfStatements) {
+		var e = listOfStatements[x];
+		var s = e.source;
+		var t = e.target;
+		if ((s === islander1 || s === islander2) && (t === islander1 || t === islander2)){
+			listOfStatements = arrayWithoutElement(listOfStatements, e);
+			console.log("removing statement: " + e.toString());
+			return listOfStatements;
+		}
+	}
+	console.log("no statements removed");
+	return listOfStatements;	
 }
 
 //returns all islanders that are neighbors (via a type statement) of the current islander

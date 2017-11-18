@@ -123,7 +123,6 @@ class PuzzleGenerator {
 		var basic2 = new SimplePuzzle(1, names);
 		var basic3 = new SimplePuzzle(3, names);
 		var basic4 = new SimplePuzzle(1, names);
-		//basic.completeWithCompound();
 		this.puzzle = new CompoundPuzzle();
 		this.puzzle.join(basic);
 		this.puzzle.joinWithCompound(basic2)		
@@ -191,6 +190,14 @@ class PuzzleGenerator {
 
 }
 
+/**
+* There are SimplePuzzles and CompoundPuzzles.
+* A basic puzzle forms a connected graph of islanders, connected by
+* Accusation/Affirmation statements.
+*
+* More interesting puzzles are formed by joining SimplePuzzles into 
+* CompoundPuzzles.
+*/
 
 class Puzzle {
 
@@ -229,7 +236,7 @@ class Puzzle {
 	}
 
 	toString() {
-		return "Puzzle islanders [" + prettyPrintList(this.islanders) + "] knaves: [" 
+		return "Puzzle knights [" + prettyPrintList(this.knights) + "] knaves: [" 
 			+ prettyPrintList(this.knaveNames()) +"]";
 	}
 }
@@ -259,7 +266,6 @@ class CompoundPuzzle extends Puzzle {
 
 	randomJoin(target) {
 		var choice = randomInt(2);
-		console.log("debug: random completion selected " + choice)
 		if (choice == 0) {
 			this.joinWithMatch(target);
 		} else {
@@ -283,8 +289,6 @@ class CompoundPuzzle extends Puzzle {
 		var state = s.compoundStatementFor(t);
 		this.statements.push(state);
 	}
-
-
 }
 
 class SimplePuzzle extends Puzzle {
@@ -338,7 +342,6 @@ class SimplePuzzle extends Puzzle {
 			if (prevSource !== undefined) {
 				remainders = arrayWithoutElement(remainders, prevSource);
 				if (remainders.length == 0) {
-					console.log("had trouble finding new source");
 					remainders = ArrayWithoutElement(this.islanders,target);
 				}
 			}
@@ -362,10 +365,8 @@ class SimplePuzzle extends Puzzle {
 		var left = arrayDifference(remainders, nbrs);
 		var target;
 		if (left.length == 0) {
-			console.log("having trouble finding unconnected islander...")
 			target = randomElement(remainders);
 		} else {
-			console.log("finding unconnected islander");
 			target = randomElement(left);
 		}
 		this.statements.push(source.matchStatementFor(target));
@@ -382,10 +383,8 @@ class SimplePuzzle extends Puzzle {
 		var left = arrayDifference(remainders, nbrs);
 		var target;
 		if (left.length == 0) {
-			console.log("having trouble finding unconnected islander...")
 			target = randomElement(remainders);
 		} else {
-			console.log("finding unconnected islander");
 			target = randomElement(left);
 		}
 		this.statements.push(source.compoundStatementFor(target));
@@ -403,6 +402,13 @@ class SimplePuzzle extends Puzzle {
 
 }
 
+/**
+* In these puzzles, there are Islanders which
+* are either Knights or Knaves.
+* Knights and Knaves in SimplePuzzles are connected
+* by Accusation/Affirmation statements.
+* Other statement types can be used to complete the puzzle.
+*/
 class Islander {
 	constructor (n) {
 		this.name = n;
@@ -463,6 +469,15 @@ class Knight extends Islander {
 	}
 }
 
+/**
+* There are various Statements that the islanders
+* make about each other.
+* A statement may behave differently depending
+* on the types of islanders involved.
+* The statement also provides information to the
+* Solver, and is used in generating a written solution
+* to the puzzle.
+*/
 class Statement {
 	constructor(source, target){
 		this.source = source;
@@ -473,12 +488,17 @@ class Statement {
 	fullStatement() {
 		var fs = this.source.name;
 		fs += " says: " + this.text + "."
-		console.log(fs);
 		return fs;
 	}
 
 }
 
+/**
+* TypeStatements are either Accusations or Affirmations.
+* They have some common solution-processing behavior.
+* In an Accusation, the source claims the target is a knave.
+* In an Affirmation, the source claims the target is a knight.
+*/
 class TypeStatement extends Statement {
 
 	done(solver) {
@@ -564,6 +584,14 @@ class Affirmation extends TypeStatement {
 	}
 }
 
+/**
+* Two other statement types are Sympathetic and Antithetic
+* statements. In these a claim is made about being the same
+* or different type.
+* A Sympathetic statement is when the source says they are the
+* same type as the target. An Antithetic statment is when the
+* source says they are a different type.
+*/
 class Sympathetic extends Statement {
 	buildStatement() {
 		var options = [
@@ -607,7 +635,15 @@ class Antithetic extends Statement {
 		addUnique(solver.knaves,this.target);		
 	}
 }
-
+/**
+* Two final statement types are Disjoint and Joint
+* statements. Here the target makes a statement with 
+* two clauses. 
+* A Disjoint statement uses an OR conjunction,
+* in the form "X or I am a knave"
+* A Joint statement uses an AND conjunction, 
+* in the form "Y and I am a knave"
+*/
 class Disjoint extends Statement {
 	buildStatement() {
 		this.text = this.target.name;
@@ -673,6 +709,14 @@ class Joint extends Statement {
 	}
 }
 
+/**
+* The Solver computes a solution to the puzzle. Because of the 
+* way the puzzles are built in PuzzleGenerator, we know that
+* they are solvable, so the purpose of the Solution is not to 
+* verify this, but only to generate one possible written description
+* of the solution, in order to display this on the page if requested.
+*
+*/
 class Solver {
 	constructor(puzzle) {
 		this.puzzle = puzzle;
@@ -685,11 +729,18 @@ class Solver {
 	solve() {
 		console.log("computing solution....");
 		var x;
+		/* Do an initial pass for all statements
+		*  This will resolve all immediately knowable types.
+		*  The remaining statements will be 'TypeStatements'
+		*  and will be used in the second pass to complete
+		*  the puzzle.
+		*/
 		for (x in this.puzzle.statements) {
 			var statement = this.puzzle.statements[x];
 			statement.solve(this);
 		}
 		
+		//type statements are gathered during the initial solving phase
 		var remainingStatements = copyArray(this.typeStatements);
 	
 		while(remainingStatements.length !== 0) {
@@ -697,15 +748,23 @@ class Solver {
 			var y;
 			for (y in remainingStatements) {
 				var s = remainingStatements[y];
+				//skip if the pair is already resolved
 				if (s.done(this)) {
 					nextRemaining = removeElement(nextRemaining, s);
 					continue;
 				}
+				// for each known knave, see if the statement is about the knave
 				var knaveCopy = copyArray(this.knaves);
 				var z;
 				for (z in knaveCopy){
 					s.process(knaveCopy[z], this);
 				}
+				//skip remaining processing if the pair is now resolved
+				if (s.done(this)) {
+					nextRemaining = removeElement(nextRemaining, s);
+					continue;
+				}
+				// for each known knight, see if the statement is about the knight
 				var knightCopy = copyArray(this.knights);
 				var w;
 				for (w in knightCopy){
@@ -714,6 +773,8 @@ class Solver {
 			}
 			remainingStatements = nextRemaining;
 		}
+		// since the puzzles are known to be solvable, we know that a solution
+		// has been constructed.
 		var str = "<ul>";
 		var i;
 		for (i in this.reasoning) {
@@ -742,17 +803,38 @@ class Solver {
 				str += " the knights were " 
 					+ prettyPrintList(this.puzzle.knightNames());
 			}
-			str += ".";
+		str += ".";
+		this.validate();
 		return "<br>" + str;
 	}
 
 	toString() {
 		return "knights: " + this.knights + " knaves: " + this.knaves;
 	}
+
+	/*
+	* After solve() has been invoked, we can validate the solution against
+	* the known answer in the original problem.
+	* This is just an extra validation for debugging purposes - in principle
+	* the Solver will always generate a correct solution...
+	*/
+	validate() {
+		var isValid = arraysEquivalent(this.knights, this.puzzle.knights);
+		isValid = isValid && arraysEquivalent(this.knaves, this.puzzle.knaves);
+		if (isValid !== true) {
+			console.log("ERROR: automated solver did not find the complete solution");
+			console.log("solver: " + this.toString());
+			console.log("puzzle: " + this.puzzle.toString());
+		} else {
+			console.log("debug: automated solver found complete solution");
+			console.log("solver: " + this.toString());
+			console.log("puzzle: " + this.puzzle.toString());		
+		}
+	}
 }
 
 /**
-* Controlers
+* Controlers are used to interface between the model and the UI.
 */
 
 class IslanderController {
@@ -854,25 +936,19 @@ function selectKnight(event) {
 
 
 /**
-* Utility functions - mostly managing arrays
+* Utility functions 
+* - functions for managing the graph of islanders linked by TypeStatements
+* - functions for manipulating arrays
+* - randomization utilities
 */
 
-function prettyPrintList(list) {
-	var s = "";
-	var i;
-	for (i in list) {
-		if (i != 0 && list.length != 2) {
-			s +=",";
-		} 
-		if (i == list.length -1 && list.length !== 1) {
-			s += " and";
-		}
-		s += " ";
-		s += list[i];	
-	}
-	return s;
-}
+/**
+* TypeStatement Graph functions. 
+* These are used to create the set of TypeStatements that connects
+* a SimplePuzzle.
+*/
 
+// Used to form connected graphs of type statements
 function joinConnectedSets(islanders, listOfStatements) {
 	//1 calculate the connected sets
 	var cSets = connectedSets(islanders, islanders, listOfStatements, [], []);
@@ -897,7 +973,7 @@ function joinConnectedSets(islanders, listOfStatements) {
 	return listOfStatements.concat(newStatements);
 }
 
-
+// Used to prune redundant type statements
 function pruneStatements(listOfStatements) {
 	var x;
 	var extras = [];
@@ -921,7 +997,7 @@ function pruneStatements(listOfStatements) {
 	return arrayDifference(listOfStatements, extras);
 }
 
-//returns all islanders that are neighbors of the current islander
+//returns all islanders that are neighbors (via a type statement) of the current islander
 function allSourcesAndTargets(islander, listOfStatements) {
 	var list = [];
 	list.push(islander);
@@ -939,6 +1015,8 @@ function allSourcesAndTargets(islander, listOfStatements) {
 	return list;
 };
 
+// returns all reachable islanders from a given islander through
+// the graph of type statements
 function allReachable(islander, listOfStatements, listSoFar) {
 	var reachable = copyArray(listSoFar);	
 	var immediateNeigbours = allSourcesAndTargets(islander, listOfStatements);
@@ -952,6 +1030,7 @@ function allReachable(islander, listOfStatements, listSoFar) {
 	return reachable;
 };
 
+//returns the set of graphs that are connected by type statements
 function connectedSets(islanders, completeIslanders, listOfStatements, setList, soFar) {
 	//1 start with the first islander, and get the connected set.
 	var connect1 = allReachable(islanders[0], listOfStatements, []);
@@ -966,6 +1045,26 @@ function connectedSets(islanders, completeIslanders, listOfStatements, setList, 
 	return connectedSets(remainder,completeIslanders, listOfStatements, setList, soFar);
 }
 
+/**
+* Array Manipulation Functions
+* A bunch of array management functions
+*/
+
+function prettyPrintList(list) {
+	var s = "";
+	var i;
+	for (i in list) {
+		if (i != 0 && list.length != 2) {
+			s +=",";
+		} 
+		if (i == list.length -1 && list.length !== 1) {
+			s += " and";
+		}
+		s += " ";
+		s += list[i];	
+	}
+	return s;
+}
 
 function arrayWithoutElement(array, e) {
 	var x;
@@ -1002,7 +1101,6 @@ function arraysEquivalent(array1, array2) {
 	if (array1.length === 0 && array2.length === 0) return true;
 	return arrayContainsArray(array1, array2) && arrayContainsArray(array2, array1);
 };
-
 
 function addOrRemove(array, e) {
 	if (arrayContains(array,e)){
@@ -1061,13 +1159,9 @@ function copyArray(array) {
 
 
 /**
-* Randomization
+* Randomization Utilities
 */
 
-/*
-* returns a pseudo-random integer in the range
-* [0, lessthan)
-*/
 function randomInt(lessThan){
 	return Math.floor(Math.random()*lessThan);
 };

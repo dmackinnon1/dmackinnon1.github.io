@@ -67,6 +67,24 @@ class PuzzleGenerator {
 	}
 
 	easy0(){
+		this.puzzle = new SimplePuzzle(2, copyArray(nameSet()));
+		this.puzzle.completeWithMatch();
+		return this.puzzle;		
+	}
+
+	easy1(){
+		this.puzzle = new SimplePuzzle(2, copyArray(nameSet()));
+		this.puzzle.completeWithCompound();
+		return this.puzzle;
+	}
+
+	easy2(){
+		this.puzzle = new SimplePuzzle(3, copyArray(nameSet()));
+		this.puzzle.randomCompletion();
+		return this.puzzle;
+	}
+
+	medium0(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		var basic1 = new SimplePuzzle(1, names);
@@ -77,7 +95,7 @@ class PuzzleGenerator {
 		return this.puzzle;
 	}
 
-	easy1(){
+	medium1(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		basic.completeWithMatch();
@@ -86,7 +104,7 @@ class PuzzleGenerator {
 		return this.puzzle;
 	}
 
-	easy2(){
+	medium2(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(1, names);
 		var basic1 = new SimplePuzzle(3, names);
@@ -96,7 +114,7 @@ class PuzzleGenerator {
 		return this.puzzle;
 	}
 
-	medium0() {
+	hard0() {
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		var basic2 = new SimplePuzzle(3,names);
@@ -105,7 +123,7 @@ class PuzzleGenerator {
 		this.puzzle.joinWithCompound(basic2);
 	}
 
-	medium1() {
+	hard1() {
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		var basic2 = new SimplePuzzle(3,names);
@@ -115,7 +133,7 @@ class PuzzleGenerator {
 		this.puzzle.joinWithMatch(basic2);
 	}
 
-	medium2() {
+	hard2() {
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(3, names);
 		var basic2 = new SimplePuzzle(2,names);
@@ -127,7 +145,7 @@ class PuzzleGenerator {
 		this.puzzle.join(basic);	
 	}
 
-	hard0(){
+	extraHard0(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(2, names);
 		var basic2 = new SimplePuzzle(1, names);
@@ -140,7 +158,7 @@ class PuzzleGenerator {
 		this.puzzle.joinWithMatch(basic4);
 	}
 
-	hard1(){
+	extraHard1(){
 		var names = copyArray(nameSet());
 		var basic = new SimplePuzzle(2, names);
 		var basic2 = new SimplePuzzle(2, names);

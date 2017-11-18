@@ -950,7 +950,7 @@ function selectKnave(event) {
 	var id = event.currentTarget.id;
 	var theKnave = id.substring(id.indexOf('_')+1, id.length);	
 	knavesList = addOrRemove(knavesList, theKnave);
-	kinghtsList = removeElement(knightsList, theKnave);
+	knightsList = removeElement(knightsList, theKnave);
 	if (arrayContains(knavesList,theKnave)) {
 		$("#knave_" + theKnave).addClass("btn-danger");		
 		$("#knave_" + theKnave).html("<span class='glypicon glyphicon glyphicon-ok lrg-font'></span>");		

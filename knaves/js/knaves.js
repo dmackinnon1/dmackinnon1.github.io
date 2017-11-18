@@ -707,7 +707,7 @@ class Disjoint extends Statement {
 	reasoning(){
 		var s = "When " + this.source + " said '"+ this.text +",'";
 		s += " we know " + this.source + " must be making a true statement."; 
-		s += "(If it was false, this would make the speaker a knave, which would make the statment true, but knaves cannot make true statements.)";
+		s += " (If it was false, this would make the speaker a knave, which would make the statment true, but knaves cannot make true statements.)";
 		s += " So, " + this.source + " is a knight and " + this.target;
 		s += " is a " + this.target.type() +".";
 		return s;			

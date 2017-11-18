@@ -160,7 +160,7 @@ class PuzzleGenerator {
 		} else {
 			s += " <em> You were wrong.</em>"
 			if (this.puzzle.knaveNames().length == 0) {
-				s += " There were no knaves. ";	
+				s += " There were no knaves ";	
 			} else if (this.puzzle.knaveNames().length == 1) {
 				s += " The only knave was " 
 					+ prettyPrintList(this.puzzle.knaveNames());	
@@ -785,7 +785,7 @@ class Solver {
 		str += "</ul>";
 		str += "For these reasons we know";
 		if (this.puzzle.knaveNames().length == 0) {
-				str += " there were no knaves. ";	
+				str += " there were no knaves ";	
 			} else if (this.puzzle.knaveNames().length == 1) {
 				str += " the only knave was " 
 					+ prettyPrintList(this.puzzle.knaveNames());	

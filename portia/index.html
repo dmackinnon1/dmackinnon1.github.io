@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/portia.js"></script>
+<script src="js/caskets.js"></script>
+<title>Portia's Caskets</title>
+</head>
+<style>
+
+ul {
+	padding-left: 40px;
+
+	list-style-type: none;
+}
+
+li {
+	padding-bottom: 10px;
+}
+
+table, tr {
+	padding: 4px;
+	text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse; 
+    margin: auto;
+}
+
+th, td {
+	padding: 10px;
+}
+
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+.centered {
+	text-align: center;
+}
+
+.puzzle-text {
+	font-style: italic;
+	font-size: large;
+}
+</style>
+<script>
+
+let portia1_puzzles = [];
+let portia2_puzzles = [];
+let portia3_puzzles = [];
+$(document).ready(function(){
+	console.log("about to fetch remote data");
+	$.getJSON("data/portia2.json", function(data){
+		portia2_puzzles = data;
+	})
+	$.getJSON("data/portia1.json", function(data){
+		portia1_puzzles = data;
+	}).done(function() {
+		reset();
+	});
+});
+
+$(document).ready(function(){
+	console.log('initializing controllers');
+	$("#resetButton").on("click", function(){
+		reset();
+	});
+	/*
+	$("#reasoningButton").on("click", function(){
+		showSolution();
+	});
+	*/	
+	display.result = document.getElementById("solutionDisplay");
+});
+
+function setButtons() {
+		$(".btn-primary").addClass("btn-secondary");
+		$(".btn-primary").removeClass("btn-primary");
+		$("#" + portia.version).addClass("btn-primary");
+		$("#" + portia.version).removeClass("btn-secondary");
+		};
+
+$(document).ready(function(){	
+	$('.puzzleTypeBtn').on("click", function(event){
+		portia.version = parseInt(event.currentTarget.id);
+		console.log("portia puzzle type: " + portia.version);
+		setButtons();
+		reset();
+	});
+});
+
+function formatPuzzle(p) {
+	console.log(p);
+	let pd =  document.getElementById("puzzleDescription");
+	let cd =  document.getElementById("caskDisplay");
+	let text = "<br>";
+	text += portiaIRiddleText(p.truths);
+	text += "<br>";
+	pd.innerHTML = text;
+	let text2 = htmlforCakets(p.caskets);
+	text2 += "<em><small>" + p.id + "</small></em>";
+	cd.innerHTML = text2;
+	
+}
+
+/*
+function showSolution() {
+	let rd = document.getElementById("reasoningDisplay");
+	rd.innerHTML = "The portrait is in casket " + portia.selected.solution +".";
+}
+*/
+function reset() {
+	if (portia.version === 1){
+		portia.puzzles = portia1_puzzles;
+	} else if (portia.version === 2){
+		portia.puzzles = portia2_puzzles;
+	} else {
+		portia.puzzles = portia3_puzzles;
+	}
+	portia.selected = randomElement(portia.puzzles);
+	formatPuzzle(portia.selected);	
+	portia.answered = false;
+	portia.chosen = -1;
+	updateResult();
+}
+
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+<div class="container-fluid">
+	<div class='row'>
+	<div class='col-sm-1'></div>
+	<div class='col-sm-10'>
+	<div class="page-header">
+		<h1>Portia's Caskets</h1>
+	</div> 		
+
+	<p>
+	In Shakespeare's <em>The Merchant of Venice</em>, Portia tested her suitors by asking them to discover which of three caskets concealed her portrait. Inscriptions on the caskets presented riddles that would test the virtue of her potential mate. In the classic book “What is the Name of this Book?” logician Raymond Smullyan imagined several generations of clever Portias, who presented potential suitors with caskets inscribed with logic puzzles that provided the key to finding the hidden portrait.
+	</p>
+	<br>
+	<p>
+	Use this page to try your luck, and puzzle solving skills with three generations of Portias.
+	</p>
+	<hr>
+	<div class="centered">
+		<div class="btn-group btn-group-md " role="group"> 
+  			<button type="button" id="1" class="puzzleTypeBtn btn btn-primary">Portia I</button>
+  			<button type="button" id="2" class="puzzleTypeBtn btn btn-secondary">Portia II</button>
+  			<button type="button" id="3" class="puzzleTypeBtn btn btn-secondary">Portia III</button>
+ 		</div>
+	</div>
+	<hr>
+	<p> </p>
+	<div id="puzzleDescription" class='puzzle-text centered'></div>	
+	<hr>
+	<div id="caskDisplay" class="centered" style="text-align=center"></div>
+	<br>
+	<div id="solutionDisplay" class="puzzle-text centered"></div>	
+	<!--
+	<hr>
+	<div id="reasoningButtonHolder">
+		<button type="button" id="reasoningButton" class="btn btn-secondary typeButton">Show Reasoning</span></button>
+	</div>
+	<div id="reasoningDisplay"></div>
+	-->
+	<hr>
+	<div id="resetButtonHolder">
+		<button type="button" id="resetButton", class="btn btn-secondary typeButton">New Puzzle</span></button>
+	</div>
+	<br>
+	<br>
+
+</div>
+	<div class='col-sm-1'></div>
+</div>
+
+</div>
+</body>
+</html>

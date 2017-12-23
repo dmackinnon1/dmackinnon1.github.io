@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<title>D3jNotebook - Bipartate graphs</title>
+</head>
+<style>
+
+svg {
+  display: block; 
+  margin: auto ;
+ }
+.centered {
+  text-align: center;
+}
+form {
+  padding: 3px;
+  font-size: large;
+  padding-left: 20px;
+}
+
+h1{
+   padding-left: 10px;
+   padding-top:20px;
+   margin:5px;
+}
+
+.inputDiv {
+	text-align: left;
+}
+
+</style>
+<body>
+  <h1>Bipartate graphs</h1>
+  <div class="inputDiv" width ="500">
+    <form>
+      line thickness: <input type="number" id="lineInput" min="0" max="20" step="1" value="1" onchange="lineChange(this)">
+      dot size: <input type="number" id="dotInput" min="0" max="20" step="1" value="5" onchange="dotChange(this)">
+      <br><br>
+      inner ring size: 
+      	<input type="number" id="r1Input" min="1" max="20" step="1" value="5" onchange="ring1CountChange(this)">
+      outer ring size: 
+      	<input type="number" id="r2Input" min="1" max="20" step="1" value="5" onchange="ring2CountChange(this)">
+      <br><br>
+      inner radius: 
+      	<input type="number" id="rad1Input" min="10" max="300" step="10" value="50" onchange="radius1Change(this)">
+      outer radius: 
+      	<input type="number" id="rad2Input" min="10" max="300" step="10" value="200" onchange="radius2Change(this)">
+    </form>
+  </div>
+  <hr>
+  <div class="centered">
+  <svg width="500" height="500"></svg>
+  </div>
+  <hr>  
+</body>
+<script>
+
+class Vertex {
+	constructor(x,y) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+let offset = 500/2; //shift into the center
+let dotSize = 5; //initial dot size 
+let lineSize = 1; //initial line size
+let r1Size = 5;
+let r2Size = 5;
+let radius1 = 50;
+let radius2 = 200;
+let ring1 = [];
+let ring2 = [];
+
+
+function initializeRings() {
+	let i = 0;
+	ring1 = [];
+	ring2 = [];
+	for (i = 0; i < r1Size; i++) {
+		ring1.push(vertexFor(i,r1Size, radius1));
+	}
+	for (i = 0; i < r2Size; i++) {
+		ring2.push(vertexFor(i,r2Size, radius2));
+	}
+}
+
+function angleFor(i, size) {
+	return Math.PI*i*2/size;
+}
+
+function vertexFor(i, size, radius) {
+	let x = offset + radius*Math.cos(angleFor(i,size));
+	let y = offset + radius*Math.sin(angleFor(i,size));
+	return new Vertex(x,y);
+}
+
+function drawRing(input, id) {
+  let svg = d3.select("svg");
+  for (i in input) {
+  	let d = input[i];
+  	svg.append("circle")
+      .attr("cx", d.x)
+      .attr("cy", d.y)
+      .attr("r", dotSize)
+      .attr("class",id)
+      .attr("fill", "grey")
+      .attr("onmouseover","this.setAttribute('opacity', '0.5')")
+      .attr("onmouseout","this.setAttribute('opacity', '1')");
+  }
+}
+
+function drawFrom(source, targets) {
+	let svg = d3.select("svg");
+  	for (t in targets) {
+  		let d = targets[t];
+ 		svg.append("line")
+      		.attr("x1", source.x)
+      		.attr("y1", source.y)
+      		.attr("x2", d.x)
+      		.attr("y2", d.y)
+      		.attr("style","stroke:grey;stroke-width:" + lineSize)
+      		.attr("onmouseover","this.setAttribute('opacity', '0.5')")
+      		.attr("onmouseout","this.setAttribute('opacity', '1')")    		
+      		.attr("stroke-linecap","round");
+	}
+}
+
+function connectRings(r1, r2) {
+	for (i in r1) {
+		drawFrom(r1[i], r2);
+	}
+}
+
+function drawAll() {
+	initializeRings();
+	eraseAll();
+	connectRings(ring1,ring2);
+	drawRing(ring1, "ring1");
+	drawRing(ring2, "ring2");
+}
+
+function ring1CountChange(e){
+    r1Size = e.value;
+    drawAll();
+}
+
+function ring2CountChange(e){
+    r2Size = e.value;
+    drawAll();
+}
+
+function radius1Change(e) {
+	radius1 = e.value;
+	drawAll();
+}
+
+function radius2Change(e) {
+	radius2 = e.value;
+	drawAll();
+}
+
+function dotChange(e) {
+    dotSize = e.value;
+    updateCircles();
+}
+
+function updateCircles() {
+    let svg = d3.select("svg");
+    svg.selectAll("circle").attr("r", dotSize);
+}     
+
+function lineChange(e) {
+    lineSize = e.value;
+    updateLines();
+}
+function updateLines() {
+    let svg = d3.select("svg");
+    svg.selectAll("line").attr("style","stroke:grey;stroke-width:" + lineSize);      		
+}     
+
+function eraseAll() {
+  let svg = d3.select("svg");
+  svg.selectAll("circle").remove();
+  svg.selectAll("line").remove();
+}
+
+drawAll();
+
+</script>
+</html>

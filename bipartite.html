@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<title>D3jNotebook - Bipartate graphs</title>
+<title>D3jNotebook - Bipartite graphs</title>
 </head>
 <style>
 
@@ -27,27 +27,26 @@ h1{
    padding-top:20px;
    margin:5px;
 }
-
 .inputDiv {
 	text-align: left;
 }
 
 </style>
 <body>
-  <h1>Bipartate graphs</h1>
+  <h1>Bipartite graphs</h1>
   <div class="inputDiv" width ="500">
     <form>
       line thickness: <input type="number" id="lineInput" min="0" max="20" step="1" value="1" onchange="lineChange(this)">
       dot size: <input type="number" id="dotInput" min="0" max="20" step="1" value="5" onchange="dotChange(this)">
       <br><br>
-      inner ring size: 
+      first set size: 
       	<input type="number" id="r1Input" min="1" max="20" step="1" value="5" onchange="ring1CountChange(this)">
-      outer ring size: 
+      second set size: 
       	<input type="number" id="r2Input" min="1" max="20" step="1" value="5" onchange="ring2CountChange(this)">
       <br><br>
-      inner radius: 
+      first set radius: 
       	<input type="number" id="rad1Input" min="10" max="300" step="10" value="50" onchange="radius1Change(this)">
-      outer radius: 
+      second set radius: 
       	<input type="number" id="rad2Input" min="10" max="300" step="10" value="200" onchange="radius2Change(this)">
     </form>
   </div>

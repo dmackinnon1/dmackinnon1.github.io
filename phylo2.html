@@ -1,6 +1,5 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -18,33 +17,37 @@ svg {
   text-align: center;
 }
 form {
-  padding: 5px;
+  padding: 3px;
   font-size: large;
 }
-h1{
+h7
    padding: 10px;
    padding-top:20px;
    margin:5px;
 }
+
 </style>
 <body>
   <h1>Phyllotaxis Spirals </h1>
-  <div class="inputDiv centered" width ="300">
+  <div class="inputDiv centered" width ="500">
     <form>
       modulo: <input type="number" id="modInput" min="1" max="20" step="1" value="1" onchange="modChange(this)">
     </form>
     <form>
-      dot size: <input type="number" id="sizeInput" min="2" max="20" step="1" value="10" onchange="sizeChange(this)">
+      dot size: <input type="number" id="sizeInput" min="0" max="20" step="1" value="7" onchange="sizeChange(this)">
     </form>
     <form>
       <div class="checkbox">
         <label><input id="scale" type="checkbox" onchange="scaleChange(this)">scale dots</label>
       </div>
+      <div class="checkbox">
+        <label><input id="lines" type="checkbox" onchange="lineChange(this)">draw lines</label>
+      </div>
     </form>
   </div>
   <hr>
   <div class="centered">
-  <svg width="600" height="600"></svg>
+  <svg width="500" height="500"></svg>
   </div>
   <hr>  
 </body>
@@ -56,28 +59,64 @@ h1{
 
 function range(n) {
   return Array.from((Array(n)).keys()) ;
-};
+}
 
-let spacer = 200;
-let total = 400;
+let spacer = 100; //a zoom on the spiral
+let total = 400; //total number of seeds/dots/circles
+let offset = 500/2; //shift into the center
+let dotSize = 7; //initial dot size 
 let data = range(total);
-let offset = 600/2;
-let dotSize = 10;
-let dotGrow = false;
-//creating the dots
-let svg = d3.select("svg");
-svg.selectAll("circle")
+
+
+function drawLines() {
+  let svg = d3.select("svg");
+  svg.selectAll("line")
+    .data(data)
+    .enter().append("line")
+      .attr("x1", function(d) { 
+        return offset + radial(d-1)*xComp(philo(d-1));
+      })
+      .attr("y1", function(d) { 
+        return offset + radial(d-1)*yComp(philo(d-1));
+      })
+      .attr("x2", function(d) { 
+        return offset + radial(d)*xComp(philo(d));
+      })
+      .attr("y2", function(d) { 
+        return offset + radial(d)*yComp(philo(d));
+      })
+      .attr("style","stroke:grey;stroke-width:1")
+      .attr("onmouseover","this.setAttribute('style', 'stroke:black;stroke-width:2')")
+      .attr("onmouseout","this.setAttribute('style', 'stroke:grey;stroke-width:1')");
+}
+
+function eraseLines() {
+  let svg = d3.select("svg");
+  svg.selectAll("line")
+    .data([])
+    .exit().remove();
+}
+
+function initializeCircles() {
+  let svg = d3.select("svg");
+  svg.selectAll("circle")
     .data(data)
     .enter().append("circle")
-      .attr("cy", function(d) { return  offset + radial(d)*xComp(philo(d))})
-      .attr("cx", function(d) { return offset + radial(d)*yComp(philo(d))})
-      .attr("r", function(d) { return dotSize; });
+      .attr("cx", function(d) { 
+        return offset + radial(d)*xComp(philo(d));
+      })
+      .attr("cy", function(d) { 
+        return offset + radial(d)*yComp(philo(d));
+      })
+      .attr("r", function(d) { return dotSize; })
+      .attr("class","dot")
+      .attr("onmouseover","this.setAttribute('opacity', '0.5')")
+      .attr("onmouseout","this.setAttribute('opacity', '1')");
+}
 
-//setup of coloring based on mod selection
-let modValue = 1;
-function colorDots() {
-    let svg2 = d3.select("svg");
-    svg2.selectAll("circle")
+function updateCircles() {
+    let svg = d3.select("svg");
+    svg.selectAll("circle")
       .data(data).style("fill", function(d) {
         if (d%modValue === 0) {
           return 'black';
@@ -92,26 +131,50 @@ function colorDots() {
             return dotSize;
           }
         });
-};     
-//initial coloring of dots
-colorDots();
+}     
+
+function eraseCircles() {
+  let svg = d3.select("svg");
+  svg.selectAll("circle")
+    .data([])
+    .exit().remove();
+}
+
+//setup
+initializeCircles();
 
 //colouring of dots after mod selection change
+let modValue = 1;
 function modChange(e) {
     modValue = e.value;
-    colorDots();
+    updateCircles();
 };
 
 function sizeChange(e) {
     dotSize = e.value;
-    colorDots();
+    updateCircles();
 };
 
+let dotGrow = false;
 function scaleChange(e) {
     dotGrow = e.checked;
-    console.log(dotGrow);
-    colorDots();
+    updateCircles();
 };
+
+let showLines = false;
+function lineChange(e) {
+    showLines = e.checked;
+    if (showLines) {
+      eraseCircles();
+      drawLines();
+      initializeCircles();
+      updateCircles();
+    } else {
+      eraseLines();
+    }
+    updateCircles();
+};
+
 
 //phylotaxis specifics
 

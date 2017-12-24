@@ -58,10 +58,18 @@ h1{
 </body>
 <script>
 
+/*
+* Reworking bipartite.html, using joins, nested selections and object constancy
+* https://bost.ocks.org/mike/join/
+* https://bost.ocks.org/mike/nest/
+* https://bost.ocks.org/mike/constancy/
+*/
+
 class Vertex {
-	constructor(x,y) {
+	constructor(x,y, id) {
 		this.x = x;
 		this.y = y;
+    this.id = id;
 	}
 }
 
@@ -81,10 +89,10 @@ function initializeRings() {
 	ring1 = [];
 	ring2 = [];
 	for (i = 0; i < r1Size; i++) {
-		ring1.push(vertexFor(i,r1Size, radius1));
+		ring1.push(vertexFor(i,r1Size, radius1, "ring1"));
 	}
 	for (i = 0; i < r2Size; i++) {
-		ring2.push(vertexFor(i,r2Size, radius2));
+		ring2.push(vertexFor(i,r2Size, radius2, "ring2"));
 	}
 }
 
@@ -92,52 +100,65 @@ function angleFor(i, size) {
 	return Math.PI*i*2/size;
 }
 
-function vertexFor(i, size, radius) {
+function vertexFor(i, size, radius, ringlabel) {
 	let x = offset + radius*Math.cos(angleFor(i,size));
 	let y = offset + radius*Math.sin(angleFor(i,size));
-	return new Vertex(x,y);
+	return new Vertex(x,y,ringlabel+"_"+i);
 }
 
 function drawRing(input, id) {
-  let svg = d3.select("svg");
-  for (i in input) {
-  	let d = input[i];
-  	svg.append("circle")
-      .attr("cx", d.x)
-      .attr("cy", d.y)
+  let circle = d3.select("svg").selectAll("." + id)
+    .data(input, function(d){ return d.id;});
+  
+  circle.exit().remove();
+
+  circle.transition(circle)
+      .attr("cx", function(d){ return d.x;})
+      .attr("cy", function(d){ return d.y;});
+
+  circle.enter().append("circle")
+      .attr("cx", function(d){ return d.x;})
+      .attr("cy", function(d){ return d.y;})
       .attr("r", dotSize)
       .attr("class",id)
       .attr("fill", "grey")
       .attr("onmouseover","this.setAttribute('opacity', '0.5')")
       .attr("onmouseout","this.setAttribute('opacity', '1')");
-  }
 }
 
-function drawFrom(source, targets) {
-	let svg = d3.select("svg");
-  	for (t in targets) {
-  		let d = targets[t];
- 		svg.append("line")
-      		.attr("x1", source.x)
-      		.attr("y1", source.y)
-      		.attr("x2", d.x)
-      		.attr("y2", d.y)
-      		.attr("style","stroke:grey;stroke-width:" + lineSize)
-      		.attr("onmouseover","this.setAttribute('opacity', '0.5')")
-      		.attr("onmouseout","this.setAttribute('opacity', '1')")    		
-      		.attr("stroke-linecap","round");
-	}
+function drawFrom(source, id, targets) {
+	
+  let line = d3.select("svg").selectAll(".dot" + id)
+    .data(targets, function(d){return "" + id + "_" + d.id;});
+
+  line.exit().remove();
+
+  line.transition(line)
+    .attr("x1", source.x)
+    .attr("y1", source.y)
+    .attr("x2", function(d){return d.x;})
+    .attr("y2", function(d){return d.y;});
+   
+  line.enter().append("line")
+    .attr("x1", source.x)
+    .attr("y1", source.y)
+    .attr("x2", function(d){return d.x;})
+    .attr("y2", function(d){return d.y;})
+    .attr("class", "dot" +id)
+    .attr("style","stroke:grey;stroke-width:" + lineSize)
+    .attr("onmouseover","this.setAttribute('opacity', '0.5')")
+    .attr("onmouseout","this.setAttribute('opacity', '1')")    		
+    .attr("stroke-linecap","round");
 }
 
 function connectRings(r1, r2) {
 	for (i in r1) {
-		drawFrom(r1[i], r2);
+		drawFrom(r1[i], i, r2);
 	}
 }
 
 function drawAll() {
 	initializeRings();
-	eraseAll();
 	connectRings(ring1,ring2);
 	drawRing(ring1, "ring1");
 	drawRing(ring2, "ring2");
@@ -145,22 +166,24 @@ function drawAll() {
 
 function ring1CountChange(e){
     r1Size = e.value;
+    eraseLines();
     drawAll();
 }
 
 function ring2CountChange(e){
     r2Size = e.value;
+    eraseLines();
     drawAll();
 }
 
 function radius1Change(e) {
 	radius1 = e.value;
-	drawAll();
+  drawAll();
 }
 
 function radius2Change(e) {
 	radius2 = e.value;
-	drawAll();
+  drawAll();
 }
 
 function dotChange(e) {
@@ -177,14 +200,14 @@ function lineChange(e) {
     lineSize = e.value;
     updateLines();
 }
+
 function updateLines() {
     let svg = d3.select("svg");
     svg.selectAll("line").attr("style","stroke:grey;stroke-width:" + lineSize);      		
 }     
 
-function eraseAll() {
+function eraseLines() {
   let svg = d3.select("svg");
-  svg.selectAll("circle").remove();
   svg.selectAll("line").remove();
 }
 

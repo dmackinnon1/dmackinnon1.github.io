@@ -121,7 +121,7 @@ function drawRing(input, id) {
       .attr("cy", function(d){ return d.y;})
       .attr("r", dotSize)
       .attr("class",id)
-      .attr("fill", "grey")
+      .attr("fill", "black")
       .attr("onmouseover","this.setAttribute('opacity', '0.5')")
       .attr("onmouseout","this.setAttribute('opacity', '1')");
 }
@@ -145,7 +145,7 @@ function drawFrom(source, id, targets) {
     .attr("x2", function(d){return d.x;})
     .attr("y2", function(d){return d.y;})
     .attr("class", "dot" +id)
-    .attr("style","stroke:grey;stroke-width:" + lineSize)
+    .attr("style","stroke:black;stroke-width:" + lineSize)
     .attr("onmouseover","this.setAttribute('opacity', '0.5')")
     .attr("onmouseout","this.setAttribute('opacity', '1')")    		
     .attr("stroke-linecap","round");
@@ -203,7 +203,7 @@ function lineChange(e) {
 
 function updateLines() {
     let svg = d3.select("svg");
-    svg.selectAll("line").attr("style","stroke:grey;stroke-width:" + lineSize);      		
+    svg.selectAll("line").attr("style","stroke:black;stroke-width:" + lineSize);      		
 }     
 
 function eraseLines() {

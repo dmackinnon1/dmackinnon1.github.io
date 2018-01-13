@@ -6,28 +6,16 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- added for google analytics -->
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-106423342-1', 'auto');
-  ga('send', 'pageview');
-</script>
 <title>Knaves and Knights</title>
 </head>
 <style>
-
 ul {
 	padding-left: 40px;
 	list-style-type: none;
 }
-
 li {
 	padding-bottom: 10px;
 }
-
 table, tr {
 	padding: 4px;
 	text-align: center;
@@ -35,11 +23,9 @@ table, tr {
     border-collapse: collapse; 
     margin: auto;
 }
-
 th, td {
 	padding: 4px;
 }
-
 .buttonDiv {
 	display: inline-block;
 	padding: 2px;
@@ -48,7 +34,6 @@ th, td {
 .centered {
 	text-align: center;
 }
-
 </style>
 <script src="js/knaves.js"></script>
 <script>
@@ -124,12 +109,8 @@ th, td {
 			reset();
 		});
 });
-
-
 </script>
-
 <body>
-
 <nav class="navbar navbar-default" style="margin-bottom:0px">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -142,7 +123,6 @@ th, td {
 		</div>
 		</div>
 </nav>
-
 <div class="container-fluid">
 	<div class='row'>
 	<div class='col-sm-1'></div>
@@ -151,9 +131,11 @@ th, td {
 		<h1>The Island of Knights and Knaves
 		</h1>
 	</div> 		
-
 	<p>
 	On the island of Knights and Knaves, everyone is either a Knave or a Knight. Knights always tell the truth and Knaves always lie. You have encountered a group of islanders, and want to know who is a knave and who is a knight. The islanders have made some statments about each other - each statement should be taken independently: each is either a true statement or a false statement.
+	</p>
+	<p>
+	Categorize each islander as either a knight or a knave. When you think you are done, click the 'solve' button to see if you have solved the puzzle. In this puzzle, you should be able to decide whether each islander is a knave or a knight.
 	</p>
 	<hr>
 	<div class="centered">
@@ -167,12 +149,6 @@ th, td {
 	<p> Here is your puzzle: </p>
 	<div id="accusationDisplay"></div>	
 	<hr>
-	<p>
-	Categorize each islander as either a knight or a knave. When you think you are done, click the 'solve' button to see if you have solved the puzzle. In this puzzle, you should be able to decide whether each islander is a knave or a knight.
-	</p>
-
-	<hr>
-	
 	<div id="islandersDisplay" class="centered" style="text-align=center"></div>
 	<br>
 	<div id="soveButton">
@@ -190,11 +166,9 @@ th, td {
 	</div>
 	<br>
 	<br>
-
 </div>
 	<div class='col-sm-1'></div>
 </div>
-
 </div>
 </body>
 </html>

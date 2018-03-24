@@ -1,4 +1,5 @@
-var gameType ={};
+'use strict';
+let gameType ={};
 
 gameType.isKnight = function() {
 	return gameType.type === "knight";
@@ -107,25 +108,25 @@ class Cell {
 	}
 	
 	row(){
-		var row = [];
-		for (var i = 0; i < this.board.rowNum; i++) {
+		let row = [];
+		for (let i = 0; i < this.board.rowNum; i++) {
 			if (i !== this.colNum) row.push(this.board.cells[this.rowNum][i]);	
 		}
 		return row;
 	}
 
 	column(){
-		var col = [];
-		for (var i = 0; i < this.board.colNum; i++) {
+		let col = [];
+		for (let i = 0; i < this.board.colNum; i++) {
 			if (i !== this.rowNum) col.push(this.board.cells[i][this.colNum]);	
 		}
 		return col;
 	}
 
 	downDiagonal(){
-		var diag = [];
-		var i = this.rowNum +1; 
-		var j = this.colNum +1;
+		let diag = [];
+		let i = this.rowNum +1; 
+		let j = this.colNum +1;
 		while( i< this.board.rowNum && j<this.board.colNum){
 			diag.push(this.board.cells[i][j]);
 			i++;
@@ -143,9 +144,9 @@ class Cell {
 	}
 
 	upDiagonal(){
-		var diag = [];
-		var i = this.rowNum -1; 
-		var j = this.colNum +1;
+		let diag = [];
+		let i = this.rowNum -1; 
+		let j = this.colNum +1;
 		while( i >= 0 && j<this.board.colNum){
 			diag.push(this.board.cells[i][j]);
 			i--;
@@ -186,25 +187,25 @@ class Cell {
 	}
 
 	queenNeighbors() {
-		var queen = this.rookNeighbors();
+		let queen = this.rookNeighbors();
 		Array.prototype.push.apply(queen, this.bishopNeighbors());
 		return queen;
 	}
 
 	rookNeighbors(){
-		var rook = this.column();
+		let rook = this.column();
 		Array.prototype.push.apply(rook, this.row());
 		return rook;
 	}
 
 	bishopNeighbors(){
-		var bish = this.upDiagonal();
+		let bish = this.upDiagonal();
 		Array.prototype.push.apply(bish, this.downDiagonal());
 		return bish;
 	}
 
 	kingNeighbors() {
-		var list = [];
+		let list = [];
 		if(this.north() != null) list.push(this.north());
 		if(this.south() != null) list.push(this.south());
 		if(this.east() != null) list.push(this.east());
@@ -218,7 +219,7 @@ class Cell {
 	}
 
 	knightNeighbors() {
-		var list = [];
+		let list = [];
 		if(this.ese() != null) list.push(this.ese());
 		if(this.sse() != null) list.push(this.sse());
 		if(this.wsw() != null) list.push(this.wsw());
@@ -233,8 +234,8 @@ class Cell {
 
 	
 	isNeighbor(cell) {
-		var nbrs = this.neighbors();
-		for (var i = 0; i < nbrs.length; i ++) {
+		let nbrs = this.neighbors();
+		for (let i = 0; i < nbrs.length; i ++) {
 			if (cell.isEqual(nbrs[i])) return true;
 		}
 		return false;
@@ -249,7 +250,7 @@ class Cell {
 	}
 	
 	isEqual(other) {
-		var result =(this.rowNum === other.rowNum) && (this.colNum === other.colNum);
+		let result =(this.rowNum === other.rowNum) && (this.colNum === other.colNum);
 		return result;
 	}
 };
@@ -264,22 +265,22 @@ class Board {
 	}
 	
 	init() {
-		for (var i = 0; i < this.rowNum; i ++) {
+		for (let i = 0; i < this.rowNum; i ++) {
 			this.cells[i] = [];
-			for (var j = 0; j < this.colNum; j ++){
+			for (let j = 0; j < this.colNum; j ++){
 				this.cells[i].push (new Cell(i, j, this));
 			}
 		}
 	}
 	randomStart() {
-		var i = randomInt(this.rowNum);
-		var j = randomInt(this.colNum);
+		let i = randomInt(this.rowNum);
+		let j = randomInt(this.colNum);
 		return this.cells[i][j];
 	}
 	
 	toString () {
-		var result = "";
-		for (var i = 0; i < this.rowNum; i ++){
+		let result = "";
+		for (let i = 0; i < this.rowNum; i ++){
 			result += this.cells[i];
 		}
 		return result;
@@ -301,12 +302,12 @@ class Board {
 */
 
 function htmlForBoard(board) {
-	var html = "<table border = 1 cellspacing = 1 cellpadding = 1 align='center'>";
-	for (var i = 0; i < board.cells.length; i++){
-		var row = board.cells[i];
+	let html = "<table border = 1 cellspacing = 1 cellpadding = 1 align='center'>";
+	for (let i = 0; i < board.cells.length; i++){
+		let row = board.cells[i];
 		html += "<tr>";
-		for (var j = 0; j < row.length; j ++) {
-			var c = row[j];
+		for (let j = 0; j < row.length; j ++) {
+			let c = row[j];
 			html += "<td><div id='cell" + i +""+ j +"' class='gameCell' onclick='cellClick(event)'";
 			html += " data-row='"+ i + "' data-col='" + j + "'>";
 			html += emptyCell(i,j) + "</div></td>";
@@ -318,15 +319,15 @@ function htmlForBoard(board) {
 };
 
 function emptyCell(i,j){
-	var empty = new Bldr("svg").att("width","28").att("height","28");
+	let empty = new Bldr("svg").att("width","28").att("height","28");
 	empty.att("data-row",i).att("data-col",j);
 	empty.att("stroke-width",0);
 	return empty.build();
 };
 
 function cellClick(event) {
-	var i = parseInt(event.target.getAttribute("data-row"));
-	var j = parseInt(event.target.getAttribute("data-col"));
+	let i = parseInt(event.target.getAttribute("data-row"));
+	let j = parseInt(event.target.getAttribute("data-col"));
 	game.clicked(i,j, event.target); //event.target
 };
 
@@ -336,51 +337,52 @@ function getDiv(i,j) {
 	
 
 //object containing displayable elements
-var gameDisplay = {};
+let gameDisplay = {};
 gameDisplay.map = "";
 gameDisplay.score = "";
+gameDisplay.status = "";
 
 
 function svgMap(pieces, cover, size) {
-	var svg = new Bldr("svg");
-	var boardSize = 30*size;
+	let svg = new Bldr("svg");
+	let boardSize = 30*size;
 	svg.att("align", "center").att("width",boardSize).att("height",boardSize);
-	var cellSize = boardSize/size;
+	let cellSize = boardSize/size;
 	//first the board
-	for (var i = 0; i < size; i++) {
-		for (var j = 0; j < size; j ++) {
-			var x = i*cellSize;
-			var y = j*cellSize;
+	for (let i = 0; i < size; i++) {
+		for (let j = 0; j < size; j ++) {
+			let x = i*cellSize;
+			let y = j*cellSize;
 			if (i%2==0 && j%2==0){
-				var rect = new Bldr("rect").att("x", x).att("y",y);
+				let rect = new Bldr("rect").att("x", x).att("y",y);
 				rect.att("width", cellSize).att("height",cellSize).att("fill", "#ccccb3"); 			
 				svg.elem(rect);
 			}
 			if (i%2!=0 && j%2!=0){
-				var rect = new Bldr("rect").att("x", x).att("y",y);
+				let rect = new Bldr("rect").att("x", x).att("y",y);
 				rect.att("width", cellSize).att("height",cellSize).att("fill", "#ccccb3"); 			
 				svg.elem(rect);
 			}
 		}
 	}
 	//finally, the dots
-	for (var i=0; i< pieces.length; i++) {
-		var cell = pieces[i];
-		var x = (15 + cell.colNum*cellSize);
-		var y = (15 + cell.rowNum*cellSize);
-		var circle = new Bldr("circle").att("cx",x).att("cy", y);
+	for (let i=0; i< pieces.length; i++) {
+		let cell = pieces[i];
+		let x = (15 + cell.colNum*cellSize);
+		let y = (15 + cell.rowNum*cellSize);
+		let circle = new Bldr("circle").att("cx",x).att("cy", y);
 		circle.att("r",3).att("stroke", "black").att("stroke-width",1).att("fill","grey");
 		svg.elem(circle);
-		var c0 = new Bldr("circle").att("cx",x).att("cy", y);
+		let c0 = new Bldr("circle").att("cx",x).att("cy", y);
 		c0.att("r",6).att("stroke", "black").att("stroke-width",1).att("fill","black");
 		svg.elem(c0);						
 	}
 	
-	for (var i=0; i< cover.length; i++) {
-		var cell = cover[i];
-		var x = (15 + cell.colNum*cellSize);
-		var y = (15 + cell.rowNum*cellSize);
-		var circle = new Bldr("circle").att("cx",x).att("cy", y);
+	for (let i=0; i< cover.length; i++) {
+		let cell = cover[i];
+		let x = (15 + cell.colNum*cellSize);
+		let y = (15 + cell.rowNum*cellSize);
+		let circle = new Bldr("circle").att("cx",x).att("cy", y);
 		circle.att("r",3).att("stroke", "black").att("stroke-width",1).att("fill","grey");
 		svg.elem(circle);
 	}
@@ -389,31 +391,31 @@ function svgMap(pieces, cover, size) {
 };
 
 function knightGlyph(i,j){
-	var glyph = "<span class='glyphicon glyphicon-knight' ";
+	let glyph = "<span class='glyphicon glyphicon-knight' ";
 	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 	return glyph;	
 };
 
 function kingGlyph(i,j){
-	var glyph = "<span class='glyphicon glyphicon-king' ";
+	let glyph = "<span class='glyphicon glyphicon-king' ";
 	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 	return glyph;	
 };
 
 function rookGlyph(i,j){
-	var glyph = "<span class='glyphicon glyphicon-tower' ";
+	let glyph = "<span class='glyphicon glyphicon-tower' ";
 	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 	return glyph;	
 };
 
 function bishopGlyph(i,j){
-	var glyph = "<span class='glyphicon glyphicon-bishop' ";
+	let glyph = "<span class='glyphicon glyphicon-bishop' ";
 	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 	return glyph;	
 };
 
 function queenGlyph(i,j){
-	var glyph = "<span class='glyphicon glyphicon-queen' ";
+	let glyph = "<span class='glyphicon glyphicon-queen' ";
 	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
 	return glyph;	
 };

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Chess Domination</title>
+</head>
+
+<style>
+table, th, td {
+	padding: 4px;
+	text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse; 
+}
+svg {
+	display: block; 
+	margin: auto ;
+	border: 1px solid black;
+}
+
+.buttonDiv {
+	display: inline-block;
+	padding: 2px;
+	border: 2px;
+}
+
+.centered {
+	text-align: center;
+}
+
+
+</style>
+</head>
+<script src="js/evnts.js"></script> <!-- required for callback registration-->
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/chess_base.js"></script>
+<script src="js/chess_domination.js"></script>
+
+<script>
+let puzzles = [];
+let originals = [];
+$(document).ready(function(){
+	console.log("about to fetch remote data");
+	$.getJSON("data/puzzles.json", function(data){
+		puzzles = data;
+		originals = data;
+	}).done(function() {
+		refresh();
+	});
+});
+
+
+function refresh() {
+	let selected = randomElement(puzzles);
+	puzzles = removeElement(puzzles, selected);
+	if (puzzles.length === 0){
+		puzzles = originals;
+	}
+	gameType.type = selected.pieces[0].name
+	let size = selected.size
+	let gameBoard = new Board(size);
+	gameBoard.init();
+	game = new Puzzle(gameBoard, selected);
+	console.log('board size is now ' + size);
+	$("#boardDisplay").html(htmlForBoard(game.getBoard()));
+	$("#puzzleDescription").html(game.puzzleDescription());	
+	$("#puzzleStatus").html(gameDisplay.status);
+	game.startGame();
+}
+
+$(document).ready(function(){
+    $("#resetButton").on("click", function(event){
+		refresh();
+	});	
+});
+
+$(document).ready(function(){  
+    evnts.addCallback("refreshMap", function() {
+		$("#mapDisplay").html(gameDisplay.map);
+    });
+
+    evnts.addCallback("refreshScore", function() {
+		$("#scoreDisplay").html(gameDisplay.score);
+    });
+
+    evnts.addCallback("refreshScore", function() {
+		$("#puzzleStatus").html(gameDisplay.status);
+    });
+ });
+
+
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+<div class="container-fluid">
+	<div class='row'>
+		<div class='col-sm-1'></div>
+		<div class='col-sm-10'>
+			<div class="page-header">
+				<h1>Chess <small> domination and independence </small>
+				<div class="btn-group btn-group-md " role="group">
+					<a class="btn btn-primary" href="./puzzles.html">Puzzles</a>
+					<a class="btn btn-default" href=".">Explorer</a>
+				</div>
+				</h1>
+			</div> 	
+			<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
+				About 
+			</button>
+			<div id='full' class='collapse '>
+				<br>
+				<div class="media">
+  					<a class="media-left media-middle" href="#">	
+    					<img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
+  					</a>
+  				<div class="media-body">
+    				<h4 class="media-heading">Domination and Independence</h4>
+					In the mathematical chess problem of <b>domination</b>, 
+					you are tasked with finding an arrangement of several pieces 
+					of the same type so that every square on the board is reachable in a 
+					single move by at least one of the pieces. 
+					In the problem of <b>independence</b>, your goal is to place the maximum 
+					number of pieces of the same type so that none of the pieces lie in the 
+					path of another. 
+				</div>
+			</div>
+			<br>
+	</div>
+	<hr>
+	<div id="puzzleDescription" style="text-align=center"></div>			
+	<hr>
+	<h3><div id="boardDisplay" style="text-align=center"></div></h3>
+	<hr>
+	<h3><div id="scoreDisplay" style="text-align=center"></div></h3>
+	<hr>
+	<h4><div id="puzzleStatus" style="text-align=center"></div></h4>
+	<hr>
+	<div id="resetButtonHolder">
+		<button type="button" id="resetButton", class="btn btn-primary typeButton">New Puzzle</span></button>
+	</div>
+
+	<div id="mapDisplay" style="text-align=center"></div>
+	<hr>
+</div>	
+<div class='col-sm-1'></div>
+</body>
+</html>

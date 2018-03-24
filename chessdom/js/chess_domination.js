@@ -1,5 +1,8 @@
-class Domination {	
-	
+'use strict';
+/*
+* Domination class keeps track of chess board domination and independence.
+*/
+class Domination {		
 	constructor(board) {
 		this.board = board;
 		board.init();
@@ -19,23 +22,23 @@ class Domination {
 	}
 
 	colourCells(){
-		for (var i = 0; i < this.board.rowNum; i++) {
-			for (var j = 0; j < this.board.colNum; j++) {
-				var div = getDiv(i, j);
+		for (let i = 0; i < this.board.rowNum; i++) {
+			for (let j = 0; j < this.board.colNum; j++) {
+				let div = getDiv(i, j);
 				div.attr("style", "color:black");		
 			}
 		}
 		this.cover = [];
-		for (var k = 0; k < this.pieces.length; k++)  {
-			var selected = this.pieces[k];
-			var nbs = selected.neighbors();
-			for (var l = 0; l < nbs.length; l++){
-				var nbCell = nbs[l];
-				var i = nbCell.rowNum;
-				var j = nbCell.colNum;
+		for (let k = 0; k < this.pieces.length; k++)  {
+			let selected = this.pieces[k];
+			let nbs = selected.neighbors();
+			for (let l = 0; l < nbs.length; l++){
+				let nbCell = nbs[l];
+				let i = nbCell.rowNum;
+				let j = nbCell.colNum;
 				if (!this.isInSet(i,j,this.cover)){
 						this.cover.push(nbCell);
-						var div = getDiv(i, j);
+						let div = getDiv(i, j);
 						div.css("background","#99ff99");
 				}
 			}
@@ -44,9 +47,9 @@ class Domination {
 	}
 	
 	dominationScore() {
-		var score = 0;
-		for (var i = 0; i < this.board.rowNum; i++) {
-			for (var j = 0; j < this.board.colNum; j++) {
+		let score = 0;
+		for (let i = 0; i < this.board.rowNum; i++) {
+			for (let j = 0; j < this.board.colNum; j++) {
 				if (!(this.isInSet(i,j, this.cover) || this.isInSet(i,j,this.pieces))){
 					score ++;
 				}
@@ -56,9 +59,9 @@ class Domination {
 	}
 
 	independenceScore() {
-		var score = 0;
-		for(var k=0; k <this.pieces.length; k++) {
-			var cell = this.pieces[k];
+		let score = 0;
+		for(let k=0; k <this.pieces.length; k++) {
+			let cell = this.pieces[k];
 			if (this.isInSet(cell.rowNum, cell.colNum, this.cover)) {
 				score ++;
 			}
@@ -72,23 +75,23 @@ class Domination {
 	
 	
 	clicked(i,j, target) {
-		var cell = this.getCell(i,j);
+		let cell = this.getCell(i,j);
 		this.selectCell(cell, target);
 	}
 	
 	
 	isInSet(i,j, set) {
-		for (var k=0; k < set.length; k++) {
-			var current = set[k];
+		for (let k=0; k < set.length; k++) {
+			let current = set[k];
 			if (current.rowNum == i && current.colNum == j) return true;
 		}
 		return false;
 	}
 	
 	remove(i,j) {
-		var reduced = [];
-		for (var k=0; k < this.pieces.length; k++) {
-			var current = this.pieces[k];
+		let reduced = [];
+		for (let k=0; k < this.pieces.length; k++) {
+			let current = this.pieces[k];
 			if (current.rowNum == i && current.colNum == j){
 				continue;
 			} else {
@@ -99,10 +102,10 @@ class Domination {
 	}
 	
 	selectCell(cell, target) {
-		var i = parseInt(target.getAttribute("data-row"));
-		var j = parseInt(target.getAttribute("data-col"));
-		var targetCell = this.board.cells[i][j];
-		var parentTarget = target;
+		let i = parseInt(target.getAttribute("data-row"));
+		let j = parseInt(target.getAttribute("data-col"));
+		let targetCell = this.board.cells[i][j];
+		let parentTarget = target;
 		if (target.localName === 'span' || target.localName ==='svg') {
 			parentTarget = target.parentNode;
 		}	
@@ -120,14 +123,96 @@ class Domination {
 		evnts.fireEvent("refreshMap");
 		gameDisplay.score = scoreDisplay(this.pieces.length, this.dominationScore(), this.independenceScore()); 
 		evnts.fireEvent("refreshScore");
+	}			
+};
+
+/*
+{
+  "name": "5 queens on 5x5",
+  "size": 5,
+  "cover": "true",
+  "unguard": "true",
+  "pieces": [
+    {
+      "name": "queen",
+      "count": 5
+    }
+  ]
+}
+In this first version of mathematical chess puzzles,
+we are assume only one piece type
+*/
+
+class Puzzle extends Domination {
+	constructor(board, puzzledef) {
+		super(board);
+		this.puzzledef = puzzledef;
+		this.number = parseInt(puzzledef.pieces[0].count)
+		this.type = puzzledef.pieces[0].name
+		this.size = puzzledef.size;
+		this.resetStatus();
 	}
-			
+
+	selectCell(cell, target){
+		super.selectCell(cell, target);
+		this.resetStatus();
+		evnts.fireEvent("refreshScore");
+	}
+
+	resetStatus(){
+		if (this.isSolved()){
+			gameDisplay.status = "You solved the Puzzle!";
+		} else {
+			gameDisplay.status = "Not solved yet...";		
+		}			
+	}
+
+	isSolved(){
+		let solvedCover = false;
+		let solvedUnguard = false;
+		let solvedPieceCount = false;
+
+		if (this.pieces.length === this.number){
+			solvedPieceCount = true;
+		}
+		if(this.puzzledef.cover === 'true'){
+			if (this.dominationScore() === 0){
+				solvedCover = true;
+			} else {
+				solvedCover = false;
+			} 
+		} else {
+			solvedCover = true;
+		}
+		if (this.puzzledef.unguard === 'true'){
+			if (this.independenceScore() === 0){
+				solvedUnguard = true;
+			} else {
+				solvedUnguard = false;
+			}
+		} else {
+			solvedUnguard = true;
+		}
+		return solvedPieceCount && solvedUnguard && solvedCover;
+	}
+
+	puzzleDescription() {
+		let d = "<div><h4> Your Puzzle: " + this.puzzledef.name + "</h4>";
+		d += "Place " + this.number +" " + this.type +"s";
+		d += " on a " + this.size + "x" + this.size + " chessboard.";
+		if(this.puzzledef.cover === 'true'){
+			d+= " The board must be dominated.";
+		}
+		if(this.puzzledef.unguard === 'true'){
+			d+= " The pieces must be independent. </div>";
+		}
+		return d;
+	}
+
 };
 
 function scoreDisplay(pieces, domination, independence) {
-	console.log("domination score: " + domination);
-	console.log("independence score: " + independence);		
-	var html = new Bldr("h4").att("align","center");
+	let html = new Bldr("h4").att("align","center");
 	html.text("" + pieces + " pieces have been placed.")
 	html.elem(new Bldr("br"));
 	if (domination == 0) {
@@ -144,3 +229,30 @@ function scoreDisplay(pieces, domination, independence) {
 	}
 	return html.build();
 }
+
+//utilities
+
+function randomInt(lessThan){
+	return Math.floor(Math.random()*lessThan);
+};
+
+function removeElement(array, e) {
+	let newArray = [];
+	let x;
+	for (x in array) {
+		if (e !== array[x]) {
+			newArray.push(array[x]);
+		}
+	}
+	return newArray;
+}
+
+function randomRange(greaterThan, lessThan){
+	let shifted = randomInt(lessThan - greaterThan + 1);
+	return lessThan - shifted; 
+};
+
+function randomElement(array) {
+	let res =randomRange(0, array.length-1);
+	return array[res];
+};

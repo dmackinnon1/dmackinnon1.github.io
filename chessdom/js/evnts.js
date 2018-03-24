@@ -1,14 +1,15 @@
+'use strict';
 /**
 * Simple callback handling
 *
 */
-var evnts = {};
+let evnts = {};
 evnts.dict = {};
 
 evnts.fireEvent = function(eventName) {
-	var callbacks = evnts.dict[eventName];
+	let callbacks = evnts.dict[eventName];
 	if (callbacks == null) return;
-	for(var i=0; i< callbacks.length; i++) {
+	for(let i=0; i< callbacks.length; i++) {
 		callbacks[i]();
 	}
 };

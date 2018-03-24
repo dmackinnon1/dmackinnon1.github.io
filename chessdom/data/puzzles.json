@@ -3,14 +3,20 @@
 	{"name": "5 rooks on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "rook", "count": 5}]},
 	{"name": "4 queens on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "queen", "count": 4}]},
 	{"name": "5 queens on 8x8", "size": 8, "cover": "true", "unguard": "true", "pieces": [{"name": "queen", "count": 5}]},
+	{"name": "6 queens on 6x6", "size": 6, "cover": "true", "unguard": "true", "pieces": [{"name": "queen", "count": 6}]},
 	{"name": "5 knights on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "knight", "count": 5}]},
 	{"name": "12 knights on 8x8", "size": 8, "cover": "true", "unguard": "false", "pieces": [{"name": "knight", "count": 12}]},
 	{"name": "12 knights on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "knight", "count": 12}]},
 	{"name": "14 bishops on 8x8", "size": 8, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 14}]},
+	{"name": "12 bishops on 7x7", "size": 7, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 12}]},
 	{"name": "8 bishops on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 8}]},
+	{"name": "6 bishops on 4x4", "size": 4, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 6}]},
 	{"name": "9 kings on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "king", "count": 9}]},
 	{"name": "9 kings on 8x8", "size": 8, "cover": "true", "unguard": "true", "pieces": [{"name": "king", "count": 9}]},
 	{"name": "6 bishops on 5x5", "size": 5, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 6}]},
 	{"name": "10 bishops on 7x7", "size": 7, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 10}]},
-	{"name": "10 bishops on 8x8", "size": 8, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 10}]}
+	{"name": "10 bishops on 8x8", "size": 8, "cover": "true", "unguard": "true", "pieces": [{"name": "bishop", "count": 10}]},
+	{"name": "3 queens on 5x5", "size": 5, "cover": "true", "unguard": "false", "pieces": [{"name": "queen", "count": 3}]},
+	{"name": "3 queens on 6x6", "size": 6, "cover": "true", "unguard": "false", "pieces": [{"name": "queen", "count": 3}]},
+	{"name": "2 queens on 4x4", "size": 4, "cover": "true", "unguard": "false", "pieces": [{"name": "queen", "count": 2}]}
 ]

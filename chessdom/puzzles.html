@@ -32,7 +32,6 @@ svg {
 	text-align: center;
 }
 
-
 </style>
 </head>
 <script src="js/evnts.js"></script> <!-- required for callback registration-->
@@ -43,39 +42,59 @@ svg {
 <script>
 let puzzles = [];
 let originals = [];
+gameType.type  = 'queen';
 $(document).ready(function(){
 	console.log("about to fetch remote data");
 	$.getJSON("data/puzzles.json", function(data){
-		puzzles = data;
 		originals = data;
 	}).done(function() {
+		setButtons();
 		refresh();
 	});
 });
 
+function resetType(){
+	puzzles = originals.filter(puzzle => puzzle.pieces[0].name == gameType.type);
+}
 
 function refresh() {
+	if (puzzles.length === 0){
+		resetType();
+	}
 	let selected = randomElement(puzzles);
 	puzzles = removeElement(puzzles, selected);
-	if (puzzles.length === 0){
-		puzzles = originals;
-	}
-	gameType.type = selected.pieces[0].name
 	let size = selected.size
 	let gameBoard = new Board(size);
 	gameBoard.init();
 	game = new Puzzle(gameBoard, selected);
-	console.log('board size is now ' + size);
 	$("#boardDisplay").html(htmlForBoard(game.getBoard()));
 	$("#puzzleDescription").html(game.puzzleDescription());	
 	$("#puzzleStatus").html(gameDisplay.status);
 	game.startGame();
 }
 
+function setButtons() {
+	$(".btn-primary").addClass("btn-secondary");
+	$(".btn-primary").removeClass("btn-primary");
+
+	$("#" + gameType.type).removeClass("btn-secondary");	
+	$("#" + gameType.type).addClass("btn-primary");
+	$(".nav-button-default").addClass("btn-default");
+	$(".nav-button-primary").addClass("btn-primary");
+}
+
+
 $(document).ready(function(){
     $("#resetButton").on("click", function(event){
 		refresh();
 	});	
+
+	$(".typeButton").on("click", function(event){
+		gameType.type = event.currentTarget.id;
+		setButtons();
+		resetType();
+		refresh();
+	});
 });
 
 $(document).ready(function(){  
@@ -117,8 +136,8 @@ $(document).ready(function(){
 			<div class="page-header">
 				<h1>Chess <small> domination and independence </small>
 				<div class="btn-group btn-group-md " role="group">
-					<a class="btn btn-primary" href="./puzzles.html">Puzzles</a>
-					<a class="btn btn-default" href=".">Explorer</a>
+					<a class="btn btn-primary nav-button-primary" href="./puzzles.html">Puzzles</a>
+					<a class="btn btn-default nav-button-default" href=".">Explorer</a>
 				</div>
 				</h1>
 			</div> 	
@@ -140,10 +159,26 @@ $(document).ready(function(){
 					In the problem of <b>independence</b>, your goal is to place the maximum 
 					number of pieces of the same type so that none of the pieces lie in the 
 					path of another. 
+					<br>
+					Choose the puzzle piece that you would like to answer puzzles about,
+					read the puzzle statement, and click on the board to place and remove
+					pieces.
 				</div>
 			</div>
 			<br>
 	</div>
+	<hr>
+	<div class="centered">
+<div class="btn-group btn-group-lg " role="group">
+  <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
+  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
+  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
+  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
+   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
+
+</div>
+</div>
+
 	<hr>
 	<div id="puzzleDescription" style="text-align=center"></div>				
 	<hr>
@@ -154,7 +189,7 @@ $(document).ready(function(){
 	<h3><div id="scoreDisplay" style="text-align=center"></div></h3>
 	<hr>
 	<div id="resetButtonHolder">
-		<button type="button" id="resetButton", class="btn btn-primary typeButton">New Puzzle</span></button>
+		<button type="button" id="resetButton", class="btn btn-primary">New Puzzle</span></button>
 	</div>
 	<hr>
 	<div id="mapDisplay" style="text-align=center"></div>

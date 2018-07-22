@@ -1,2 +1,2 @@
 # dmackinnon1.github.io
-github pages for dmackinnon1
+GitHub pages for dmackinnon1 -please visit at https://dmackinnon1.github.io

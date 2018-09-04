@@ -47,9 +47,14 @@ h7
   </div>
   <hr>
   <div class="centered">
-  <svg width="500" height="500"></svg>
+  <svg id='svg' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width="500" height="500"></svg>
   </div>
   <hr>  
+<div class='centered'>
+    <div class="btn-group btn-group-md" role="group"> 
+      <button id="download" class="gs-btn btn btn-secondary" onclick='downloadClicked(event)'>download</button>  
+      </div>
+    </div>
 </body>
 <script>
 
@@ -195,5 +200,16 @@ function radial(n) {
   let d = n + 1;
   return Math.sqrt(d*spacer);
 }
+
+function downloadClicked(event){
+    let tempElement = document.createElement('a');
+      tempElement.setAttribute('href', 'data:text/plain;charset=utf-8,' 
+        + encodeURIComponent(document.getElementById('svg').outerHTML));
+      tempElement.setAttribute('download', 'image.svg');
+      tempElement.style.display = 'none';
+      document.body.appendChild(tempElement);
+    tempElement.click();
+    document.body.removeChild(tempElement);
+  }
 </script>
 </html>

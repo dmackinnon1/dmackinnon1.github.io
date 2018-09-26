@@ -29,7 +29,7 @@ function displayQuestion(divisionResult){
 	return latexRemoteImage(divisionResult.latexShowQuestion());
 };
 function displayAnswer(divisionResult) {
-	var htmlString = "<button type='button' class='btn btn-info '";
+	let htmlString = "<button type='button' class='btn btn-info '";
 	htmlString += " data-toggle='collapse' data-target='#answer'>";
 	htmlString += "Show Answer</button>";
 	htmlString += "<div id='answer' class='collapse ' >";
@@ -59,19 +59,19 @@ function div(numerator,denominator ){
 };
 
 function handleClick(event) {
-		var numerator = $('#numInput').val();
-		var denominator = $('#denInput').val();
+		let numerator = $('#numInput').val();
+		let denominator = $('#denInput').val();
 
 		console.log("" + numerator + "/" + denominator);
 
-		var pnum = new Parser(numerator);
-		var pden = new Parser(denominator);
+		let pnum = new Parser(numerator);
+		let pden = new Parser(denominator);
 
 		pnum.parse(); 
 		pden.parse();
 
 		//check for errors
-		var errorMessage = "<p> Please follow the suggestions above for formatting your polynomials."
+		let errorMessage = "<p> Please follow the suggestions above for formatting your polynomials."
 		if (pnum.hasError()) {
 			$("#latexHolder").html("<p><div>The calculator is having trouble parsing the dividend: " +pnum.showStack() + errorMessage+ "</div>");
 			return; 		
@@ -88,7 +88,7 @@ function handleClick(event) {
 			return;
 		}
 
-		var divisionResult = div(pnum.result,pden.result).simplify();
+		let divisionResult = div(pnum.result,pden.result).simplify();
 		console.log(divisionResult);
 		$("#latexHolder").html(displayQuestion(divisionResult)); 
 

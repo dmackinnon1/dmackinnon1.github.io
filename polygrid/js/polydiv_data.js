@@ -1,17 +1,13 @@
+"use strict";
 
-//$.getScript('polydiv.js', function() {} put tests in here if test.html does not include the dependency
-/*
-* For now, we are just using an array of Rational expressions. May be replaced with 
-* some other mechanism at some point.
-*/
-var count = 0;
-var examples = [];
+let count = 0;
+let examples = [];
 function hasMoreExamples() {
 	return count < examples.length;
 };
 
 function nextExample() {
-	var nextExample = examples[count];
+	let nextExample = examples[count];
 	count ++;
 	return nextExample;
 };
@@ -30,7 +26,4 @@ examples = [div([-10,-3,9,27],[-2,3]),
 	div([2,1,2,3],[4,0,2]), 
 	div([12,-2,3,6],[1,2]),
 	div([-3,2,1],[1,1])
-	
-	
-	
 	];

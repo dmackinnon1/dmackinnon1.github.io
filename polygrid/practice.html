@@ -33,8 +33,35 @@ function displayQuestion(divisionResult){
 };
 
 function displayAnswer(divisionResult) {
-	let htmlString = "<div>" + divisionResult.htmlLatexHistoryTo(stepCount) + "</div>";
+	let htmlString = "The divisor has been placed down the first column of the grid.";
+	htmlString += " You must find the values to place along the top row.";
+	htmlString += " Multiplying the first colum by the top row fills the interior of the grid, and ";
+	htmlString += "summing all values in the interior of the grid should result in the dividend"; 
+	htmlString += " (possibly less the remainder).";
+	htmlString += "<br><br>";
+	htmlString += "<div>" + divisionResult.htmlLatexHistoryTo(stepCount) + "</div>";
 	htmlString += "<br>";
+	return htmlString;
+};
+
+function displayFullAnswer(divisionResult) {
+	let htmlString = "<br>";
+	htmlString += divisionResult.htmlLatexGrid();
+	htmlString += "<br>";
+	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
+	htmlString += "<br> " + latexRemoteImage("=" + divisionResult.latexShowSolution());
+	htmlString += "<button type='button' class='btn btn-info '";
+	htmlString += " data-toggle='collapse' data-target='#full"+ count + "'>";
+	htmlString += "Show Additional Steps</button>";
+	htmlString += "<div id='full" + count +"' class='collapse ' >";
+	htmlString += "<br>";
+	htmlString += "<div>" + divisionResult.htmlLatexHistory() + "</div>";
+	htmlString += "<br>";
+	htmlString += "So we finally have:";
+	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
+	htmlString += "<br> " + latexRemoteImage("=" + divisionResult.latexShowSolution());
+	htmlString += " </div>";
+	htmlString += " </div>";
 	return htmlString;
 };
 
@@ -56,6 +83,8 @@ function initialDisplay() {
 	$("#promptHolder").html(prompt());		
 	$("#nextButton").show();
 	$('#coefficientInput').show();
+	$('#solutionButton').show();
+	
 	MathJax.Hub.Typeset(); //required to render dynamically generated Latex
 }
 
@@ -63,9 +92,6 @@ function handleClick(event) {
 		let solutionDegree = divisionResult.solution.main.degree();
 		let answer = parseInt($('#numInput').val());
 		let correct = divisionResult.solution.main.coefficient(solutionDegree - stepCount); 
-		console.log("step: " + stepCount)
-		console.log("answer: " + answer);
-		console.log("correct: " + correct); 
 		if (answer == correct){
 			stepCount ++
 			$("#promptHolder").html(prompt(true));
@@ -79,12 +105,11 @@ function handleClick(event) {
 			stepCount = solutionDegree;
 			$("#nextButton").hide();
 			$('#coefficientInput').hide();
+			$('#solutionButton').hide();
 		} else {
 			$("#nextButton").show();
 			$('#coefficientInput').show();
-		}
-		if (stepCount == 0){
-			stepCount ++;
+			$('#solutionButton').show();
 		}
 		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
 };		
@@ -98,14 +123,17 @@ $(document).ready(function(){
 		reset();
 	});	
 	$(".checkbox").on('click',function(e){
-		var remainders = $('#remainderCheck:checked').val();
-		console.log("checkbox clicked: " + remainders);
+		let remainders = $('#remainderCheck:checked').val();
 		if (remainders == 'yes') {
 			generateWithRemainders = true;
 		} else {
 			generateWithRemainders = false;
 		}
 	});	
+	$("#solutionButton").on("click", function(event){
+		solutionButtonClick();
+	});	
+
 
 	reset();
 });
@@ -115,11 +143,11 @@ function prompt(correct=true){
 	let solutionDegree = divisionResult.solution.main.degree();
 	let questionDegree = divisionResult.question.numerator.degree();
 	if (stepCount > solutionDegree){
-			resultHtml += "We are done!";
+			resultHtml += "Congratulations - we are done!";
 			resultHtml += "<br>";
 			resultHtml += latexRemoteImage(divisionResult.latexShowQuestion());
 			resultHtml += latexRemoteImage("=" + divisionResult.latexShowSolution());
-			resultHtml += "<br>"
+
 	} else {
 		let answer = parseInt($('#numInput').val());
 		let prevSolution = divisionResult.solution.main.polyAt(solutionDegree - stepCount +1);
@@ -145,15 +173,27 @@ function prompt(correct=true){
 			resultHtml += "Try to find the coefficient for the zero degree ";
 		}
 		resultHtml += " term in the solution that will help complete the grid. ";	
-		resultHtml += "All degree " + currentTarget.degree() +" terms";
-		resultHtml += " in the grid, along with the result of multiplying ";
+		resultHtml += "All degree " + (questionDegree - stepCount) +" terms";
+		resultHtml += " in interior of the grid, along with the result of multiplying ";
 		resultHtml += "\\("+ denomTerm.revShow()+"\\) by the new entry in the top row, must add up to";
 		resultHtml += " \\("+ currentTarget.revShow()+"\\).";
 		resultHtml += "<br>"
 	}
 	return resultHtml;
-
 };
+
+function solutionButtonClick() {
+		$("#latexHolder").html("");	
+		$("#latexHolder").append(displayQuestion(divisionResult)); 
+		$("#latexHolder").append(displayFullAnswer(divisionResult)); 
+		$("#promptHolder").html("");
+		
+		$("#nextButton").hide();
+		$("#coefficientInput").hide();
+		$("#solutionButton").hide();
+
+		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
+};		
 
 </script>
 
@@ -211,10 +251,12 @@ A less widely known method is the grid or tabular method, described
 	coefficient: <input id="numInput" type="number" min="-100" max="100" step="1" value="0" maxlength="4" size="4">
 </div>
 <br>
+<div class="btn-group btn-group-md " role="group">
 <button id="nextButton" class="btn btn-default"">submit</button>
+<button id="solutionButton" class="btn btn-default"">skip to solution</button>
+</div>
 <br>
 <hr>
-<br>
 <button id="resetButton" class="btn btn-default"">new question</button>
 <br>
 </div>

@@ -1,4 +1,9 @@
+"use strict";
 
+/*
+* Classes for parsing polynomial expressions, used on the calc.html page.
+*
+*/
 class Token {
 
 	constructor(value, type) {
@@ -91,8 +96,8 @@ class Parser {
 	}
 
 	hasError() {
-		var hasError = false;
-		for (var i = 0; i < this.stack.length; i++) {
+		let hasError = false;
+		for (let i = 0; i < this.stack.length; i++) {
 			hasError = this.stack[i].isError();
 			if (hasError === true) {
 				return hasError;
@@ -106,8 +111,8 @@ class Parser {
 	}
 
 	tokenize() {		
-		for(var i = 0; i < this.input.length; i++) {
-			var current = this.input[i];
+		for(let i = 0; i < this.input.length; i++) {
+			let current = this.input[i];
 			if (current == 'x' || current == 'X') {
 				this.tokens.push(new Token('x', 'variable'));
 			} else if ( current == '^') {
@@ -133,11 +138,11 @@ class Parser {
 			this.stack.push(this.tokens[this.tokenIndex]);
 			this.tokenIndex ++;
 		} 
-		var current = "";
-		for (var i = this.stack.length-1; i >= this.stackIndex ; i--) {
+		let current = "";
+		for (let i = this.stack.length-1; i >= this.stackIndex ; i--) {
 			current = this.stack.pop().value + current;
 		}
-		var result = parseInt(current);
+		let result = parseInt(current);
 		if (!isNaN(result)) {
 			this.stack.push(new Token(result, "number"));
 			this.stackIndex++;
@@ -145,11 +150,11 @@ class Parser {
 	}
 
 	concatenateSigns() {
-		var hasSign = false;
-		var signPositive = true;
+		let hasSign = false;
+		let signPositive = true;
 		while(this.hasRemaining() && this.currentToken().isSign()) {
 			hasSign = true;
-			var current = this.tokens[this.tokenIndex];
+			let current = this.tokens[this.tokenIndex];
 			if(current.value === '-') {
 				signPositive = !signPositive;
 			}
@@ -173,7 +178,7 @@ class Parser {
 
 	fallbackRule() {
 		if (!this.hasRemaining()) return;
-		var current = this.currentToken(); 
+		let current = this.currentToken(); 
 		if (current.isDigit() || current.isSign() || current.isMultiplication()) return; 
 		this.stack.push(current) 
 		this.stackIndex ++;
@@ -216,7 +221,7 @@ class Parser {
 		}
 
 		// case: leading with number or sign
-		var number = 1;		
+		let number = 1;		
 		if (this.currentToken().isSign()) {
 			if (this.currentToken().value == '-') number = -1;
 			if (this.peekToken().isEnd()) {
@@ -269,7 +274,7 @@ class Parser {
 	//polynomial terms are combined into a single expression
 	consolidate() {
 		if (this.hasError()) return null;
-		var poly = Poly.zero();
+		let poly = Poly.zero();
 		for (var i=0; i<this.stack.length; i++){
 			poly = poly.add(this.stack[i].value);
 		}

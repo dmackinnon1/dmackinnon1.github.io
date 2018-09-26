@@ -25,13 +25,13 @@ table, th, td {
 <!-- script src="polydiv_data.js"> </script -->
 <script src="js/polydiv_rand.js"> </script>
 <script>
-var exampleCount = 1;
+let exampleCount = 1;
 PolyGrid.useGlyphQuestion = true;
 function displayQuestion(divisionResult){
 	return latexRemoteImage(divisionResult.latexShowQuestion());
 };
 function displayAnswer(divisionResult) {
-	var htmlString = "<button type='button' class='btn btn-info '";
+	let htmlString = "<button type='button' class='btn btn-info '";
 	htmlString += " data-toggle='collapse' data-target='#answer"+ count + "'>";
 	htmlString += "Show Answer</button>";
 	htmlString += "<div id='answer" + count +"' class='collapse ' >";
@@ -77,7 +77,7 @@ function resetExamplesClicked(event) {
 }
 
 function handleClick(event) {
-		var divisionResult = nextExample().simplify();
+		let divisionResult = nextExample().simplify();
 		$("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
 		exampleCount ++;
 		$("#latexHolder").append(displayQuestion(divisionResult)); 
@@ -101,7 +101,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 	$(".checkbox").on('click',function(e){
-		var remainders = $('#remainderCheck:checked').val();
+		let remainders = $('#remainderCheck:checked').val();
 		console.log("checkbox clicked: " + remainders);
 		if (remainders == 'yes') {
 			generateWithRemainders = true;

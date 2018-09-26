@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" async	
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+</head>
+
+<style>
+table, th, td {
+	padding: 4px;
+	text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse; 
+}
+
+</style>
+</head>
+<script src="js/polydiv.js"> </script>
+<script src="js/polydiv_rand.js"> </script>
+<script>
+let stepCount = 0;
+let divisionResult = null;
+
+PolyGrid.useGlyphQuestion = true;
+function displayQuestion(divisionResult){
+	return latexRemoteImage(divisionResult.latexShowQuestion());
+};
+
+function displayAnswer(divisionResult) {
+	let htmlString = "<div>" + divisionResult.htmlLatexHistoryTo(stepCount) + "</div>";
+	htmlString += "<br>";
+	return htmlString;
+};
+
+function reset(){
+	stepCount = 0;
+	divisionResult = nextExample().simplify();
+	initialDisplay();	
+}
+
+function resetExamplesClicked(event) {
+	console.log("reset button clicked");
+	reset();	 			
+}
+
+function initialDisplay() {
+	$("#latexHolder").html("");
+	$("#latexHolder").append(displayQuestion(divisionResult)); 
+	$("#latexHolder").append(displayAnswer(divisionResult)); 	
+	$("#promptHolder").html(prompt());		
+	$("#nextButton").show();
+	$('#coefficientInput').show();
+	MathJax.Hub.Typeset(); //required to render dynamically generated Latex
+}
+
+function handleClick(event) {
+		let solutionDegree = divisionResult.solution.main.degree();
+		let answer = parseInt($('#numInput').val());
+		let correct = divisionResult.solution.main.coefficient(solutionDegree - stepCount); 
+		console.log("step: " + stepCount)
+		console.log("answer: " + answer);
+		console.log("correct: " + correct); 
+		if (answer == correct){
+			stepCount ++
+			$("#promptHolder").html(prompt(true));
+		} else {
+			$("#promptHolder").html(prompt(false));
+		}
+		$("#latexHolder").html("");
+		$("#latexHolder").append(displayQuestion(divisionResult)); 
+		$("#latexHolder").append(displayAnswer(divisionResult)); 	
+		if (stepCount > solutionDegree){
+			stepCount = solutionDegree;
+			$("#nextButton").hide();
+			$('#coefficientInput').hide();
+		} else {
+			$("#nextButton").show();
+			$('#coefficientInput').show();
+		}
+		if (stepCount == 0){
+			stepCount ++;
+		}
+		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
+};		
+	
+$(document).ready(function(){
+    $("#nextButton").on("click", function(event){
+		handleClick(event);
+	});	
+
+	$("#resetButton").on("click", function(event){
+		reset();
+	});	
+	$(".checkbox").on('click',function(e){
+		var remainders = $('#remainderCheck:checked').val();
+		console.log("checkbox clicked: " + remainders);
+		if (remainders == 'yes') {
+			generateWithRemainders = true;
+		} else {
+			generateWithRemainders = false;
+		}
+	});	
+
+	reset();
+});
+
+function prompt(correct=true){
+	let resultHtml = "<br>";
+	let solutionDegree = divisionResult.solution.main.degree();
+	let questionDegree = divisionResult.question.numerator.degree();
+	if (stepCount > solutionDegree){
+			resultHtml += "We are done!";
+			resultHtml += "<br>";
+			resultHtml += latexRemoteImage(divisionResult.latexShowQuestion());
+			resultHtml += latexRemoteImage("=" + divisionResult.latexShowSolution());
+			resultHtml += "<br>"
+	} else {
+		let answer = parseInt($('#numInput').val());
+		let prevSolution = divisionResult.solution.main.polyAt(solutionDegree - stepCount +1);
+		if(!correct){
+			resultHtml += "Sorry, " + answer + " is not correct, please try again.";
+			resultHtml += "<br>";
+		} else if (stepCount > 0){
+			resultHtml += "Well done! The grid has been filled in using " ; 
+			resultHtml += "\\("+ prevSolution.revShow()+"\\).";
+			resultHtml += "<br>"
+		}
+		$('#numInput').val(0);
+		let currentTarget = divisionResult.question.numerator.polyAt(( questionDegree- stepCount));
+		let solution = divisionResult.solution.main.polyAt(solutionDegree - stepCount);
+		let simpleTerm = Poly.term(1, solutionDegree - stepCount);
+		let denomDeg = divisionResult.question.denominator.degree();
+		let denomTerm = divisionResult.question.denominator.polyAt(denomDeg); 
+		resultHtml += "We are working on the term \\("+ currentTarget.revShow()+"\\).";
+		resultHtml += "<br>";
+		if (simpleTerm.degree() > 0){
+			resultHtml += "Try to find the coefficient for the \\("+ simpleTerm.revShow()+"\\)";
+		} else {
+			resultHtml += "Try to find the coefficient for the zero degree ";
+		}
+		resultHtml += " term in the solution that will help complete the grid. ";	
+		resultHtml += "All degree " + currentTarget.degree() +" terms";
+		resultHtml += " in the grid, along with the result of multiplying ";
+		resultHtml += "\\("+ denomTerm.revShow()+"\\) by the new entry in the top row, must add up to";
+		resultHtml += " \\("+ currentTarget.revShow()+"\\).";
+		resultHtml += "<br>"
+	}
+	return resultHtml;
+
+};
+
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+<div class="container-fluid">
+<div class='row'>
+<div class='col-sm-1'>
+</div>
+<div class='col-sm-10'>
+<div class="page-header">
+	<h1>Polynomial Division using the Grid Method
+<div class="btn-group btn-group-md " role="group">
+<a class="btn btn-default" href="./calc.html">Calculator</a>
+<a class="btn btn-default" href=".">Examples</a>
+<a class="btn btn-primary" href="./practice">Practice</a>
+</div>
+	</h1>
+</div> 	
+<div>
+Most students learn how to divide polynomials using the long division method, a process very similar to long division for numbers. 
+A less widely known method is the grid or tabular method, described 
+<a href="http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html">here</a> and 
+<a href="http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html">here</a>.
+</div>
+<div>
+<br>
+<p>This page will randomly generate division problems and prompt you to provide the solutions, one step at a time.
+<br>
+<br>
+<div class="well well-sm">
+ <form>
+    <div class="checkbox">
+      <label><input id="remainderCheck" type="checkbox" value="yes">generate questions with remainders</label>
+    </div>
+   </form>
+</div>
+<hr>
+<div id="latexHolder" style="text-align=center"></div>
+<div id="promptHolder" style="text-align=center"></div>
+<div id="coefficientInput">
+	<br>
+	coefficient: <input id="numInput" type="number" min="-100" max="100" step="1" value="0" maxlength="4" size="4">
+</div>
+<br>
+<button id="nextButton" class="btn btn-default"">submit</button>
+<br>
+<hr>
+<br>
+<button id="resetButton" class="btn btn-default"">new question</button>
+<br>
+</div>
+<div class='col-sm-1'>
+</div>
+</div>
+</body>
+
+</html>

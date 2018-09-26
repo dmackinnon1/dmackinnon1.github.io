@@ -547,7 +547,20 @@ class DivisionResult {
 		}
 		return rowHtml += "</tr>";
 	}
-		
+	
+	//used in practice mode
+	htmlLatexHistoryTo(level) {
+		var answerSoFar = new Poly([0]);
+		var htmlSection = "";
+		var degree = this.question.numerator.degree();
+		for (var i = 0; i < level; i++) {
+			var step = this.history.length - this.history[i].column - 1;
+			answerSoFar = answerSoFar.add(this.solution.main.polyAt(this.solution.main.degree() - i));
+		}
+		htmlSection += this.htmlHistoryEntry(this.history[i].grid, this.history[i].column, answerSoFar);
+		return htmlSection;		
+	}
+
 	htmlLatexHistory() {
 		var answerSoFar = new Poly([0]);
 		var htmlSection = "";
@@ -600,7 +613,7 @@ class DivisionResult {
 	
 	htmlHistoryEntry(histGrid, index, answerSoFar) {
 		var table = "<table align='center'>";
-		table += this.internalLatexHtmlTopRow(answerSoFar, index);
+		table += this.internalLatexHtmlTopRow(this.solution.main, index);
 		var limit = this.grid.length - 1;
 		for(var i = 0; i< this.grid.length; i ++) {
 			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), histGrid[limit-i], this.solution.main.degree(), index);

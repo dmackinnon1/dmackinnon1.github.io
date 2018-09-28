@@ -4,6 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -22,6 +23,32 @@
 <script src="js/celtic.js"></script>
 <script>
 $(document).ready(function(){
+	$("#show").on("click", function(event){
+		interactive.mode = 'show';
+		$("#show").addClass('btn-primary');
+		$("#show").removeClass('btn-secondary');
+		$("#edit").removeClass('btn-primary');
+		$("#edit").addClass('btn-secondary');
+		refreshInteractive();
+	});	
+	$("#edit").on("click", function(event){
+		interactive.mode = 'edit';
+		$("#edit").addClass('btn-primary');
+		$("#edit").removeClass('btn-secondary');
+		$("#show").removeClass('btn-primary');
+		$("#show").addClass('btn-secondary');
+		refreshInteractive();
+	});
+	$("#download").on("click", function(event){
+		let tempElement = document.createElement('a');
+  		tempElement.setAttribute('href', 'data:text/plain;charset=utf-8,' 
+  			+ encodeURIComponent(""+ interactive.knot.init().junctions().nodes().lines().build()+""));
+  		tempElement.setAttribute('download', 'image.svg');
+  		tempElement.style.display = 'none';
+  		document.body.appendChild(tempElement);
+		tempElement.click();
+		document.body.removeChild(tempElement);
+	});
 	
 	$("#xs-size").on("click", function(event){
 		$(".gs-btn").removeClass('btn-primary');
@@ -58,89 +85,71 @@ $(document).ready(function(){
 		reset();
 	});	
 	
-	$("#randomize").on("click", function(event){
-		randomize();
-	});		
-
 	$("#reset").on("click", function(event){
 		reset();
 	});		
-
-	$("#download").on("click", function(event){
-		let tempElement = document.createElement('a');
-  		tempElement.setAttribute('href', 'data:text/plain;charset=utf-8,' 
-  			+ encodeURIComponent(""+ knot.init().junctions().nodes().lines().build()+""));
-  		tempElement.setAttribute('download', 'image.svg');
-  		tempElement.style.display = 'none';
-  		document.body.appendChild(tempElement);
-		tempElement.click();
-		document.body.removeChild(tempElement);
-	});
+	interactive.display = document.getElementById('knot');
 	reset();
 });
 
 let width = 200;
-let xsmall = [4, 3, width/3];
-let small = [7, 5, width/5];
-let medium = [15, 10, width/11];
-let large = [20, 15, width/16];
+let xsmall = [4, 3, 200/4];
+let small = [6, 4, 200/5];
+let medium = [7, 5, 200/6];
+let large = [8, 6, 200/7];
 let size = small;
-let grid = null;
-let knot = null;
 
 function reset(){
-	grid = new Grid(size[0],size[1]);
-	grid.initialize().borders();
+	let grid = new Grid(size[0],size[1]);
+	grid.initialize().borders(); //borders()
 	let fg = "white";
 	let bg = "black";
-	if (knot != null){
-		fg = knot.foregroundColor;
-		bg = knot.backgroundColor
+	if (interactive.knot != null){
+		fg = interactive.knot.foregroundColor;
+		bg = interactive.knot.backgroundColor
 	} 
-	knot = new KnotSVG(grid, size[2]).chunkyStyle();
-	knot.setForeground(fg);
-	knot.setBackground(bg);
-	redraw();
+	interactive.knot = new EditKnotSVG(grid, size[2]);
+	interactive.knot.setForeground(fg);
+	interactive.knot.setBackground(bg);
+	interactive.mode='show';
+	resetButtons();
+	applyStyle();
+	refreshInteractive();
 };
 
-function redraw(){
-	if (interactive.format == 'negative'){
-		document.getElementById('knot').innerHTML =  knot.init().nodes().junctions().lines().build();
-	} else {
-		document.getElementById('knot').innerHTML =  knot.init().centerLines().build();
-	}	
-}
 
+function resetButtons(){
+	$("#show").addClass('btn-primary');
+	$("#show").removeClass('btn-secondary');
+	$("#edit").removeClass('btn-primary');
+	$("#edit").addClass('btn-secondary');	
+}
 function foreground(c='white'){
 	if (interactive.format == 'negative'){
-		knot.setForeground(c);
+		interactive.knot.setForeground(c);
 	} else {
-		knot.setBackground(c);
+		interactive.knot.setBackground(c);
 	}
-	redraw();
+	refreshInteractive();
 }
 function background(c='black'){
 	if (interactive.format == 'negative'){
-		knot.setBackground(c);
+		interactive.knot.setBackground(c);
 	} else {
-		knot.setForeground(c);
+		interactive.knot.setForeground(c);
 	}
-	redraw();
+	refreshInteractive();
 }
+//the two types of formats reverse the foreground and background
 function format(f='negative'){
 	if (interactive.format != f){
-		let oldBackground = knot.backgroundColor;
-		let oldForeground = knot.foregroundColor;
-		knot.setForeground(oldBackground);
-		knot.setBackground(oldForeground);
+		let oldBackground = interactive.knot.backgroundColor;
+		let oldForeground = interactive.knot.foregroundColor;
+		interactive.knot.setForeground(oldBackground);
+		interactive.knot.setBackground(oldForeground);
 		interactive.format = f;
-		redraw();
+		refreshInteractive();
 	}
-}
-
-function randomize(){
-	grid.randomLines(20);
-	redraw();
 }
 </script>
 <body>
@@ -151,21 +160,27 @@ function randomize(){
 				dmackinnon1.github.io</a>		
 </nav>
 <br>
-
 <div class="container-fluid">
 	<div class='row'>
 	<div class='col-sm-1 col-lg-3'></div>
 	<div class='col-sm-10 col-lg-6 main-column'>
-		<div class="page-header">			
+		<div class="page-header">
 			<h1>Celtic Knots
 			<div class="btn-group btn-group-md " role="group">
-					<a class="btn nav-button-default btn-default" href="./simple.html">Editor</a>
-					<a class="btn nav-button-primary btn-primary" href="./random.html">Random</a>
+					<a class="btn nav-button-primary btn-primary" href="./simple.html">Editor</a>
+					<a class="btn nav-button-defualt btn-default" href="./random.html">Random</a>
 			</div>
+			</h1>
 		</div> 	
-			Generate randomized celtic knot patterns using the
-			options below.
-		<hr>	
+		<button type='button' 
+		class='btn btn-info' data-toggle='collapse' data-target='#mainText'>
+		About </button>
+		<div id='mainText' class='collapse'> <br>
+			You can edit the woven pattern below to create interconnected celtic-style knots.
+			Click the <strong>Edit</strong> button to show the primary (small) and secondary (larger) grid points. Connect two adjacent secondary points (non-diagonal) to form a knot boundary by clicking on one point and then another neighbouring point. If two non-adjacent points are selected, a rectangular boundary with the selected points as diagonal corners will be drawn,
+			if possible. Click on the grey midpoint of a boundary to remove it. Click <strong>Show</strong> to reveal the knot pattern.
+		</div>
+	<hr>	
 		<div class='centered'>
 		<div class="btn-group btn-group-md" role="group">	
 			<button id="xs-size" class="gs-btn btn btn-secondary">xs</button>	
@@ -178,15 +193,16 @@ function randomize(){
 		<div id='knot' class='framed'></div>
 		<br>
 		<div class='centered'>
-		<div class="btn-group btn-group-md" role="group">	
-			<button id="randomize" class="btn btn-primary">Random</button>
-			<button id="reset" class="btn btn-primary">Reset</button>
-		</div>
-		<br>
-		<br>
 		<div class="btn-group btn-group-sm" role="group">	
 			<button id="negative" class="btn btn-secondary" onclick="format('negative')">Style 1</button>
 			<button id="positive" class="btn btn-secondary" onclick="format('positive')">Style 2</button>
+		</div>
+		<br>
+		<br>
+		<div class="btn-group btn-group-md" role="group">	
+			<button id="show" class="btn btn-primary">Show</button>
+			<button id="edit" class="btn btn-secondary">Edit</button>
+			<button id="reset" class="btn btn-secondary">Reset</button>
 		</div>
 		<br>
 		<br>
@@ -238,12 +254,10 @@ function randomize(){
 			</div>
 		</div>
 		<br>
-		<br>			
-	</div>
+		<br>	
+		</div>
 	<div class='col-sm-1 col-lg-3'></div>
-	
 	</div>
 </div>
 </body>
 </html>
-	

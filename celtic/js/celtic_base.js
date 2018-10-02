@@ -61,15 +61,6 @@ class Point{
 	}
 }
 
-/*
-* A helper for drawing SVG lines. Expects two points to connect.
-*/
-class Line {
-	constructor(source, target){
-		this.source = source;
-		this.target = target;
-	}
-}
 
 /*
 * Points on the secondary grid play a different role, they 
@@ -197,7 +188,6 @@ class Node extends Point {
 		} while (nextSet.size != connectedSet.size);
 		return nextSet;
 	}
-
 }
 
 /*
@@ -211,6 +201,23 @@ class Junction {
 		this.medianPoint = medianPoint;	
 		this.dir = dir;
 		medianPoint.junction(this);
+	}
+}
+
+/*
+* A helper class used to draw junctions in scripts.
+*/
+class JunctionEnd {
+	constructor(grid, x, y){
+		this.grid = grid;
+		this.x = x;
+		this.y = y;
+	}
+
+	to(otherX, otherY){
+		let p1 = new Point(this.x, this.y);
+		let p2 = new Point(otherX, otherY);
+		this.grid.boxFrame(p1,p2);
 	}
 }
 
@@ -230,7 +237,6 @@ class Grid {
 		this.junctions = [];
 	}
 
-	
 	initialize(){
 		//set up points
 		for (let i = 0; i < this.xdim; i++){
@@ -249,6 +255,11 @@ class Grid {
 			}
 		}
 		return this;
+	}
+
+	//used to draw junctions in scripts
+	from(x, y){
+		return new JunctionEnd(this, x, y);
 	}
 
 	boxFrame(p1, p2){

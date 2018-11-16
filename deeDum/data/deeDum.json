@@ -1,0 +1,336 @@
+[{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "1"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "2"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "3"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "4"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My name is Tweedledee or I have a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "5"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "6"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "7"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "8"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "9"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My name is Tweedledum, and I have a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "10"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "11"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "12"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My name is Tweedledee.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "13"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledee.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "14"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My name is Tweedledum.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "15"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother's name is Tweedledum.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "16"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "17"}
+, 
+{"bro0": "My name is Tweedledee, and I have a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "18"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "19"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "20"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "21"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "22"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "23"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "24"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "25"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "26"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "27"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "28"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My name is Tweedledee, and I have a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "29"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "30"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "31"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "32"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "33"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "34"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "35"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My name is Tweedledum or I have a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "36"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "37"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My name is Tweedledee.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "38"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledee.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "39"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My name is Tweedledum.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "40"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother's name is Tweedledum.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "41"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "42"}
+, 
+{"bro0": "My name is Tweedledee or I have a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "43"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "44"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "45"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "46"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "47"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "48"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "49"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "50"}
+, 
+{"bro0": "My name is Tweedledee, and I have a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "51"}
+, 
+{"bro0": "My name is Tweedledee, and I have a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "52"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "53"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "54"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "55"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "56"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "57"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "58"}
+, 
+{"bro0": "My brother's name is Tweedledee, and he has a red card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "59"}
+, 
+{"bro0": "My name is Tweedledee or I have a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "60"}
+, 
+{"bro0": "My name is Tweedledee or I have a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "61"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "62"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "63"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "64"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "65"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "66"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "67"}
+, 
+{"bro0": "My brother's name is Tweedledee or he has a red card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "68"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "69"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "70"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "71"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My name is Tweedledee, and I have a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "72"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "73"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "74"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "75"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "76"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "77"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "78"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My name is Tweedledum or I have a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "79"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "80"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My name is Tweedledee.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "81"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledee.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "82"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My name is Tweedledum.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "83"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother's name is Tweedledum.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "84"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "85"}
+, 
+{"bro0": "My name is Tweedledum, and I have a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "86"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "87"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "88"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "89"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "90"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "91"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "92"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "93"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "94"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "95"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "96"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "97"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My name is Tweedledee or I have a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "98"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "99"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "100"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "101"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "102"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My name is Tweedledum, and I have a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "103"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "104"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "105"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My name is Tweedledee.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "106"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledee.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "107"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My name is Tweedledum.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "108"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother's name is Tweedledum.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "109"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "110"}
+, 
+{"bro0": "My name is Tweedledum or I have a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "111"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "112"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "113"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "114"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "115"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "116"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "117"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a black card.",  "bro1": "My brother has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "118"}
+, 
+{"bro0": "My name is Tweedledum, and I have a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "119"}
+, 
+{"bro0": "My name is Tweedledum, and I have a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "120"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "121"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "122"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "123"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "124"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "125"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "126"}
+, 
+{"bro0": "My brother's name is Tweedledum, and he has a red card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "127"}
+, 
+{"bro0": "My name is Tweedledum or I have a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "128"}
+, 
+{"bro0": "My name is Tweedledum or I have a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "129"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "130"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "131"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "132"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "133"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "134"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "135"}
+, 
+{"bro0": "My brother's name is Tweedledum or he has a red card.",  "bro1": "My brother has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "136"}
+, 
+{"bro0": "My name is Tweedledee.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "137"}
+, 
+{"bro0": "My name is Tweedledee.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "138"}
+, 
+{"bro0": "My name is Tweedledee.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "139"}
+, 
+{"bro0": "My name is Tweedledee.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "140"}
+, 
+{"bro0": "My brother's name is Tweedledee.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "141"}
+, 
+{"bro0": "My brother's name is Tweedledee.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "142"}
+, 
+{"bro0": "My brother's name is Tweedledee.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "143"}
+, 
+{"bro0": "My brother's name is Tweedledee.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "144"}
+, 
+{"bro0": "My name is Tweedledum.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "145"}
+, 
+{"bro0": "My name is Tweedledum.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "146"}
+, 
+{"bro0": "My name is Tweedledum.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "147"}
+, 
+{"bro0": "My name is Tweedledum.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "148"}
+, 
+{"bro0": "My brother's name is Tweedledum.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "149"}
+, 
+{"bro0": "My brother's name is Tweedledum.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "150"}
+, 
+{"bro0": "My brother's name is Tweedledum.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "151"}
+, 
+{"bro0": "My brother's name is Tweedledum.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "152"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "153"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "154"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My brother's name is Tweedledee, and he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "155"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My brother's name is Tweedledee or he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "156"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'black'))",  "id": "157"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'red'))",  "id": "158"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My brother's name is Tweedledum, and he has a red card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "black",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'black'))",  "id": "159"}
+, 
+{"bro0": "My brother has a black card.",  "bro1": "My brother's name is Tweedledum or he has a red card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "red",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'red'))",  "id": "160"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My name is Tweedledee, and I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "161"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My brother's name is Tweedledee, and he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "162"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My name is Tweedledee or I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "163"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My brother's name is Tweedledee or he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "164"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My name is Tweedledum, and I have a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledum', 'black'), ('Tweedledee', 'black'))",  "id": "165"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My brother's name is Tweedledum, and he has a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "black",  "bro1_card": "black",  "solution": "(('Tweedledee', 'black'), ('Tweedledum', 'black'))",  "id": "166"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My name is Tweedledum or I have a black card.",  "bro0_name": "Tweedledee",  "bro1_name": "Tweedledum",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledee', 'red'), ('Tweedledum', 'red'))",  "id": "167"}
+, 
+{"bro0": "My brother has a red card.",  "bro1": "My brother's name is Tweedledum or he has a black card.",  "bro0_name": "Tweedledum",  "bro1_name": "Tweedledee",  "bro0_card": "red",  "bro1_card": "red",  "solution": "(('Tweedledum', 'red'), ('Tweedledee', 'red'))",  "id": "168"}
+]

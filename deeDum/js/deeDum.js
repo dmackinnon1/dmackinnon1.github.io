@@ -55,6 +55,10 @@ function puzzleReset(url = null) {
  	}
  	deeDum.selected = new PuzzleController(p);
  	deeDum.activeSet = removeElement(deeDum.activeSet,p);
+	bro0.name = "Tweedledee";
+	bro1.name = "Tweedledum";
+	bro0.card = "red";
+	bro1.card = "red";
 	formatPuzzle(deeDum.selected);	
   	deeDum.answered = false;
 	display.disabled = false;
@@ -83,8 +87,8 @@ class PuzzleController {
 	}
 	
 	puzzleIntro() {
-		let txt = "<ul><li> The first brother says: " + this.puzzle.bro0 + "</li>";
-		txt +="<li> The second brother says: " + this.puzzle.bro1 + "</li>";
+		let txt = "<ul><li> The first brother says: <strong>" + this.puzzle.bro0 + "</strong></li>";
+		txt +="<li> The second brother says: <strong>" + this.puzzle.bro1 + "</strong></li>";
 		txt += "</ul>";
 		return txt;
 	}

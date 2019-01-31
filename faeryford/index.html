@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<script src="js/ford.js"></script>
+<script src="js/bldrs.js"></script>
+<script type="text/javascript"	
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  console.log("downloading mathjax")
+</script>
+<script>
+let level = 0;
+function incrementLevel(){
+	level++;
+	computeFaeryFord();
+}
+function decrementLevel(){
+	if (level > 0) level--;
+	computeFaeryFord();
+}
+function computeFaeryFord(){
+	let sequence = nthLevelFaery(level);
+	let svg = fordCirclesSVG(sequence, 600, 'black');		
+	document.getElementById("svg").innerHTML = svg;
+	document.getElementById("fractions").innerHTML = new FracList(sequence).fracList();
+	MathJax.Hub.Typeset(); //required to render dynamically generated Latex
+}
+</script>
+<title>Ford Circles</title>
+</head>
+<body>
+	<div style="text-align:center;" id='svg'></div>
+	<div style="text-align:center;" id='fractions'></div>
+	<div style="text-align:center;" id='controllers'>
+		<button type="button" onclick="incrementLevel()">Increase Level</button>
+		<button type="button" onclick="decrementLevel()">Decrease Level</button>
+	</div>
+</body> 
+
+<script>	
+	computeFaeryFord();
+</script>
+
+</html>

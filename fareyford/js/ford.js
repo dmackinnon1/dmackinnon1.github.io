@@ -1,7 +1,7 @@
 "use strict";
 
 /*
- * Utility functions and classes for calculating Faery sequences
+ * Utility functions and classes for calculating Farey sequences
  */
 
  /*
@@ -31,7 +31,7 @@ function gcd(a, b) {
 
 /*
 * Frac class represents a fraction
-* Public class, the returned Faery sequence
+* Public class, the returned Farey sequence
 * is a list of Frac instances. Constructor
 * should only be used internally.
 */
@@ -136,7 +136,7 @@ function maxDenominator(sequence){
 
 /*
 * Internal function for adding the n-level of mediants into an existing 
-* Faery sequence.
+* Farey sequence.
 */
 function addMediant(sequence, frac1, frac2, n){
 	if (frac1.d + frac2.d == n){
@@ -147,10 +147,10 @@ function addMediant(sequence, frac1, frac2, n){
 	}
 }
 /*
-* Internal function for generating the next level of a Faery sequence
+* Internal function for generating the next level of a Farey sequence
 */
 
-function faerySequence(sequence){
+function fareySequence(sequence){
 	let newSequence = [];
 	let level = maxDenominator(sequence) +1 ;
 	for (let f in sequence){
@@ -168,12 +168,12 @@ function faerySequence(sequence){
 
 
 /*
-* Principle public function for generating Faery sequence.
+* Principle public function for generating Farey sequence.
 */
-function nthLevelFaery(n){
+function nthLevelFarey(n){
 	let start =[new Frac(0,1), new Frac(1,1)];
 	for (let i = 0; i < n; i++){
-		start = faerySequence(start);
+		start = fareySequence(start);
 	}
 	return start;
 }

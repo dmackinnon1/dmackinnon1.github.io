@@ -13,14 +13,14 @@
 let level = 0;
 function incrementLevel(){
 	level++;
-	computeFaeryFord();
+	computeFareyFord();
 }
 function decrementLevel(){
 	if (level > 0) level--;
-	computeFaeryFord();
+	computeFareyFord();
 }
-function computeFaeryFord(){
-	let sequence = nthLevelFaery(level);
+function computeFareyFord(){
+	let sequence = nthLevelFarey(level);
 	let svg = fordCirclesSVG(sequence, 600, 'black');		
 	document.getElementById("svg").innerHTML = svg;
 	document.getElementById("fractions").innerHTML = new FracList(sequence).fracList();
@@ -39,7 +39,7 @@ function computeFaeryFord(){
 </body> 
 
 <script>	
-	computeFaeryFord();
+	computeFareyFord();
 </script>
 
 </html>

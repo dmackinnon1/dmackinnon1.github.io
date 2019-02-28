@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<script src="js/starpoly.js"></script>
+<script src="js/bldrs.js"></script>
+<script type="text/javascript"	
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  console.log("downloading mathjax")
+</script>
+<title>Star Polygons</title>
+</head>
+<body>
+	<h1> Star Polygons</h1>
+	<hr>
+
+	<p>The list below shows star and compund polygons on a given number of vertices.	
+	</p>
+	<hr>
+	<div style="text-align:center;" id='vertexCount'></div>
+	<div style="text-align:center;" id='svg'></div>
+	<div style="text-align:center;" id='controllers'>
+		<button type="button" onclick="incrementLevel()">Increase Vertices</button>
+		<button type="button" onclick="decrementLevel()">Decrease Vertices</button>
+	</div>
+	<hr>
+	<p>The chart below shows a table of star and compound polygons for vertices less than
+or equal to the value provided. </p>
+	<div style="text-align:center;" id='svgChart'></div>
+</body> 
+
+<script>	
+	let vertexCount = 12;
+	drawing.strokeWidth = 2;
+	function incrementLevel(){
+		vertexCount++;
+		redrawRow();
+	}
+	function decrementLevel(){
+		if (vertexCount > 3) vertexCount--;
+		redrawRow();
+	}
+	function redrawRow(){
+		let r = row(vertexCount,sizeRange(vertexCount)+10);
+		document.getElementById("vertexCount").innerHTML = "<h2>" + vertexCount +"</h2>";
+		document.getElementById("svg").innerHTML = r.build();
+		MathJax.Hub.Typeset();
+		let c = triangularChart(vertexCount+1);
+		document.getElementById("svgChart").innerHTML = c.build();
+	}
+	redrawRow();
+</script>
+
+</html>

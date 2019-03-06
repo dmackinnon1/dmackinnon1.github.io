@@ -28,10 +28,27 @@
 	<p>The chart below shows a table of star and compound polygons for vertices less than
 or equal to the value provided. </p>
 	<div style="text-align:center;" id='svgChart'></div>
+	<hr>
+	<p> See a star or compund that looks interesting? Take a look at a larger version using
+		the tool below. </p>
+	<div style="text-align:center;" id='controllers2'>
+		<input type="number" id="vertices" name="vertices"
+       min="2" max="100" value="2" onchange="changeVertex(event)">vertices</input>
+           
+	 <input type="number" id="skip" name="skip"
+       min="0" max="100" value="0" onchange="changeSkip(event)">skip</input>
+	</div>
+
+	<div style="text-align:center;" id='bigStar'></div>
+	<div style="text-align:center;" id='bigStarNotation'></div>
+	
+
 </body> 
 
 <script>	
 	let vertexCount = 12;
+	let largerVertexCount = 2;
+	let largerSkip = 1;
 	drawing.strokeWidth = 2;
 	function incrementLevel(){
 		vertexCount++;
@@ -40,6 +57,33 @@ or equal to the value provided. </p>
 	function decrementLevel(){
 		if (vertexCount > 3) vertexCount--;
 		redrawRow();
+	}
+	function changeVertex(event){
+		largerVertexCount = parseInt(document.getElementById("vertices").value);
+		let nextSkip = parseInt(document.getElementById("skip").value) + 1;
+		if (nextSkip > largerVertexCount/2){
+			document.getElementById("skip").value = largerSkip -1;
+		} else{
+			largerSkip = parseInt(document.getElementById("skip").value) + 1;
+		}	
+		redrawBig();
+	}
+	function changeSkip(event){parseInt(document.getElementById("skip").value) + 1;		
+		let nextSkip = parseInt(document.getElementById("skip").value) + 1;
+		if (nextSkip > largerVertexCount/2){
+			document.getElementById("skip").value = largerSkip -1;
+		} else{
+			largerSkip = parseInt(document.getElementById("skip").value) + 1;
+		}	
+		redrawBig();
+	}
+	function redrawBig(){
+		let a = alone(largerVertexCount, largerSkip, 150);
+		document.getElementById("bigStar").innerHTML = a[0].build();
+		document.getElementById("bigStarNotation").innerHTML = 
+			"<h2>"+ a[1].schlafliLaTeX() +"</h2>";
+		MathJax.Hub.Typeset();
+		
 	}
 	function redrawRow(){
 		let r = row(vertexCount,sizeRange(vertexCount)+10);
@@ -50,6 +94,7 @@ or equal to the value provided. </p>
 		document.getElementById("svgChart").innerHTML = c.build();
 	}
 	redrawRow();
+	redrawBig();
 </script>
 
 </html>

@@ -229,11 +229,13 @@ class Polygon {
 * Returns a pair: an SVG builder and the polygon it contains.
 */
 function alone(n,p,size){
+	let frame = 3*size;
+	let center = 3*size/2;
 	let poly = new Polygon(n,p);
 	let g = new Bldr('g');
 	g.elem(poly.svgComponent(size));
-	g.att('transform','translate('+size+','+size+')');
-	return [new SVGWrapper(2.1*size,2.1*size, g),poly];
+	g.att('transform','translate('+center+','+center+')');
+	return [new SVGWrapper(frame,frame, g),poly];
 }
 
 /*
@@ -261,8 +263,8 @@ function row(value, size){
 */
 function triangularChart(limit){
 	let radius = sizeRange(limit);
-	let height = limit*radius*3;
-	let width = height/2;
+	let height = limit*radius*2.5;
+	let width = height/1.5;
 
 	let table = new Bldr("g");
 	for(let j = 2; j < limit; j++){

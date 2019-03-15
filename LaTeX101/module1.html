@@ -31,6 +31,9 @@ This single-page template is used for each learning module.
         }
       }
 
+	.dm-code {
+		background:azure;
+	}
     </style>
 <script type="text/javascript"	
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -39,7 +42,7 @@ This single-page template is used for each learning module.
   </head>
   <body>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">dmackinnon1.github.io</a>
+    <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -54,14 +57,17 @@ This single-page template is used for each learning module.
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Modules</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="#">What is LaTeX?</a>
-            <a class="dropdown-item" href="#">LaTeX as a Digital Literacy</a>
+            <a class="dropdown-item" href="./module0.html">0: What is LaTeX?</a>
+            <a class="dropdown-item" href="./module1.html">1: Getting Started</a>
+            <a class="dropdown-item" href="./module2.html">2: Essential LaTeX Commands</a>
+            <a class="dropdown-item" href="./module3.html">3: Cloud-based LaTeX Environments</a>
+            <a class="dropdown-item" href="./module4.html">4: LaTeX on Various Platforms</a>
+            <a class="dropdown-item" href="./module5.html">5: LaTeX as a Digital Literacy</a>           
           </div>
         </li>
       </ul>
     </div>
-    </nav>
-
+  </nav>
 
 <main role="main">
 
@@ -71,44 +77,126 @@ This single-page template is used for each learning module.
  
   <div class="container">
     <!-- Row 1 introduction -->
-   
+    <h1> Module 1: Getting Started </h1>
     <div class="row" id="contents">
       <div class="col-md-8">
         <h2>Contents</h2>
        	<ul>
-       		<li><a href="#before">Before you start</a></li>
-       		<li><a href="#main">Title</a></li>
+       		<li><a href="#goals">Learning Goals</a></li>		
+       		<li><a href="#before">Before You Start</a></li>
+       		<li><a href="#main">Introducing LaTeX</a></li>
        		<li><a href="#more">Learn More</a></li>
+       		<li><a href="#check">Checklist</a></li>
        		<li><a href="#references">References</a></li>
        	</ul>
        </div>
     </div>
     <hr>
 
+	<div class="row" id="goals">
+      <div class="col-md-8">
+        <h2>Learning Goals</h2>
+        <p> The learning goals for this module include:
+		<ul>
+		<li>Identify some online LaTeX editors.</li>
+		<li>Practice using basic LaTeX commands using an online editor.</li>
+		<li>Learn how to use outputs from online editors in electronic documents.</li>
+        </ul>
+        </p>   
+       </div>
+    </div>	
+    <hr>
 	<div class="row" id="before">
       <div class="col-md-8">
-        <h2>Before you start</h2>
+        <h2>Before You Start</h2>
+        <p> Take a moment and search online for "Latex editor"		
+        </p>
+        <p> Consider these questions:
+        <ol>
+   		<li> item 1</li>
+		  <li> item 2 </li>
+       </ol>
+		<p> Blah blah
+		</p>
+   
        </div>
     </div>	
     <hr>
 
 	<div class="row" id="main">
       <div class="col-md-8">
-        <h2>Title</h2>
-       </div>
+        <h2>Online LaTeX</h2> 
+    
+    <!-- Small LaTeX editor powered by codeCogs webservice -->    
+    <div class="input-group">
+  			<div class="input-group-prepend">
+    		<span class="input-group-text">Input LaTeX:</span>
+  			</div>
+  			<textarea id='latexInput' class="form-control" aria-label="Input LaTeX"></textarea>
+  			<button class="btn btn-secondary" onClick='getRenderedLatex()' role="button">Try It</button>
+		</div>
+		<br>      
+        <div id="renderedLatex" tyle="text-align:center;">  </div>
+    <!-- end of LaTeX editor -->
+    </div>
     </div>	
     <hr>
 
     <div class="row" id="more">
       <div class="col-md-8">
         <h2>Learn More</h2>
-       </div>
+       <p>
+       For a very brief overview of what LaTeX is, read the LaTeX project <a href="https://www.latex-project.org/about/">'about' page</a>
+       (LaTeX Project, 2019), and the introduction to LaTeX in the 
+       <a href=" https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336">LaTeX wikibook</a> (LaTeX/Introduction, 2019).
+	   </p>
+	   
+    </div>
     </div>	
     <hr>
 	
+	<div class="row" id="check">
+      <div class="col-md-8">
+	  <h2>Learning Checklist</h2>
+	<p>
+	Before moving on to the next module, take a moment to review the learning checklist.
+	</p>
+	<p>
+	<div class="form-check">
+  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+  	<label class="form-check-label" for="defaultCheck1">
+    item 1  
+  	</label><br>
+  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+  	<label class="form-check-label" for="defaultCheck2">
+    item 2 
+  	</label><br>
+  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+  	<label class="form-check-label" for="defaultCheck3">
+    item 3
+  	</label><br>
+  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
+  	<label class="form-check-label" for="defaultCheck4">
+    item 4 
+  	</label><br> 	
+	</div>
+	</p>
+	<p> If there were any items in the checklist that you did not complete,
+		consider reviewing this page again before moving on.
+	</p>
+	  </div>
+	</div>	
+	<hr>
 	<div class="row" id="references">
       <div class="col-md-8">
         <h2>References</h2>
+        <p>
+        LaTeX Project. (2019) <em>An introduction to LaTeX</em>. Webpage. Retrieved February 27, 2019 from https://www.latex-project.org/about/
+        </p>
+        <p>
+        LaTeX/Introduction. (2019, February 4). Wikibooks, The Free Textbook Project. Retrieved March 15, 2019 from https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336.
+        </p>
+
        </div>
     </div>	
     <hr>
@@ -122,5 +210,16 @@ This single-page template is used for each learning module.
 </footer>
 <script>
 MathJax.Hub.Typeset();
+let equationToRender = "";
+function getRenderedLatex(){
+  let equationToRender = document.getElementById("latexInput").value; 
+  let html = "<img src='https://latex.codecogs.com/png.latex?\\large " + equationToRender + "' title='LaTeX' ";
+  html += "style='padding:10px;border:thin solid black;'>"
+  document.getElementById("renderedLatex").innerHTML = html;
+}
+
+//set default
+document.getElementById("latexInput").value = "\\LaTeX";
+getRenderedLatex();
 </script>
 </html>

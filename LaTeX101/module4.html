@@ -41,7 +41,7 @@ This single-page template is used for each learning module.
 </script>
   </head>
   <body>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,6 +69,7 @@ This single-page template is used for each learning module.
     </div>
   </nav>
 
+
 <main role="main">
 
   <div id='top_padding'>
@@ -77,7 +78,7 @@ This single-page template is used for each learning module.
  
   <div class="container">
     <!-- Row 1 introduction -->
-    <h1> Module 0: What is LaTeX? </h1>
+    <h1> Module X: Something about LaTeX </h1>
     <div class="row" id="contents">
       <div class="col-md-8">
         <h2>Contents</h2>
@@ -98,9 +99,9 @@ This single-page template is used for each learning module.
         <h2>Learning Goals</h2>
         <p> The learning goals for this module include:
 		<ul>
-		<li>Reflecting on how you include mathematics in digital documents.</li>
-		<li>Learning how simple expressions, like polynomials, are written in LaTeX.</li>
-		<li>Learning about the basic structure of LaTeX commands.</li>
+		<li>goal1</li>
+		<li>goal2</li>
+		<li>goal3</li>
         </ul>
         </p>   
        </div>
@@ -109,26 +110,14 @@ This single-page template is used for each learning module.
 	<div class="row" id="before">
       <div class="col-md-8">
         <h2>Before You Start</h2>
-        <p> Before learning about what LaTeX is, spend a few minutes thinking about
-			the problem of writing mathematics for digital documents. How do you do this 
-			today? Do you avoid using word-processers when creating resources and
-			assessments because it is hard to include mathematical notation and
-			get the formattng right? Do you use equation editors, or hand-write the
-			mathematics and paste it in when photocopying? Teachers use many strategies
-			to overcome the difficulties of communicating mathematics in digital environments.		
+        <p> Blah blah		
         </p>
         <p> Consider these questions:
         <ol>
-   		<li> What makes writing mathematics difficult? </li>
-		<li> How do you avoid those problems, or solve them, when you teach a math class? </li>
-       	</ol>
-		<p> At a minimum, LaTeX can be another arrow in your quiver of strategies
-			for making comunicating mathematics easier. Depending on 
-			how you apply it and what kind of documents you create and 
-			platforms you use, you may find that knowing a little 
-			LaTeX can be a great benefit - improving the quality of your 
-			communication and expanding your ability to use new platforms
-			in your teaching.
+   		<li> item 1</li>
+		  <li> item 2 </li>
+       </ol>
+		<p> Blah blah
 		</p>
    
        </div>
@@ -137,10 +126,9 @@ This single-page template is used for each learning module.
 
 	<div class="row" id="main">
       <div class="col-md-8">
-        <h2>Introducing LaTeX</h2>
+        <h2>Online LaTeX</h2>
        <p>
-       One way to think about LaTeX is as a computer or scripting language for writing mathematics. You type in commands, and the LaTeX processor
-	   converts it into the kind of math notation that we expect to see in printed documents.
+       Blah blah
 	   For example, you type:
 	   <div class="dm-code">
 	    <br/><pre>
@@ -150,74 +138,8 @@ This single-page template is used for each learning module.
 	   And LaTeX will generate:
 	   \[ \frac{x^2-2x+1}{x-1} \]	   
 	   </p>
-	   <p> As you may notice from the example above, writing LaTeX involves a combination somse standard 
-		conventions for writing digital mathematics, like using the carrot (^) symbol for exponents, using
-		regular text, and some special commands like the "\frac{}{}" to create a fraction.
-		</p>
-		<p> In the modules that follow this one, you'll learn some of the conventions and commands used 
-		in LaTeX, and also how to use LaTeX on various platforms. One example is web-pages like the one you
-		are reading now, where the formulas shown were rendered using LaTeX by integrating a special
-		JavaScript library called <strong>MathJaX</strong>.
-		</p>
-		<p>
-		The most powerful and widely used system for creating equations and mathematical documents is not a new technology. The TeX formatting system was originally created by Donald Knuth in 1978, and an easier to use software layer, LaTex, was added to TeX by Leslie Lamport in 1980. This is old technology: it has been used by mathematicians and scientists around the world for decades, and is very widely used today (LaTeX. 2019).
-		</p>
-		<p>
-		So what is new? There are two relatively new developments that make it very useful for math teachers to learn how to use LaTeX:
-		</p>
-		<ul>
-		<li>
-		In recent years many platforms have adopted LaTeX as the means by which they display equations. Knowing the basics of LaTeX commands will allow you to quickly add equations in a consistent way into wikis, webpages, platforms like <strong>Brightspace</strong>, <strong>Google Docs</strong>, and programs like <strong>GeoGebra</strong>.
-		</li>
-		<br/>
-		<li>
-		Running a complete LaTeX processor on your own computer used to require some technical skill and a willingness to muck around with installing components and adjusting configuration - the setup was not always straightforward. Now there are cloud-based LaTeX offerings (like <strong>Overleaf</strong>) which make it easier to produce complete LaTex documents.
-		</li>
-		</ul>	
-		<p>
-		LaTeX, and TeX the system it is based on, are computer languages, not applications or plugins. Although software is required to render anything written in these languages into nice mathematics (just like your browser is required to render HTML), you don’t need any special software to write LaTeX (Notepad, Sublime, vi, or any text editor will do).
-		</p>
-		<p>
-		LaTeX resembles HTML or Markdown in how it allows a plain text document to be enhanced with formatting instructions. 
-		</p>
-
-		<p>
-		When an entire document is created using LaTeX, a simple text file is created that has some commands that
-		instruct the LaTeX processor. 
-		</p>
-		<div class="dm-code">
-	    <br/><pre>
-%This is a simple LaTeX file
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\title{An example of \LaTeX}
-\author{Dan MacKinnon}
-\date{March 2019}
-\begin{document}
-\maketitle
-\section{Introduction}
-Here is a rational expression:
-\[
-\frac{x^2-2x+1}{x-1}
-\]
-\end{document}
-</pre> </div>
-<p> In the example above, we can see comments demarcated by percent signs (%), directives about how to structure the document, and a simple example of a displayed equation,
-and some other LaTeX commands. </p>
-
-<p> When processed by LaTeX, a text file containing the commands shown above will produce a postscript or
-pdf file resembling the image below.</p>
-<br/>
-<div>
-<img src="./imgs/latex_document_example.png" 
-	alt="LaTeX full document example" 
-	style="width:100%;height:100%;padding:1px;border:thin solid black;">
-</div>
-<br/>
-<br/>
-<p> 
-Although you can format an entire document using LaTeX, it is often used only where needed within a document to provide the mathematics - with many platforms allowing you to insert LaTeX commands where required.
-</p>     
+	   <p> Blah blah
+		     
     </div>
     </div>	
     <hr>
@@ -230,13 +152,8 @@ Although you can format an entire document using LaTeX, it is often used only wh
        (LaTeX Project, 2019), and the introduction to LaTeX in the 
        <a href=" https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336">LaTeX wikibook</a> (LaTeX/Introduction, 2019).
 	   </p>
-	   <p>
-	   Donald Knuth, the creator of TeX upon which LaTeX is based, is a prolific mathematician and computer scientist who has made many
-	   interesting contributions to both disciplines. Leslie Lamport, who built upon TeX to create LaTeX, is an award winning computer science
-	   pioneer. Take a moment to read their online biographies and learn about what motivated them to tackle the challenge of 
-	   typesetting digital mathematics.   
-       </p>
-       </div>
+	   
+    </div>
     </div>	
     <hr>
 	
@@ -250,21 +167,19 @@ Although you can format an entire document using LaTeX, it is often used only wh
 	<div class="form-check">
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
   	<label class="form-check-label" for="defaultCheck1">
-    I reflected the problems
-    that I need to overcome when I include mathematics in electronic documents.  
+    item 1  
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
   	<label class="form-check-label" for="defaultCheck2">
-    I noted in the example how LaTeX provides a language for describing displayed mathematics. 
+    item 2 
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
   	<label class="form-check-label" for="defaultCheck3">
-    I learned that LaTeX can be used to create entire documents, or can be used within other applications
-	and document types. 
+    item 3
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
   	<label class="form-check-label" for="defaultCheck4">
-    I did some research on LaTeX and the people who originally designed it. 
+    item 4 
   	</label><br> 	
 	</div>
 	</p>

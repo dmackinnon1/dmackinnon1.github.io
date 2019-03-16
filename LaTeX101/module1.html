@@ -84,7 +84,7 @@ This single-page template is used for each learning module.
        	<ul>
        		<li><a href="#goals">Learning Goals</a></li>		
        		<li><a href="#before">Before You Start</a></li>
-       		<li><a href="#main">Introducing LaTeX</a></li>
+       		<li><a href="#main">Getting Started</a></li>
        		<li><a href="#more">Learn More</a></li>
        		<li><a href="#check">Checklist</a></li>
        		<li><a href="#references">References</a></li>
@@ -109,15 +109,16 @@ This single-page template is used for each learning module.
 	<div class="row" id="before">
       <div class="col-md-8">
         <h2>Before You Start</h2>
-        <p> Take a moment and search online for "Latex editor"		
+        <p> Take a moment and search online for "latex editor" and "latex equation editor."
+        Your search will likely reveal a long and possibly confusing list of options: some 
+		LaTeX authoring tools are downloadable applications, some are web-based document preparation
+		systems, some are online equation editors.				
         </p>
-        <p> Consider these questions:
-        <ol>
-   		<li> item 1</li>
-		  <li> item 2 </li>
-       </ol>
-		<p> Blah blah
-		</p>
+        <p> It is worthwhile to look a bit further into these options, but none are required 
+        to get started using LaTeX. One of the later modules will have some suggestions about
+        using Overleaf, one of the many LaTeX authoring tools available as a free cloud-based
+		service.
+        </p>
    
        </div>
     </div>	
@@ -125,9 +126,30 @@ This single-page template is used for each learning module.
 
 	<div class="row" id="main">
       <div class="col-md-8">
-        <h2>Online LaTeX</h2> 
-    
-    <!-- Small LaTeX editor powered by codeCogs webservice -->    
+        <h2>Getting Started</h2> 
+    The simple LaTeX renderer below allows you to input LaTeX commands and see
+	the resulting displayed math. Try inputing the following statements - incorrect statments
+	will cause the red text to display in the box.
+	<br><br>
+	<ol>
+	<li> A polynomial.</li> 
+	<div class="dm-code"> 
+	    <br/><pre>
+	   x^3-2x^2+5x-1
+	   </pre> </div>
+	<li> A fraction.</li>
+	<div class="dm-code">
+	    <br/><pre>
+	   \frac{5}{9}
+	   </pre> </div>
+	<li> A rational expression. </li>
+	<div class="dm-code">
+	    <br/><pre>
+	   \frac{x^2-3x+2}{x-1}
+	   </pre> </div>
+	</ol>
+    <!-- Small LaTeX editor using MathJaX -->    
+    <div style="padding:5px;border:thick solid grey;" id='miniEditor'> 
     <div class="input-group">
   			<div class="input-group-prepend">
     		<span class="input-group-text">Input LaTeX:</span>
@@ -137,7 +159,60 @@ This single-page template is used for each learning module.
 		</div>
 		<br>      
         <div id="renderedLatex" tyle="text-align:center;">  </div>
+    </div>
+    <br>
     <!-- end of LaTeX editor -->
+    
+    Let's try a couple more, using the editor above.
+    <br><br>
+	<ol>
+    <li> A summation. </li>
+	<div class="dm-code">
+	    <br/><pre>
+	   \sum_{i=1}^n{i} = \frac{n(n+1)}{2}
+	   </pre> </div>
+	<li> A trigonometric identity. </li>
+	<div class="dm-code">
+	    <br/><pre>
+	   \sin^2(x) +\cos^2(x) = 1
+	   </pre> </div>
+	</ol>   
+	<h3>Better Editors </h3>
+	
+	<p>
+	The simple editor above is an example of a LaTeX equation editor - it cannot be 
+	used to create full LaTeX documents, only to render small snippets of LaTeX code.
+	</p>
+	<p> LaTeX equation editors, although limited, are still very useful, both for 
+	learning how to create simple LaTeX commands. The resulting rendered math
+	can usually be downloaded or captured and inserted as an image into documents
+	that do not offer native LaTeX support (i.e. copy and paste into Word or PowerPoint).
+	</p>
+	<p>Take a moment to try the examples above in some other online LaTeX equation
+	editors, like <a href="https://www.codecogs.com/latex/eqneditor.php">CodeCogs</a>,
+	or <a href="https://quicklatex.com/">QuickLaTeX</a>.
+	</p>
+	<p> 
+	<a href="https://www.codecogs.com/latex/eqneditor.php">CodeCogs</a> features an interface
+	that allows you to use a typical equation editor interface, allowing you to
+	use symbols that you don't know the LaTeX commands - allowing you to discover
+	new commands. <a href="https://quicklatex.com/">QuickLaTeX</a> supports more
+	complex LaTeX syntax, but requires you to know which commands to use. Both
+	editors are free to use, and allow you to download the rendered math as images.
+	</p>
+	<h3> Using Images from Equation Editors </h3>
+	<p> When you create images using these editors, you can obtain the image by:
+	<ul>
+	<li> Downloading the image (for CodeCogs or QuickLaTeX) using the option provided; </li>
+	<li> Right-clicking to download or copy the image (for CodeCogs or QuickLaTeX); </li>
+	<li> Using a screen capture tool to grab the image (for the simple editor on this page, CodeCogs or QuickLaTeX).</li>
+	</ul>	
+	</p> 
+	<div style="padding:4px;border:thin solid black;">
+	<p><strong>Exercise:</strong> Create a document in a word processor and record each of the LaTeX commands that
+	you have tried. Alongside each command, include an image of the math that the command creates from one of the editors
+	you used in this module.</p>
+	</div> 
     </div>
     </div>	
     <hr>
@@ -146,11 +221,10 @@ This single-page template is used for each learning module.
       <div class="col-md-8">
         <h2>Learn More</h2>
        <p>
-       For a very brief overview of what LaTeX is, read the LaTeX project <a href="https://www.latex-project.org/about/">'about' page</a>
-       (LaTeX Project, 2019), and the introduction to LaTeX in the 
-       <a href=" https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336">LaTeX wikibook</a> (LaTeX/Introduction, 2019).
-	   </p>
-	   
+       Take a look at some of the LaTeX examples on the <a href="https://en.wikibooks.org/wiki/LaTeX/Mathematics">
+       LaTeX wikibooks page</a>, choose some of them to try either using the editor on this page, CodeCogs, or
+       QuickLaTeX.
+       </p>	   
     </div>
     </div>	
     <hr>
@@ -165,20 +239,20 @@ This single-page template is used for each learning module.
 	<div class="form-check">
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
   	<label class="form-check-label" for="defaultCheck1">
-    item 1  
+    I completed an online search to see the variety of LaTeX editors available on the web. 
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
   	<label class="form-check-label" for="defaultCheck2">
-    item 2 
+    I used the simple editor on this page to try out some LaTeX commands. 
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
   	<label class="form-check-label" for="defaultCheck3">
-    item 3
+    I tried some of these examples in the CodeCogs and QuickLaTeX editors.
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
   	<label class="form-check-label" for="defaultCheck4">
-    item 4 
-  	</label><br> 	
+    I created a document that shows LaTeX commands and the rendered math from one of the editors.
+  	</label><br>	
 	</div>
 	</p>
 	<p> If there were any items in the checklist that you did not complete,
@@ -191,10 +265,13 @@ This single-page template is used for each learning module.
       <div class="col-md-8">
         <h2>References</h2>
         <p>
-        LaTeX Project. (2019) <em>An introduction to LaTeX</em>. Webpage. Retrieved February 27, 2019 from https://www.latex-project.org/about/
+        LaTeX/Mathematics. (2019, March 8). Wikibooks, The Free Textbook Project. Retrieved March 16, 2019 from https://en.wikibooks.org/w/index.php?title=LaTeX/Mathematics&oldid=3522971.
         </p>
         <p>
-        LaTeX/Introduction. (2019, February 4). Wikibooks, The Free Textbook Project. Retrieved March 15, 2019 from https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336.
+        CodeCogs. (2015). CodeCogs Equation Editor. online software. Retrievied March 16, 2019 from https://www.codecogs.com/latex/eqneditor.php
+        </p>
+        <p>
+        Holoborodko, P. (2018). QuickLaTeX. online software. Retrievied March 16, 2019 from https://quicklatex.com/
         </p>
 
        </div>
@@ -209,17 +286,20 @@ This single-page template is used for each learning module.
   <p></p>
 </footer>
 <script>
-MathJax.Hub.Typeset();
-let equationToRender = "";
+function renderAllLatex(){
+	  MathJax.Hub.Typeset();
+}
 function getRenderedLatex(){
   let equationToRender = document.getElementById("latexInput").value; 
-  let html = "<img src='https://latex.codecogs.com/png.latex?\\large " + equationToRender + "' title='LaTeX' ";
-  html += "style='padding:10px;border:thin solid black;'>"
+  let html = "<div style='padding:10px;border:thin solid black;'>";
+  html += "\\[ \\Large{ " + equationToRender + "} \\]</div>";
   document.getElementById("renderedLatex").innerHTML = html;
+  renderAllLatex();
 }
 
 //set default
 document.getElementById("latexInput").value = "\\LaTeX";
 getRenderedLatex();
+renderAllLatex();
 </script>
 </html>

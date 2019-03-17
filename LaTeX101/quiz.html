@@ -35,13 +35,13 @@ This single-page template is used for each learning module.
 		background:azure;
 	}
     </style>
+
 <script type="text/javascript"	
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
   console.log("downloading mathjax")
-</script>
-  </head>
+</script>  </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,6 @@ This single-page template is used for each learning module.
     </div>
   </nav>
 
-
 <main role="main">
 
   <div id='top_padding'>
@@ -84,132 +83,57 @@ This single-page template is used for each learning module.
   </div>	
  
   <div class="container">
-    <!-- Row 1 introduction -->
-    <h1> Module X: Something about LaTeX </h1>
-    <div class="row" id="contents">
-      <div class="col-md-8">
-        <h2>Contents</h2>
-       	<ul>
-       		<li><a href="#goals">Learning Goals</a></li>		
-       		<li><a href="#before">Before You Start</a></li>
-       		<li><a href="#main">Introducing LaTeX</a></li>
-       		<li><a href="#more">Learn More</a></li>
-       		<li><a href="#check">Checklist</a></li>
-       		<li><a href="#references">References</a></li>
-       	</ul>
-       </div>
-    </div>
-    <hr>
-
-	<div class="row" id="goals">
-      <div class="col-md-8">
-        <h2>Learning Goals</h2>
-        <p> The learning goals for this module include:
-		<ul>
-		<li>goal1</li>
-		<li>goal2</li>
-		<li>goal3</li>
-        </ul>
-        </p>   
-       </div>
-    </div>	
-    <hr>
-	<div class="row" id="before">
-      <div class="col-md-8">
-        <h2>Before You Start</h2>
-        <p> Blah blah		
-        </p>
-        <p> Consider these questions:
-        <ol>
-   		<li> item 1</li>
-		  <li> item 2 </li>
-       </ol>
-		<p> Blah blah
-		</p>
-   
-       </div>
-    </div>	
-    <hr>
-
+    
+	<hr>
 	<div class="row" id="main">
       <div class="col-md-8">
-        <h2>Online LaTeX</h2>
-       <p>
-       Blah blah
-	   For example, you type:
-	   <div class="dm-code">
-	    <br/><pre>
-	   \frac{x^2-2x+1}{x-1}
-	   </pre> </div>
-
-	   And LaTeX will generate:
-	   \[ \frac{x^2-2x+1}{x-1} \]	   
-	   </p>
-	   <p> Blah blah
-		     
-    </div>
-    </div>	
-    <hr>
-
-    <div class="row" id="more">
-      <div class="col-md-8">
-        <h2>Learn More</h2>
-       <p>
-       For a very brief overview of what LaTeX is, read the LaTeX project <a href="https://www.latex-project.org/about/">'about' page</a>
-       (LaTeX Project, 2019), and the introduction to LaTeX in the 
-       <a href=" https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336">LaTeX wikibook</a> (LaTeX/Introduction, 2019).
-	   </p>
-	   
-    </div>
-    </div>	
-    <hr>
-	
-	<div class="row" id="check">
-      <div class="col-md-8">
-	  <h2>Learning Checklist</h2>
-	<p>
-	Before moving on to the next module, take a moment to review the learning checklist.
+        <h2>LaTeX Command Quiz</h2> 
+    <p>
+	Use your growing knowledge of LaTeX commands to create the math displayed in the question below.
 	</p>
-	<p>
-	<div class="form-check">
-  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-  	<label class="form-check-label" for="defaultCheck1">
-    item 1  
-  	</label><br>
-  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-  	<label class="form-check-label" for="defaultCheck2">
-    item 2 
-  	</label><br>
-  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
-  	<label class="form-check-label" for="defaultCheck3">
-    item 3
-  	</label><br>
-  	<input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
-  	<label class="form-check-label" for="defaultCheck4">
-    item 4 
-  	</label><br> 	
-	</div>
+	<p>First, try to input the correct commands to match the displayed math, and press the
+	<strong>Try It</strong> button to test your answer.
 	</p>
-	<p> If there were any items in the checklist that you did not complete,
-		consider reviewing this page again before moving on.
-	</p>
-	  </div>
-	</div>	
+	<p> Next, reveal the answer and compare it with yours. If it is different, try pasting
+	the provided answer into the response area, and see that it works. Sometimes there is more
+	than one way to achieve the result you want.
+	</p>  
 	<hr>
-	<div class="row" id="references">
-      <div class="col-md-8">
-        <h2>References</h2>
-        <p>
-        LaTeX Project. (2019) <em>An introduction to LaTeX</em>. Webpage. Retrieved February 27, 2019 from https://www.latex-project.org/about/
-        </p>
-        <p>
-        LaTeX/Introduction. (2019, February 4). Wikibooks, The Free Textbook Project. Retrieved March 15, 2019 from https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336.
-        </p>
-
-       </div>
-    </div>	
+	<h2> Question: </h2>
+	<div id='question'> Input the LaTeX commands to create: </div>
+	<br>
+	<!-- Small LaTeX editor using MathJaX -->    
+    <div id ='answerArea'>
+    <h2> Your Answer: </h2>
+    <div style="padding:5px;border:thick solid grey;" id='miniEditor'> 
+    <div class="input-group">
+  			<div class="input-group-prepend">
+    		<span class="input-group-text">Input LaTeX:</span>
+  			</div>
+  			<textarea id='latexInput' class="form-control" aria-label="Input LaTeX"></textarea>
+  			<button class="btn btn-secondary" onClick='getRenderedLatex()' role="button">Try It</button>
+		</div>
+		<br>      
+        <div id="renderedLatex" tyle="text-align:center;">  </div>
+    </div>
+    <br>
+    <div class="btn-group btn-group-md" role="group" >	
+			<button id="answerButton" onClick="revealAnswer()" class="btn btn-secondary">reveal answer</button>	
+	</div>
+	<br>
+	<br>
+	<div id='answerDisplay' style='text-align:center'></div>
+	<br>
+	<div class="btn-group btn-group-md" role="group" >	
+			<button id="newButton" onClick="resetCurrent()" class="btn btn-primary">new question</button>	
+	</div>
+	</div>
+    <!-- end of LaTeX editor -->
     <hr>
+	<br>
 
+	</div>
+    
   </div> <!-- /container -->
 
 </main>
@@ -218,6 +142,78 @@ This single-page template is used for each learning module.
   <p><a href='./'>Back to Main</a></p>
 </footer>
 <script>
-MathJax.Hub.Typeset();
+
+let questions = [
+'x^2+3x-2',
+'\\{a_0, a_1, a_2\\}',
+'x^2+y^2=r^2',
+'\\frac{x^2-9}{x+3}',
+'\\frac{1}{2} + \\frac{2}{3}',
+'\\sqrt{2}-1',
+'\\pm \\sqrt{x+2}',
+'\\sin^2(\\theta ) + \\cos^2(\\theta) = 1',
+'\\sin(\\frac{\\pi}{2} )= 1',
+'D = b^2-4ac ',
+'\\ \\{x \\in \\textbf{R} | x \\leq 1\\} ',
+'-1 \\leq y \\leq +1',
+'\\sum^{6}_{i=1}i = 21',
+'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}',
+'y=f(x)',
+'e^{i\\pi} = -1',
+'\\cos(\\pi) = -1',
+'\\sqrt[3]{27} = 3',
+'\\sqrt{-1} = i',
+"\\binom{n}{r} = \\frac{n!}{r!(n-r)!}"
+];
+
+let current = questions[Math.floor(Math.random()*questions.length)];
+
+function resetCurrent(){
+	let i = Math.floor(Math.random()*questions.length);
+	current = questions[i];
+	questions = questions.filter(function(value, index, arr){
+		return index != i;
+		}
+	);
+	document.getElementById('answerDisplay').innerHTML = "";
+	document.getElementById("latexInput").value = "";
+	document.getElementById("renderedLatex").innerHTML= "";
+	showCurrentQuestion();	
+}
+
+function showCurrentQuestion(){
+	if (questions.length > 0){
+		let text = "Input the LaTeX commands to create: ";	
+		text += "\\( \\large{ " + current + " } \\)";	
+		document.getElementById('question').style.display = "none";
+		document.getElementById('question').innerHTML = text;
+		renderAllLatex();
+		document.getElementById('question').style.display = "block";			
+	} else {
+		let text = "You have completed all the quiz questions. Refresh the page to try them again.";
+		document.getElementById('question').innerHTML = text;	
+		document.getElementById('answerArea').style.display = "none";	
+	}
+}
+
+function renderAllLatex(){
+	//use svg instead of mathml to allow for image downloading
+	MathJax.Hub.Typeset();
+}
+
+function getRenderedLatex(){
+  let equationToRender = document.getElementById("latexInput").value; 
+  let html = "<div style='padding:10px;border:thin solid black;'>";
+  html += "\\[ \\Large{ " + equationToRender + "} \\]</div>";
+  document.getElementById("renderedLatex").innerHTML = html;
+  renderAllLatex();
+}
+
+function revealAnswer(){
+	let text = "<h3>" + current + "</h3>";
+	document.getElementById('answerDisplay').innerHTML = text;
+}
+
+showCurrentQuestion();
 </script>
 </html>

@@ -65,6 +65,13 @@ This single-page template is used for each learning module.
             <a class="dropdown-item" href="./module5.html">5: LaTeX as a Digital Literacy</a>           
           </div>
         </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Utilities</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown02">
+            <a class="dropdown-item" href="./quiz.html">Command Quiz</a>
+            <a class="dropdown-item" href="./simpleLaTeX.html">LaTeX Tester</a>
+           </div>
+        </li>
       </ul>
     </div>
   </nav>
@@ -78,14 +85,14 @@ This single-page template is used for each learning module.
  
   <div class="container">
     <!-- Row 1 introduction -->
-    <h1> Module X: Something about LaTeX </h1>
+    <h1> Module 2: Essential LaTeX Commands </h1>
     <div class="row" id="contents">
       <div class="col-md-8">
         <h2>Contents</h2>
        	<ul>
        		<li><a href="#goals">Learning Goals</a></li>		
        		<li><a href="#before">Before You Start</a></li>
-       		<li><a href="#main">Introducing LaTeX</a></li>
+       		<li><a href="#main">Essential LaTeX Commands</a></li>
        		<li><a href="#more">Learn More</a></li>
        		<li><a href="#check">Checklist</a></li>
        		<li><a href="#references">References</a></li>
@@ -93,15 +100,15 @@ This single-page template is used for each learning module.
        </div>
     </div>
     <hr>
-
 	<div class="row" id="goals">
       <div class="col-md-8">
         <h2>Learning Goals</h2>
         <p> The learning goals for this module include:
 		<ul>
-		<li>goal1</li>
-		<li>goal2</li>
-		<li>goal3</li>
+		<li>Learn about the basic command structure of LaTeX.</li>
+		<li>Learn some specific commands that are useful for highschool mathematics teachers.</li>
+		<li>Find out where to look for LaTeX command references.</li>
+		<li>Practice using the commands using the <a href = "./simpleLaTex.html">Simple Renderer</a> and <a href="./quiz.htm"l>Command Quiz</a> utilities.</li>
         </ul>
         </p>   
        </div>
@@ -110,36 +117,125 @@ This single-page template is used for each learning module.
 	<div class="row" id="before">
       <div class="col-md-8">
         <h2>Before You Start</h2>
-        <p> Blah blah		
+        <p> A good understanding of LaTeX comes from appreciating both the problem it is solving and
+		the kind of solution it provides.		
         </p>
-        <p> Consider these questions:
+        <p> 
         <ol>
-   		<li> item 1</li>
-		  <li> item 2 </li>
+   		<li> Reflect on some of the symbols and notation that you use when writing mathematics: greek letters,
+		exponents, subscripts, radical signs... can you think of some others?</li>
+		<li> Have you used or read about languages used in computer programming? LaTeX is sometimes 
+		described as a <strong>descriptive markup language</strong>. Take a moment to look at the Wikipedia
+		entry on <a href="https://en.wikipedia.org/wiki/Markup_language">markup languages</a>. </li>
        </ol>
-		<p> Blah blah
 		</p>
-   
+		<p> As you work through this module, you can use the  <a href = "./simpleLaTex.html">Simple Renderer</a> to test commands, and when
+		you feel like assessing how much you have learned, try the <a href="./quiz.htm"l>Command Quiz</a>.  
+		</p>
+   		<p> For each new command you learn, consider building the document that you started as an exercise in module 1: </p>
+   		<div style="padding:4px;border:thin solid black;">
+		<p><strong>Exercise:</strong> Create a document in a word processor and record each of the LaTeX commands that
+		you have tried. Alongside each command, include an image of the math that the command creates from one of the editors
+		you used in this module.</p>
+		</div> 	
        </div>
     </div>	
     <hr>
 
 	<div class="row" id="main">
       <div class="col-md-8">
-        <h2>Online LaTeX</h2>
+        <h2>Essential Commands</h2>
+       <p> In this document, we will describe commands assuming that you are using them within LaTeX's <strong>math mode</strong>.
+       If you are writing an entire LaTeX document, you need to mark the beginning and end of this mode within your document. In 
+       many online environemnts and simple equation editors, you do not need to do this.  Additional details on marking
+	   math mode are provided in later modules. LaTeX features two modes for displaying math, <strong>inline</strong> for when 
+	   you use math notation directly in a paragraph, and <strong>displayed equation</strong> mode, where the math is separated
+	   from the text (similar to inline quotations and block quotes). These distinctions
+	   are not important for this module, but will be touched on later.
+       <h3> Two Important Characters </h3>
        <p>
-       Blah blah
-	   For example, you type:
+       Because LaTeX is included directly in documents, there has to be some way to tell the difference between LaTeX commands and
+       normal words within the document. This is what the <strong>backslash</strong> (\) accomplishes - most LaTeX commands are prefixed
+	   by the backslahs, which functions as an <a href="https://en.wikipedia.org/wiki/Escape_character">escape character</a>. If you ever need to
+	   type an actual backslash within a LaTeX document, you must type a double backslash (\\).
+	   <\p>
+	   <p> Not all math commands require a backslash. Exponents are created using the carrot (^) and subscripts are created using the underscore(_)
+	   without being prefixed by a backslash. <\p>
+	   <p> The following snippet shows the use of underscore, carrots and a command requiring backslash (\theta).
 	   <div class="dm-code">
 	    <br/><pre>
-	   \frac{x^2-2x+1}{x-1}
+	   x_0 = \theta^2
 	   </pre> </div>
 
-	   And LaTeX will generate:
-	   \[ \frac{x^2-2x+1}{x-1} \]	   
+	   Which is rendered by LaTeX as:
+	   \[ \large{x_0 = \theta^2} \]	   
 	   </p>
-	   <p> Blah blah
-		     
+	   <p> The other special character(s) that you need to be aware of are the <strong>curly braces</strong> ({}). These are used to 
+	   block off a set of latex commands that need to be considered as one unit, or if values need to be provided to
+	   be included as part of another command. If you need to include curly braces as part of the displayed math, you 
+	   must prefix them with a backslash.
+		</p>
+	   <p> The following snippet shows the use of curly braces to create an exponent with more than one symbol.
+	   <div class="dm-code">
+	    <br/><pre>
+	   e^{i\theta} = \cos(\theta) + i\sin(\theta)
+	   </pre> </div>
+
+	   Which is rendered by LaTeX as:
+	   \[ \large{e^{i\theta} = \cos(\theta) + i\sin(\theta)} \]	   
+	   </p>
+	   <p> This next example shows how to include curly braces in the displayed math.
+	   <div class="dm-code">
+	    <br/><pre>
+	   \{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}
+	   </pre> </div>
+
+	   Which is rendered by LaTeX as:
+	   \[ \large{\{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}} \]	   
+	   </p>
+	   
+	<h3> Finding the Right Command </h3>
+		<p> The above examples used many commands, like <strong>\theta</strong>, <strong>\pi</strong>, <strong>\leq</strong>, and others. There are commands 
+		for virtually every symbol and notation that you might need - some of them are obvious,
+		as is the case for the greek letters, and some are memorable, like <strong>\leq</strong> for "less than or equal to."
+		Generally, you will need to look up commands using a reference. A <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols">good listing</a> is available
+		at the <a href="https://oeis.org/">Online Encyclopedia of Integer Sequences (OEIS)</a> - an interesting site to check out, if
+		you have the time.
+		</p>
+		<p> Some commands, like <strong>\cos</strong> and <strong>\sin</strong> do not seem to do much - but they do let LaTeX know 
+		that cos and sin are not just words, but functions - this causes them to be rendered not italicised,
+		whereas any word or letter without a backslash will be put in italics inside an equation (like the
+		variable x in the examples). In this way, LaTeX is helping to ensure that standard mathematical
+		communication practices are followed. The <strong>\textbf</strong> is another example of how we can 
+		follow mathematical conventions by bolding the letter that represents the set of real numbers.
+    
+	<h3> Fractions </h3>
+	<p>Fractions are difficult to write without the help of something like LaTeX, and also provide
+	a good example of a command that takes arguments or parameters. In this case, to write a fraction,
+	we need to provide two values, the numerator and the denominator. We do this in LaTeX like this:
+	<div class="dm-code">
+	    <br/><pre>
+	  	\frac{9}{10}
+	   </pre> </div>
+
+	   Which is rendered by LaTeX as:
+	   \[ \large{\frac{9}{10}} \]	   
+	   </p>
+	
+	<p>
+	The two sets of curly braces are required here to supply values for the numerator and the denominator.
+	Of course, we sometimes need to include fractions in more complicated expressions, like this one,
+	which shows the formula for a binomial coefficient:
+    <div class="dm-code">
+    <br/><pre>
+	  	\binom{n}{r} = \frac{n!}{r!(n-r)!}
+	   </pre> </div>
+
+	   Which is rendered by LaTeX as: <br>
+	   \[ \large{\binom{n}{m} = \frac{n!}{m!(n-m)!}} \]	   
+	   </p>
+	
+	<p>
     </div>
     </div>	
     <hr>
@@ -192,6 +288,12 @@ This single-page template is used for each learning module.
 	<div class="row" id="references">
       <div class="col-md-8">
         <h2>References</h2>
+        <p> Forgues, D. and other OEIS contributors. (2013,2019). List of LaTeX mathematical symbols.
+        from OIES Wiki. Retrieved March 17, 2019 from https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
+        </p>
+        <p>
+        Wikipedia contributors. (2019, March 7). Markup language. In Wikipedia, The Free Encyclopedia. Retrieved 19:13, March 17, 2019, from https://en.wikipedia.org/w/index.php?title=Markup_language&oldid=886646213
+        </p>
         <p>
         LaTeX Project. (2019) <em>An introduction to LaTeX</em>. Webpage. Retrieved February 27, 2019 from https://www.latex-project.org/about/
         </p>

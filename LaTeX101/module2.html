@@ -187,7 +187,7 @@ This single-page template is used for each learning module.
 	   <p> This next example shows how to include curly braces in the displayed math.
 	   <div class="dm-code">
 	    <br/><pre>
-	   \{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}
+	\{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}
 	   </pre> </div>
 
 	   Which is rendered by LaTeX as:
@@ -214,11 +214,12 @@ This single-page template is used for each learning module.
 	a good example of a command that takes arguments or parameters. In this case, to write a fraction,
 	we need to provide two values, the numerator and the denominator. We do this in LaTeX like this:
 	<div class="dm-code">
-	    <br/><pre>
-	  	\frac{9}{10}
+	    <br/>
+	    <pre>
+	\frac{9}{10}
 	   </pre> </div>
 
-	   Which is rendered by LaTeX as:
+	   Which is rendered as:
 	   \[ \large{\frac{9}{10}} \]	   
 	   </p>
 	
@@ -227,28 +228,103 @@ This single-page template is used for each learning module.
 	Of course, we sometimes need to include fractions in more complicated expressions, like this one,
 	which shows the formula for a binomial coefficient:
     <div class="dm-code">
-    <br/><pre>
-	  	\binom{n}{r} = \frac{n!}{r!(n-r)!}
-	   </pre> </div>
+    <br/>
+    <pre>
+	\binom{n}{r} = \frac{n!}{r!(n-r)!}
+	</pre> </div>
 
 	   Which is rendered by LaTeX as: <br>
-	   \[ \large{\binom{n}{m} = \frac{n!}{m!(n-m)!}} \]	   
-	   </p>
+	   \[ \large{\binom{n}{r} = \frac{n!}{r!(n-r)!}} \]	   
+	   </p>	
+	<p>
+	More involved fractions, and continued fractions, are supported by the <strong>\cfrac</strong>
+	command, whose use provides a good example of nesting commands. For example,
+	<div class="dm-code">
+    <br/>
+    <pre>
+	a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2+\cfrac{1}{a_3}}}	
+	</pre> </div>
+
+	   is rendered by LaTeX as: <br>
+	   \[ \large{a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2+\cfrac{1}{a_3}}}} \]	   
+	   </p>	
+	<br>
+	<h3> Some More Advanced Notation </h3>
 	
 	<p>
+	To format something like a matrix, we need
+	some way of creating a table structure, and some way of creating
+	large square brackets to surround the table.
+
+	The need to create Tables in LaTeX occurs in several settings, and matrix
+	mode provides a good example of how they are created. There are several 
+	more advanced formatting situations that require a special mode. These
+	modes are indicated by the <strong>\begin</strong> and <strong>\end</strong> 
+	commands, which take the name of the mode as an argument. In matrix mode, ampersands (&)
+	are used to denote columns or tab-alignments, while the double backslash (\\) is 
+	used to denote the end of a row. A matrix then, is created like this:
+	
+
+ 	<div class="dm-code">
+    <br/><pre>   
+ 	\left[\begin{matrix}
+  	a & b & c \\
+ 	d & e & f \\
+  	g & h & i
+ 	\end{matrix}\right]
+	</pre> </div>
+
+	   Which is rendered by LaTeX as: <br>
+	   \[ \large{
+ \left[\begin{matrix}
+  a & b & c \\
+  d & e & f \\
+  g & h & i
+ \end{matrix}\right]} \]	   
+	   </p>	
+	<p> The <strong>\left</strong> and <strong>\right</strong> commands are used in front of
+	a bracket to signal that they should be adjusted to enclose the notation between them.
+	</p>
+	A similar structure (the <strong>align</strong> mode) is used to get the correct alignment in multi-line equations. 
+	For example:
+
+	<div class="dm-code">
+    <br/><pre>   
+	\begin{align}
+	\Delta x & = x_2 - x_1 \\
+ 	& = 9-2 \\
+	& =7 
+	\end{align}
+	</pre> </div>
+	Which is rendered by LaTeX as: <br>
+	\[ \large{\begin{align}
+	\Delta x & = x_2 - x_1 \\
+	& = 9-2 \\
+	& =7 
+	\end{align}} \]	   
+
+	<p> A good overview of more advanced math formatting is provided by the 
+	<a href= "https://en.wikibooks.org/wiki/LaTeX/Mathematics">LaTeX Wikibook</a>.
+
+	</div>
     </div>
-    </div>	
     <hr>
 
     <div class="row" id="more">
       <div class="col-md-8">
-        <h2>Learn More</h2>
-       <p>
-       For a very brief overview of what LaTeX is, read the LaTeX project <a href="https://www.latex-project.org/about/">'about' page</a>
-       (LaTeX Project, 2019), and the introduction to LaTeX in the 
-       <a href=" https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336">LaTeX wikibook</a> (LaTeX/Introduction, 2019).
-	   </p>
-	   
+       <h2>Learn More</h2>
+
+       <ul>
+       <li>
+       Try out each of the examples above using the <a href="./simpleLaTeX.html">Simple LaTeX Renderer</a>. Experiment by
+       changing each example.	   
+       </li>
+       <li> Look over the commands listed on the <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols"> OEIS wiki</a>. Choose some that you think
+       you might want to use and <a href="./simpleLaTeX.html">test them out</a>.
+	   </li>
+	   <li> Give the <a href="./quiz.html">Command Quiz</a> a try.</li>
+	   <li> Review the page on Mathematics notation in the <a href= "https://en.wikibooks.org/wiki/LaTeX/Mathematics">LaTeX Wikibook</a>.
+	   </ul>	
     </div>
     </div>	
     <hr>
@@ -263,19 +339,20 @@ This single-page template is used for each learning module.
 	<div class="form-check">
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
   	<label class="form-check-label" for="defaultCheck1">
-    item 1  
+    I tried several examples from this page using a LaTeX renderer or equation editor. 
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
   	<label class="form-check-label" for="defaultCheck2">
-    item 2 
+    I experimented with additional examples from the referenced sources, like the OIES page
+    or the LaTeX Wikibook. 
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
   	<label class="form-check-label" for="defaultCheck3">
-    item 3
+    I gave the <a href="./quiz.html">Command Quiz</a> a try.
   	</label><br>
   	<input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
   	<label class="form-check-label" for="defaultCheck4">
-    item 4 
+    I updated my own document with some useful LaTeX command examples.
   	</label><br> 	
 	</div>
 	</p>

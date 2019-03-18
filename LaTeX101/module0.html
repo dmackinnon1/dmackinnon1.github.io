@@ -149,10 +149,16 @@ This single-page template is used for each learning module.
        One way to think about LaTeX is as a computer or scripting language for writing mathematics. You type in commands, and the LaTeX processor
 	   converts it into the kind of math notation that we expect to see in printed documents.
 	   For example, you type:
-	   <div class="dm-code">
-	    <br/><pre>
-	   \frac{x^2-2x+1}{x-1}
-	   </pre> </div>
+
+<div class="dm-code">
+
+<pre>
+
+    \frac{x^2-2x+1}{x-1}
+
+</pre> 
+
+</div>
 
 	   And LaTeX will generate:
 	   \[ \frac{x^2-2x+1}{x-1} \]	   
@@ -192,24 +198,27 @@ This single-page template is used for each learning module.
 		When an entire document is created using LaTeX, a simple text file is created that has some commands that
 		instruct the LaTeX processor. 
 		</p>
-		<div class="dm-code">
-	    <br/><pre>
-%This is a simple LaTeX file
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\title{An example of \LaTeX}
-\author{Dan MacKinnon}
-\date{March 2019}
-\begin{document}
-\maketitle
-\section{Introduction}
-Here is a rational expression:
-\[
-\frac{x^2-2x+1}{x-1}
-\]
-\end{document}
-</pre> </div>
-<p> In the example above, we can see comments demarcated by percent signs (%), directives about how to structure the document, and a simple example of a displayed equation,
+<div class="dm-code">
+<pre>
+
+    %This is a simple LaTeX file
+    \documentclass{article}
+    \usepackage[utf8]{inputenc}
+    \title{An example of \LaTeX}
+    \author{Dan MacKinnon}
+    \date{March 2019}
+    \begin{document}
+        \maketitle
+        \section{Introduction}
+        Here is a rational expression:
+        \[
+        \frac{x^2-2x+1}{x-1}
+        \]
+    \end{document}
+
+</pre> 
+</div>
+    <p> In the example above, we can see comments demarcated by percent signs (%), directives about how to structure the document, and a simple example of a displayed equation,
 and some other LaTeX commands. </p>
 
 <p> When processed by LaTeX, a text file containing the commands shown above will produce a postscript or

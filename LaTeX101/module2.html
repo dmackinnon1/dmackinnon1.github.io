@@ -162,10 +162,13 @@ This single-page template is used for each learning module.
 	   <p> Not all math commands require a backslash. Exponents are created using the carrot (^) and subscripts are created using the underscore(_)
 	   without being prefixed by a backslash. <\p>
 	   <p> The following snippet shows the use of underscore, carrots and a command requiring backslash (\theta).
-	   <div class="dm-code">
-	    <br/><pre>
-	   x_0 = \theta^2
-	   </pre> </div>
+<div class="dm-code">
+<pre>
+
+    x_0 = \theta^2
+
+</pre> 
+</div>
 
 	   Which is rendered by LaTeX as:
 	   \[ \large{x_0 = \theta^2} \]	   
@@ -176,19 +179,26 @@ This single-page template is used for each learning module.
 	   must prefix them with a backslash.
 		</p>
 	   <p> The following snippet shows the use of curly braces to create an exponent with more than one symbol.
-	   <div class="dm-code">
-	    <br/><pre>
-	   e^{i\theta} = \cos(\theta) + i\sin(\theta)
-	   </pre> </div>
+
+<div class="dm-code">
+<pre>
+
+    e^{i\theta} = \cos(\theta) + i\sin(\theta)
+
+</pre> 
+</div>
 
 	   Which is rendered by LaTeX as:
 	   \[ \large{e^{i\theta} = \cos(\theta) + i\sin(\theta)} \]	   
 	   </p>
 	   <p> This next example shows how to include curly braces in the displayed math.
-	   <div class="dm-code">
-	    <br/><pre>
-	\{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}
-	   </pre> </div>
+<div class="dm-code">
+<pre>
+
+    \{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}
+
+</pre> 
+</div>
 
 	   Which is rendered by LaTeX as:
 	   \[ \large{\{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}} \]	   
@@ -213,11 +223,13 @@ This single-page template is used for each learning module.
 	<p>Fractions are difficult to write without the help of something like LaTeX, and also provide
 	a good example of a command that takes arguments or parameters. In this case, to write a fraction,
 	we need to provide two values, the numerator and the denominator. We do this in LaTeX like this:
-	<div class="dm-code">
-	    <br/>
-	    <pre>
-	\frac{9}{10}
-	   </pre> </div>
+<div class="dm-code">
+<pre>
+
+    \frac{9}{10}
+
+</pre> 
+</div>
 
 	   Which is rendered as:
 	   \[ \large{\frac{9}{10}} \]	   
@@ -227,11 +239,13 @@ This single-page template is used for each learning module.
 	The two sets of curly braces are required here to supply values for the numerator and the denominator.
 	Of course, we sometimes need to include fractions in more complicated expressions, like this one,
 	which shows the formula for a binomial coefficient:
-    <div class="dm-code">
-    <br/>
-    <pre>
-	\binom{n}{r} = \frac{n!}{r!(n-r)!}
-	</pre> </div>
+<div class="dm-code">
+<pre>
+
+    \binom{n}{r} = \frac{n!}{r!(n-r)!}
+
+</pre> 
+</div>
 
 	   Which is rendered by LaTeX as: <br>
 	   \[ \large{\binom{n}{r} = \frac{n!}{r!(n-r)!}} \]	   
@@ -239,11 +253,14 @@ This single-page template is used for each learning module.
 	<p>
 	More involved fractions, and continued fractions, are supported by the <strong>\cfrac</strong>
 	command, whose use provides a good example of nesting commands. For example,
-	<div class="dm-code">
-    <br/>
-    <pre>
+
+<div class="dm-code">
+<pre>
+
 	a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2+\cfrac{1}{a_3}}}	
-	</pre> </div>
+	
+</pre> 
+</div>
 
 	   is rendered by LaTeX as: <br>
 	   \[ \large{a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2+\cfrac{1}{a_3}}}} \]	   
@@ -264,15 +281,17 @@ This single-page template is used for each learning module.
 	are used to denote columns or tab-alignments, while the double backslash (\\) is 
 	used to denote the end of a row. A matrix then, is created like this:
 	
+<div class="dm-code">
+<pre>   
 
- 	<div class="dm-code">
-    <br/><pre>   
  	\left[\begin{matrix}
   	a & b & c \\
  	d & e & f \\
   	g & h & i
  	\end{matrix}\right]
-	</pre> </div>
+
+</pre> 
+</div>
 
 	   Which is rendered by LaTeX as: <br>
 	   \[ \large{
@@ -288,14 +307,17 @@ This single-page template is used for each learning module.
 	A similar structure (the <strong>align</strong> mode) is used to get the correct alignment in multi-line equations. 
 	For example:
 
-	<div class="dm-code">
-    <br/><pre>   
+<div class="dm-code">
+<pre> 
+
 	\begin{align}
 	\Delta x & = x_2 - x_1 \\
  	& = 9-2 \\
 	& =7 
 	\end{align}
-	</pre> </div>
+
+</pre> 
+</div>
 	Which is rendered by LaTeX as: <br>
 	\[ \large{\begin{align}
 	\Delta x & = x_2 - x_1 \\

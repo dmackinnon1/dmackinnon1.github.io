@@ -1,220 +1,205 @@
 <!doctype html>
 <!--
-This single-page template is used for each learning module.
--->
+   This single-page template is used for each learning module.
+   -->
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="LaTeX101 landing page">
-    <title>LaTeX101 Learning Module</title>
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- Additional scripts required for collapse, etc. -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-	.dm-code {
-		background:azure;
-	}
-    </style>
-
-<script type="text/javascript"	
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-  console.log("downloading mathjax")
-</script>
-  </head>
-  <body>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="./">Home <span class="sr-only">(current)</span></a>
-        </li>
-      
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Modules</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="./module0.html">0: What is LaTeX?</a>
-            <a class="dropdown-item" href="./module1.html">1: Getting Started</a>
-            <a class="dropdown-item" href="./module2.html">2: Essential LaTeX Commands</a>
-            <a class="dropdown-item" href="./module3.html">3: Cloud-based LaTeX Environments</a>
-            <a class="dropdown-item" href="./module4.html">4: LaTeX on Various Platforms</a>
-            <a class="dropdown-item" href="./module5.html">5: LaTeX as a Digital Literacy</a>           
-          </div>
-        </li>
-         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Utilities</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown02">
-            <a class="dropdown-item" href="./quiz.html">Command Quiz</a>
-            <a class="dropdown-item" href="./simpleLaTeX.html">LaTeX Tester</a>
-           </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-<main role="main">
-
-  <div id='top_padding'>
-  	<br/><br/><br/>
-  </div>	
- 
-  <div class="container">
-    
-	<hr>
-	<div class="row" id="main">
-      <div class="col-md-8">
-        <h2>LaTeX Command Quiz</h2> 
-    <p>
-	Use your growing knowledge of LaTeX commands to create the math displayed in the question below.
-	</p>
-	<p>First, try to input the correct commands to match the displayed math, and press the
-	<strong>Try It</strong> button to test your answer.
-	</p>
-	<p> Next, reveal the answer and compare it with yours. If it is different, try pasting
-	the provided answer into the response area, and see that it works. Sometimes there is more
-	than one way to achieve the result you want.
-	</p>  
-	<hr>
-	<h2> Question: </h2>
-	<div id='question'> Input the LaTeX commands to create: </div>
-	<br>
-	<!-- Small LaTeX editor using MathJaX -->    
-    <div id ='answerArea'>
-    <h2> Your Answer: </h2>
-    <div style="padding:5px;border:thick solid grey;" id='miniEditor'> 
-    <div class="input-group">
-  			<div class="input-group-prepend">
-    		<span class="input-group-text">Input LaTeX:</span>
-  			</div>
-  			<textarea id='latexInput' class="form-control" aria-label="Input LaTeX"></textarea>
-  			<button class="btn btn-secondary" onClick='getRenderedLatex()' role="button">Try It</button>
-		</div>
-		<br>      
-        <div id="renderedLatex" tyle="text-align:center;">  </div>
-    </div>
-    <br>
-    <div class="btn-group btn-group-md" role="group" >	
-			<button id="answerButton" onClick="revealAnswer()" class="btn btn-secondary">reveal answer</button>	
-	</div>
-	<br>
-	<br>
-	<div id='answerDisplay' style='text-align:center'></div>
-	<br>
-	<div class="btn-group btn-group-md" role="group" >	
-			<button id="newButton" onClick="resetCurrent()" class="btn btn-primary">new question</button>	
-	</div>
-	</div>
-    <!-- end of LaTeX editor -->
-    <hr>
-	<br>
-
-	</div>
-    
-  </div> <!-- /container -->
-
-</main>
-
-<footer class="container">
-  <p><a href='./'>Back to Main</a></p>
-</footer>
-<script>
-
-let questions = [
-'x^2+3x-2',
-'\\{a_0, a_1, a_2\\}',
-'x^2+y^2=r^2',
-'\\frac{x^2-9}{x+3}',
-'\\frac{1}{2} + \\frac{2}{3}',
-'\\sqrt{2}-1',
-'\\pm \\sqrt{x+2}',
-'\\sin^2(\\theta ) + \\cos^2(\\theta) = 1',
-'\\sin(\\frac{\\pi}{2} )= 1',
-'D = b^2-4ac ',
-'\\ \\{x \\in \\textbf{R} | x \\leq 1\\} ',
-'-1 \\leq y \\leq +1',
-'\\sum^{6}_{i=1}i = 21',
-'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}',
-'y=f(x)',
-'e^{i\\pi} = -1',
-'\\cos(\\pi) = -1',
-'\\sqrt[3]{27} = 3',
-'\\sqrt{-1} = i',
-"\\binom{n}{r} = \\frac{n!}{r!(n-r)!}"
-];
-
-let current = questions[Math.floor(Math.random()*questions.length)];
-
-function resetCurrent(){
-	let i = Math.floor(Math.random()*questions.length);
-	current = questions[i];
-	questions = questions.filter(function(value, index, arr){
-		return index != i;
-		}
-	);
-	document.getElementById('answerDisplay').innerHTML = "";
-	document.getElementById("latexInput").value = "";
-	document.getElementById("renderedLatex").innerHTML= "";
-	showCurrentQuestion();	
-}
-
-function showCurrentQuestion(){
-	if (questions.length > 0){
-		let text = "Input the LaTeX commands to create: ";	
-		text += "\\( \\large{ " + current + " } \\)";	
-		document.getElementById('question').style.display = "none";
-		document.getElementById('question').innerHTML = text;
-		renderAllLatex();
-		document.getElementById('question').style.display = "block";			
-	} else {
-		let text = "You have completed all the quiz questions. Refresh the page to try them again.";
-		document.getElementById('question').innerHTML = text;	
-		document.getElementById('answerArea').style.display = "none";	
-	}
-}
-
-function renderAllLatex(){
-	//use svg instead of mathml to allow for image downloading
-	MathJax.Hub.Typeset();
-}
-
-function getRenderedLatex(){
-  let equationToRender = document.getElementById("latexInput").value; 
-  let html = "<div style='padding:10px;border:thin solid black;'>";
-  html += "\\[ \\Large{ " + equationToRender + "} \\]</div>";
-  document.getElementById("renderedLatex").innerHTML = html;
-  renderAllLatex();
-}
-
-function revealAnswer(){
-	let text = "<h3>" + current + "</h3>";
-	document.getElementById('answerDisplay').innerHTML = text;
-}
-
-showCurrentQuestion();
-</script>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="LaTeX101 landing page">
+      <title>LaTeX101 Learning Module</title>
+      <!-- Bootstrap core CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <!-- Additional scripts required for collapse, etc. -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
+      <style>
+         .bd-placeholder-img {
+         font-size: 1.125rem;
+         text-anchor: middle;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         user-select: none;
+         }
+         @media (min-width: 768px) {
+         .bd-placeholder-img-lg {
+         font-size: 3.5rem;
+         }
+         }
+         .dm-code {
+         background:azure;
+         }
+      </style>
+      <script type="text/javascript"	
+         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+         console.log("downloading mathjax")
+      </script>
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+         <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+               <li class="nav-item active">
+                  <a class="nav-link" href="./">Home <span class="sr-only">(current)</span></a>
+               </li>
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Modules</a>
+                  <div class="dropdown-menu" aria-labelledby="dropdown01">
+                     <a class="dropdown-item" href="./module0.html">0: What is LaTeX?</a>
+                     <a class="dropdown-item" href="./module1.html">1: Getting Started</a>
+                     <a class="dropdown-item" href="./module2.html">2: Essential LaTeX Commands</a>
+                     <a class="dropdown-item" href="./module3.html">3: LaTeX on Various Platforms</a>            
+                     <a class="dropdown-item" href="./module4.html">4: Cloud-based LaTeX Environments</a>
+                     <a class="dropdown-item" href="./module5.html">5: LaTeX as a Digital Literacy</a>           
+                  </div>
+               </li>
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Utilities</a>
+                  <div class="dropdown-menu" aria-labelledby="dropdown02">
+                     <a class="dropdown-item" href="./quiz.html">Command Quiz</a>
+                     <a class="dropdown-item" href="./simpleLaTeX.html">LaTeX Tester</a>
+                  </div>
+               </li>
+            </ul>
+         </div>
+      </nav>
+      <main role="main">
+         <div id='top_padding'>
+            <br/><br/><br/>
+         </div>
+         <div class="container">
+         <hr>
+         <div class="row" id="main">
+            <div class="col-md-8">
+               <h2>LaTeX Command Quiz</h2>
+               <p>
+                  Use your growing knowledge of LaTeX commands to create the math displayed in the question below.
+               </p>
+               <p>First, try to input the correct commands to match the displayed math, and press the
+                  <strong>Try It</strong> button to test your answer.
+               </p>
+               <p> Next, reveal the answer and compare it with yours. If it is different, try pasting
+                  the provided answer into the response area, and see that it works. Sometimes there is more
+                  than one way to achieve the result you want.
+               </p>
+               <hr>
+               <h2> Question: </h2>
+               <div id='question'> Input the LaTeX commands to create: </div>
+               <br>
+               <!-- Small LaTeX editor using MathJaX -->    
+               <div id ='answerArea'>
+                  <h2> Your Answer: </h2>
+                  <div style="padding:5px;border:thick solid grey;" id='miniEditor'>
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text">Input LaTeX:</span>
+                        </div>
+                        <textarea id='latexInput' class="form-control" aria-label="Input LaTeX"></textarea>
+                        <button class="btn btn-secondary" onClick='getRenderedLatex()' role="button">Try It</button>
+                     </div>
+                     <br>      
+                     <div id="renderedLatex" tyle="text-align:center;">  </div>
+                  </div>
+                  <br>
+                  <div class="btn-group btn-group-md" role="group" >	
+                     <button id="answerButton" onClick="revealAnswer()" class="btn btn-secondary">reveal answer</button>	
+                  </div>
+                  <br>
+                  <br>
+                  <div id='answerDisplay' style='text-align:center'></div>
+                  <br>
+                  <div class="btn-group btn-group-md" role="group" >	
+                     <button id="newButton" onClick="resetCurrent()" class="btn btn-primary">new question</button>	
+                  </div>
+               </div>
+               <!-- end of LaTeX editor -->
+               <hr>
+               <br>
+            </div>
+         </div>
+         <!-- /container -->
+      </main>
+      <footer class="container">
+         <p><a href='./'>Back to Main</a></p>
+      </footer>
+      <script>
+         let questions = [
+         'x^2+3x-2',
+         '\\{a_0, a_1, a_2\\}',
+         'x^2+y^2=r^2',
+         '\\frac{x^2-9}{x+3}',
+         '\\frac{1}{2} + \\frac{2}{3}',
+         '\\sqrt{2}-1',
+         '\\pm \\sqrt{x+2}',
+         '\\sin^2(\\theta ) + \\cos^2(\\theta) = 1',
+         '\\sin(\\frac{\\pi}{2} )= 1',
+         'D = b^2-4ac ',
+         '\\ \\{x \\in \\textbf{R} | x \\leq 1\\} ',
+         '-1 \\leq y \\leq +1',
+         '\\sum^{6}_{i=1}i = 21',
+         'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}',
+         'y=f(x)',
+         'e^{i\\pi} = -1',
+         '\\cos(\\pi) = -1',
+         '\\sqrt[3]{27} = 3',
+         '\\sqrt{-1} = i',
+         "\\binom{n}{r} = \\frac{n!}{r!(n-r)!}"
+         ];
+         
+         let current = questions[Math.floor(Math.random()*questions.length)];
+         
+         function resetCurrent(){
+         	let i = Math.floor(Math.random()*questions.length);
+         	current = questions[i];
+         	questions = questions.filter(function(value, index, arr){
+         		return index != i;
+         		}
+         	);
+         	document.getElementById('answerDisplay').innerHTML = "";
+         	document.getElementById("latexInput").value = "";
+         	document.getElementById("renderedLatex").innerHTML= "";
+         	showCurrentQuestion();	
+         }
+         
+         function showCurrentQuestion(){
+         	if (questions.length > 0){
+         		let text = "Input the LaTeX commands to create: ";	
+         		text += "\\( \\large{ " + current + " } \\)";	
+         		document.getElementById('question').style.display = "none";
+         		document.getElementById('question').innerHTML = text;
+         		renderAllLatex();
+         		document.getElementById('question').style.display = "block";			
+         	} else {
+         		let text = "You have completed all the quiz questions. Refresh the page to try them again.";
+         		document.getElementById('question').innerHTML = text;	
+         		document.getElementById('answerArea').style.display = "none";	
+         	}
+         }
+         
+         function renderAllLatex(){
+         	//use svg instead of mathml to allow for image downloading
+         	MathJax.Hub.Typeset();
+         }
+         
+         function getRenderedLatex(){
+           let equationToRender = document.getElementById("latexInput").value; 
+           let html = "<div style='padding:10px;border:thin solid black;'>";
+           html += "\\[ \\Large{ " + equationToRender + "} \\]</div>";
+           document.getElementById("renderedLatex").innerHTML = html;
+           renderAllLatex();
+         }
+         
+         function revealAnswer(){
+         	let text = "<h3>" + current + "</h3>";
+         	document.getElementById('answerDisplay').innerHTML = text;
+         }
+         
+         showCurrentQuestion();
+      </script>
 </html>

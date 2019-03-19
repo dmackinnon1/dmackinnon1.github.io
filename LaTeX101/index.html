@@ -1,212 +1,188 @@
 <!doctype html>
 <!--
-This landing page is based on the Bootstrap Jumbotron template,
-authored by Mark Otto, Jacob Thornton, and Bootstrap contributors.
-For the canonical example of this template, please see
-https://getbootstrap.com/docs/4.3/examples/jumbotron/
--->
+   This landing page is based on the Bootstrap Jumbotron template,
+   authored by Mark Otto, Jacob Thornton, and Bootstrap contributors.
+   For the canonical example of this template, please see
+   https://getbootstrap.com/docs/4.3/examples/jumbotron/
+   -->
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="LaTeX101 landing page">
-    <title>LaTeX101</title>
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- Additional scripts required for collapse, etc. -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-<script type="text/javascript"	
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-  console.log("downloading mathjax")
-</script>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="./">Home <span class="sr-only">(current)</span></a>
-        </li>
-      
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Modules</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="./module0.html">0: What is LaTeX?</a>
-            <a class="dropdown-item" href="./module1.html">1: Getting Started</a>
-            <a class="dropdown-item" href="./module2.html">2: Essential LaTeX Commands</a>
-            <a class="dropdown-item" href="./module3.html">3: Cloud-based LaTeX Environments</a>
-            <a class="dropdown-item" href="./module4.html">4: LaTeX on Various Platforms</a>
-            <a class="dropdown-item" href="./module5.html">5: LaTeX as a Digital Literacy</a>           
-          </div>
-        </li>
-         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Utilities</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown02">
-            <a class="dropdown-item" href="./quiz.html">Command Quiz</a>
-            <a class="dropdown-item" href="./simpleLaTeX.html">LaTeX Tester</a>
-           </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-<main role="main">
-
-  <!-- Main jumbotron  -->
-  <div class="jumbotron">
-    <div class="container">
-      <br/> <br/>
-      <h2 class="display-3">Hello \( \LaTeX \)</h2>
-      <p>A learning resource for mathematics teachers.</p> 
-      <button type='button' class='btn btn-info btn-primary btn-lg' data-toggle='collapse' role="button" data-target='#mainText'>
-		Learn more &raquo;</button>
-	<div id='mainText' class='collapse'> <br>
-		<p>
-			High school mathematics teachers use a wide variety of digital platforms and technologies to communicate
-            with their students, colleagues, and the broader learning community.
-		</p>
-		<p>
-		    <strong> LaTeX </strong> (pronounced lay-<em>tech</em>) is a long-established technology that allows you to write
-            portable, proffessional-quality mathematics and share it with everyone. It can be
-            used to integrate mathematical symbols and notation into a wide variety of documents across many digital platforms.
-		</p>
-        <p>
-            These pages are structured as a self-paced online workshop that introduces high school mathematics 
-            teachers to LaTeX and the many platforms that support its use.
-        </p>
-
-	</div>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- Row 1 introduction -->
-   
-    <div class="row">
-      <div class="col-md-4">
-        <h2>Module 0: What is LaTeX?</h2>
-        <p>LaTeX is a digital typesetting technology used by scientists and mathematicians
-			to create publication-quality documents and precicely formatted mathematics.
-		</p>
-        <p><a class="btn btn-secondary" href="./module0.html" role="button">Learn more &raquo;</a></p>
-      </div>
-      <div class="col-md-4">
-        <h2>Module 1: Getting Started</h2>
-        <p>
-        Begin writing mathematics with LaTeX using
-		online LaTeX equation editors. 
-		Learn how to create nicely 
-        formatted mathematics that can be saved as images and 
-        inserted into documents that do not have native LaTeX 
-        support.
-        </p>
-        <p><a class="btn btn-secondary" href="./module1.html" role="button">Learn more &raquo;</a></p>
-      </div>
-      <div class="col-md-4">
-        <h2>Module 2: Essential LaTeX Commands</h2>
-        <p>Continue to build your repitore of LaTeX commands and understanding
-        of LaTeX syntax.
-        </p>
-        <p><a class="btn btn-secondary" href="./module2.html" role="button">Learn more &raquo;</a></p>
-      </div>
-    </div>
-
-    <hr>
-
-  <!-- Row 2 LaTeX on various Platforms -->
-   
-    <div class="row">
-      
-      <div class="col-md-4">
-        <h2>Module 3: Cloud-based LaTeX environments</h2>
-        <p>Learn some of the essential LaTeX commands that will help you communicate effectively
-        with anyone across many platforms.</p>
-        <p><a class="btn btn-secondary" href="./module3.html" role="button">Learn more &raquo;</a></p>
-      </div>
-
-	<div class="col-md-4">
-        <h2>Module 4: LaTeX on Various Platforms</h2>
-        <p>LaTeX in Google Docs? In Brighspace? On any HTML page? You bet.</p>
-        <p><a class="btn btn-secondary" href="./module4.html" role="button">Learn more &raquo;</a></p>
-      </div>
-    	
-      <div class="col-md-4">
-        <h2>Module 5: LaTeX as a Digital Literacy</h2>
-        <p>Who can benefit from LaTeX? Well, maybe everybody.</p>
-        <p><a class="btn btn-secondary" href="./module5.html" role="button">Learn more &raquo;</a></p>
-      </div>
-    
-    </div>
-
-	<hr/>
-
-	 <!-- Row 3 Utilities -->
-   
-    <div class="row">
-      
-      <div class="col-md-4">
-        <h2>LaTeX Commands Quiz</h2>
-        <p>Review the commands that you have learned.</p>
-        <p><a class="btn btn-secondary" href="./quiz.html" role="button">Try it &raquo;</a></p>
-      </div>
-
-	<div class="col-md-4">
-        <h2>Simple Command Tester</h2>
-        <p>A simple editor for LaTeX commands.</p>
-        <p><a class="btn btn-secondary" href="./simpleLaTeX.html" role="button">Try it &raquo;</a></p>
-      </div>
-    	
-    
-    
-    </div>
-
-	<hr/>
-
-  </div> <!-- /container -->
-
-</main>
-
-<footer class="container">
-  <br/>
-   <button type='button' class='btn btn-info btn-primary btn-sm' data-toggle='collapse' role="button" data-target='#about'>
-		About</button>
-	<div id='about' class='collapse'> <br>
-  	<p> This digital learning resource was prepared as a project for the course EDU 5287 in the Faculty of Education,
-	University of Ottawa. The source code is availble on <a href="https://github.com/dmackinnon1/LaTeX101">GitHub</a>.
-  	</p>
-  	<p>
-  	<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><br/>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-	Other works referenced have their respective copyright and licensing.</p>
-	</div>
-	<br/>
-	<br/
-</footer>
-<script>
-MathJax.Hub.Typeset();
-</script>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="LaTeX101 landing page">
+      <title>LaTeX101</title>
+      <!-- Bootstrap core CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <!-- Additional scripts required for collapse, etc. -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
+      <style>
+         .bd-placeholder-img {
+         font-size: 1.125rem;
+         text-anchor: middle;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         user-select: none;
+         }
+         @media (min-width: 768px) {
+         .bd-placeholder-img-lg {
+         font-size: 3.5rem;
+         }
+         }
+      </style>
+      <script type="text/javascript"	
+         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+         console.log("downloading mathjax")
+      </script>
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+         <a class="navbar-brand" href="..">dmackinnon1.github.io</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+               <li class="nav-item active">
+                  <a class="nav-link" href="./">Home <span class="sr-only">(current)</span></a>
+               </li>
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Modules</a>
+                  <div class="dropdown-menu" aria-labelledby="dropdown01">
+                     <a class="dropdown-item" href="./module0.html">0: What is LaTeX?</a>
+                     <a class="dropdown-item" href="./module1.html">1: Getting Started</a>
+                     <a class="dropdown-item" href="./module2.html">2: Essential LaTeX Commands</a>
+                     <a class="dropdown-item" href="./module3.html">3: LaTeX on Various Platforms</a>            
+                     <a class="dropdown-item" href="./module4.html">4: Cloud-based LaTeX Environments</a>
+                     <a class="dropdown-item" href="./module5.html">5: LaTeX as a Digital Literacy</a>           
+                  </div>
+               </li>
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Utilities</a>
+                  <div class="dropdown-menu" aria-labelledby="dropdown02">
+                     <a class="dropdown-item" href="./quiz.html">Command Quiz</a>
+                     <a class="dropdown-item" href="./simpleLaTeX.html">LaTeX Tester</a>
+                  </div>
+               </li>
+            </ul>
+         </div>
+      </nav>
+      <main role="main">
+         <!-- Main jumbotron  -->
+         <div class="jumbotron">
+            <div class="container">
+               <br/> <br/>
+               <h2 class="display-3">Hello \( \LaTeX \)</h2>
+               <p>A learning resource for mathematics teachers.</p>
+               <button type='button' class='btn btn-info btn-primary btn-lg' data-toggle='collapse' role="button" data-target='#mainText'>
+               Learn more &raquo;</button>
+               <div id='mainText' class='collapse'>
+                  <br>
+                  <p>
+                     High school mathematics teachers use a wide variety of digital platforms and technologies to communicate
+                     with their students, colleagues, and the broader learning community.
+                  </p>
+                  <p>
+                     <strong> LaTeX </strong> (pronounced lay-<em>tech</em>) is a long-established technology that allows you to write
+                     portable, proffessional-quality mathematics and share it with everyone. It can be
+                     used to integrate mathematical symbols and notation into a wide variety of documents across many digital platforms.
+                  </p>
+                  <p>
+                     These pages are structured as a self-paced online workshop that introduces high school mathematics 
+                     teachers to LaTeX and the many platforms that support its use.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="container">
+            <!-- Row 1 introduction -->
+            <div class="row">
+               <div class="col-md-4">
+                  <h2>Module 0: What is LaTeX?</h2>
+                  <p>LaTeX is a digital typesetting technology used by scientists and mathematicians
+                     to create publication-quality documents and precicely formatted mathematics.
+                  </p>
+                  <p><a class="btn btn-secondary" href="./module0.html" role="button">Learn more &raquo;</a></p>
+               </div>
+               <div class="col-md-4">
+                  <h2>Module 1: Getting Started</h2>
+                  <p>
+                     Begin writing mathematics with LaTeX using
+                     online LaTeX equation editors. 
+                     Learn how to create nicely 
+                     formatted mathematics that can be saved as images and 
+                     inserted into documents that do not have native LaTeX 
+                     support.
+                  </p>
+                  <p><a class="btn btn-secondary" href="./module1.html" role="button">Learn more &raquo;</a></p>
+               </div>
+               <div class="col-md-4">
+                  <h2>Module 2: Essential LaTeX Commands</h2>
+                  <p>Continue to build your repitore of LaTeX commands and understanding
+                     of LaTeX syntax.
+                  </p>
+                  <p><a class="btn btn-secondary" href="./module2.html" role="button">Learn more &raquo;</a></p>
+               </div>
+            </div>
+            <hr>
+            <!-- Row 2 eX on various Platforms -->
+            <div class="row">
+               <div class="col-md-4">
+                  <h2>Module 3: LaTeX on Various Platforms</h2>
+                  <p>LaTeX in Google Docs? In Brighspace? On any HTML page? You bet.</p>
+                  <p><a class="btn btn-secondary" href="./module4.html" role="button">Learn more &raquo;</a></p>
+               </div>
+               <div class="col-md-4">
+                  <h2>Module 4: Cloud-based LaTeX environments</h2>
+                  <p>Learn some of the essential LaTeX commands that will help you communicate effectively
+                     with anyone across many platforms.
+                  </p>
+                  <p><a class="btn btn-secondary" href="./module3.html" role="button">Learn more &raquo;</a></p>
+               </div>
+               <div class="col-md-4">
+                  <h2>Module 5: LaTeX as a Digital Literacy</h2>
+                  <p>Who can benefit from LaTeX? Well, maybe everybody.</p>
+                  <p><a class="btn btn-secondary" href="./module5.html" role="button">Learn more &raquo;</a></p>
+               </div>
+            </div>
+            <hr/>
+            <!-- Row 3 Utilities -->
+            <div class="row">
+               <div class="col-md-4">
+                  <h2>LaTeX Commands Quiz</h2>
+                  <p>Review the commands that you have learned.</p>
+                  <p><a class="btn btn-secondary" href="./quiz.html" role="button">Try it &raquo;</a></p>
+               </div>
+               <div class="col-md-4">
+                  <h2>Simple Command Tester</h2>
+                  <p>A simple editor for LaTeX commands.</p>
+                  <p><a class="btn btn-secondary" href="./simpleLaTeX.html" role="button">Try it &raquo;</a></p>
+               </div>
+            </div>
+            <hr/>
+         </div>
+         <!-- /container -->
+      </main>
+      <footer class="container">
+         <br/>
+         <button type='button' class='btn btn-info btn-primary btn-sm' data-toggle='collapse' role="button" data-target='#about'>
+         About</button>
+         <div id='about' class='collapse'>
+            <br>
+            <p> This digital learning resource was prepared as a project for the course EDU 5287 in the Faculty of Education,
+               University of Ottawa. The source code is availble on <a href="https://github.com/dmackinnon1/LaTeX101">GitHub</a>.
+            </p>
+            <p>
+               <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><br/>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+               Other works referenced have their respective copyright and licensing.
+            </p>
+         </div>
+         <br/>
+         <br/
+      </footer>
+      <script>
+         MathJax.Hub.Typeset();
+      </script>
 </html>

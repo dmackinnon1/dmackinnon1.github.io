@@ -95,9 +95,9 @@
                   <h2>Learning Goals</h2>
                   <p> The learning goals for this module include:
                   <ul>
-                     <li>goal1</li>
-                     <li>goal2</li>
-                     <li>goal3</li>
+                     <li>Learn about the LaTeX support provided by environments like GeoGebra, Brightspace, and Google Docs.</li>
+                     <li>Learn how to include LaTeX on any webpage using the MathJax Javascript library.</li>
+                     <li>Explore other platforms that offer LaTeX support.</li>
                   </ul>
                   </p>   
                </div>
@@ -106,15 +106,12 @@
             <div class="row" id="before">
                <div class="col-md-8">
                   <h2>Before You Start</h2>
-                  <p> Blah blah		
+                  <p> Think of a few different document types or platforms that you use to communicate mathematics. This might
+                  include word-processors, slide-presentation software, online learning environments, webpages, graphing calculators, etc.	
+                  How many different tools do you need to use to insert mathematical expressions and symbols into these
+                  environments?
                   </p>
-                  <p> Consider these questions:
-                  <ol>
-                     <li> item 1</li>
-                     <li> item 2 </li>
-                  </ol>
-                  <p> Blah blah
-                  </p>
+                 
                </div>
             </div>
             <hr>
@@ -125,20 +122,135 @@
                      to include mathematics without having to create an entire LaTeX document. In most chases, there are facilities
                      on these platforms to inject a small amount of LaTeX (just what you need) into your document or page.
                   </p>
+                  <h3> LaTeX in GeoGebra </h3>
+                  <p>
+                  The free online graphing and geometry tool <strong>GeoGebra</strong> includes LaTeX support in
+                  its text tool, allowing you to include LaTeX-based formulas on graphs and 
+                  sketches that you create.
+                  </p>
+                  <!-- image here -->
+                  <br>
+                  <image src="./imgs/geogebra1.png" alt="LaTeX editor in GeoGebra" 
+                        style="width:150;padding:1px;border:thin solid black;">
+                  <br>
+                  <br>
+                  <p> Try out the GeoGebra support for LaTeX following these steps:
+                  <ol>
+                  <li> Go to the GeoGebra <a href="https://www.geogebra.org/graphing">graphing calculator page</a>.</li>
+                  <li> Select the <strong>Tools</strong> menu and choos the <strong>Text Tool</strong> within the <strong>Media Tools</strong> category.</li>
+                  <li> Click on the graphig area to bring up the Text Tool, and select <strong>LaTeX Formula</strong>.</li>
+                  <li> Enter one of the LaTeX commands you have learned.</li>
+                  </ol>
+                  Geogebra's LaTeX editor provides some help - clicking on the Advanced/LaTeX options will open an equation-editor style
+                  interface that will insert the LaTeX code for symbols that you select.
+                  <!-- image here --> 
+                  <br>
+                  <br>
+                  <image src="./imgs/geogebra2.png" alt="LaTeX editor in GeoGebra" 
+                        style="width:150;padding:1px;border:thin solid black;">
+                  <br>
+                  <br>
+                  Read more about GeoGebra's LaTeX support on the <a href="https://wiki.geogebra.org/en/LaTeX">GeoGebra wiki<a>.
+                  </p>
+
                   <h3>LaTeX in Brightspace</h3>
                   <p>
-                     Brightspace has a simple LaTeX renderer, very similar to the one included in this course.
+                     The virtual learning environment <strong>Brightspace</strong> has a LaTeX editor that is similar to the GeoGebra
+                     editor and the simple LaTeX renderer included in this course.
+                     <ol>
+                     <li> In any Brightspace text editor, click on the "Show All Components" button (the ellipsis ...)</li>
+                     <li> Clicking on the Sigma button will show a dropdown with options for equation and symbol insertion. </li>
+                     <li> You can choose the LaTeX editor from the list.</li>                     
+                  </ol>
+                  <br>
+                  <image src="./imgs/brightspace1.png" alt="LaTeX editor in Brightspace" 
+                        style="width:150;padding:1px;border:thin solid black;">
+                  <br>
+                  <br>
                   </p>
                   <h3>LaTeX in Google Docs</h3>
                   <p>
                      Google Docs allows you to insert equattions into your documents, and provides an equation editor to help
                      you create the mathematics you want. However, if you know a bit of LaTeX, you can speed things up by using
-                     the Google Docs Equation Shortcuts, which are essentially LaTeX commands without the curly braces.
+                     the Google Docs Equation Shortcuts, which are essentially LaTeX commands without the curly braces.                     
+                  </p>
+                  <p> Google's <a href="https://support.google.com/docs/answer/160749?co=GENIE.Platform%3DDesktop&hl=en">official documentation</a>       
+                  on the use of equation shortcuts is very brief, but one enterprising user has come up with an 
+                  <a href="http://www.notuom.com/google-docs-equation-shortcuts.html">unofficial cheatsheet</a>.
+                  </p>
+                  <p>Once you have finished typing the shortcut, Google Docs will automatically replace it with the symbol, and create
+                  editable spaces for you to put any required arguments. For example, typing "\frac" within the equation editing region 
+                  will cause Google Docs to create a horizontal line, and places for the numerator and denominator.
+                  </p>
+                  <br>
+                  <image src="./imgs/googledocs.png" alt="LaTeX-based shortcut in GoogleDocs" 
+                        style="width:50;padding:1px;border:thin solid black;">
+                  <br>
+                  <br>
+                  <p> If you have a Google account, try following these steps:
+                  <ol>
+                  <li>Open a new Google Doc file.</li>
+                  <li>From the <strong>Insert</strong> menue, select <strong>Equation</strong>.</li>
+                  <li>In the text area created, type a simple command, like "\alpha" followed by a space.</li>
+                  <li>Note that your command should be replaced by an appropriate symbol.</li>
+                  </ol>
+                  
                   </p>
                   <h3>LaTeX on any Web Page</h3>
-                  <p> Any webpage can display mathematics using LaTeX thanks to MathJax, a JavaScript library. All of the
+                  <p> Any webpage can display mathematics using LaTeX thanks to <a href="https://www.mathjax.org/">MathJax</a>, a JavaScript library. All of the
                      displayed mathematics in this course is created using LaTeX commands supported by MathJax, so looking at the
                      source for these pages can provide some hints at how it is used.
+                  </p> 
+                  <p>The <a href="https://www.mathjax.org/">MathJax</a> provides instructions on how to include MathJax on any
+                  webpage you author. As described there, including a small script will allow you to insert LaTeX formatted math using
+                  delimeters: backslashes with round brackets for inline math, and backslashes with square brackets for displayed equations.
+<div class="dm-code">
+<pre>
+
+  &lt;!DOCTYPE html&gt;
+   &lt;html&gt;
+   &lt;head&gt;
+      &lt;meta charset="utf-8"&gt;
+      &lt;meta name="viewport" content="width=device-width"&gt;
+      &lt;title&gt;MathJax example&lt;/title&gt;
+      &lt;script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async&gt;
+      &lt;/script&gt;
+      &lt;/head&gt;
+   &lt;body&gt;
+   &lt;p&gt;
+     When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
+     \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+   &lt;/p&gt;
+   &lt;/body&gt;
+   &lt;/html&gt;
+
+</pre>
+                  </div>
+                   This results in a web page displaying:
+                  <br>
+                  <div style="padding:10px;border:thick solid grey;">
+                  When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
+                  \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+                  </div>
+                  </p>
+                  <p> This method can be used on some web-page authoring and blogging platforms that do not offer 
+                  explicit LaTeX support. If there is a facility for inserting a script, you can insert the MathJax
+                  code, and start using LaTeX on your page. This is one way to get LaTeX support on <strong>Blogger</strong>-based
+                  blogs, for example.
+                  </p>
+                  <p> MathJax offers support for advanced LaTeX formatting and configuration - please see their docs for more information.
+                  </p>
+
+                  <h3> LaTeX in Other Documents</h3>
+                  <p>
+                  If you are creating a document in another platform that does not have LaTeX support, you can use online
+                  LaTeX editors and insert the displayed math as an image file into your document.
+                  As described in module 1, editors like <a href="https://www.codecogs.com/latex/eqneditor.php">CodeCogs</a>,
+                     or <a href="https://quicklatex.com/">QuickLaTeX</a> allow you to download a rendered image
+                  of your LaTeX commands. Alternatively, you could use the simple LaTeX renderer <a href="./simpleLaTeX.html">
+                  here</a> and use a screen-capture tool to obtain an image of your equation.
+
                   </p>
                </div>
             </div>
@@ -151,6 +263,14 @@
                      includes some background,
                      brief descriptions of Wikipedia, Wordpress, and various wiki-engine
                      support for LaTeX, and a short overview of MathJax.
+                  </p>
+                  <p>
+                  The popular graphing calculator <a href="https://www.desmos.com/calculator">Desmos</a> will automatically render the math you type correctly. But did you know that
+                  it uses LaTeX behind the scenes, and can even act like a LaTeX editor? In Desmos, type any equation, like
+                  "y=sin(theta)", highlight what you typed and copy it into a plain text editor. You will see that the
+                  result is a set of LaTeX commands that give the typed math that you see in Desmos.
+                  This suggest that if you want to get a bit of LaTeX code but you don't know the commands, you can 
+                  type it in Desmos and copy the commands from there.
                   </p>
                </div>
             </div>
@@ -165,19 +285,19 @@
                   <div class="form-check">
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                      <label class="form-check-label" for="defaultCheck1">
-                     item 1  
+                     I tried inserting LaTeX-based math into Geogebra, Brightspace, or Google docs.  
                      </label><br>
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
                      <label class="form-check-label" for="defaultCheck2">
-                     item 2 
+                     I looked at how LaTeX can be used on any web page using MathJax.
                      </label><br>
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
                      <label class="form-check-label" for="defaultCheck3">
-                     item 3
+                     I thought about how to insert images created with LaTeX editors into other document types.
                      </label><br>
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
                      <label class="form-check-label" for="defaultCheck4">
-                     item 4 
+                     I experimented with grabbing LaTeX commands from Desmos. 
                      </label><br> 	
                   </div>
                   </p>
@@ -192,7 +312,30 @@
                   <h2>References</h2>
                   <p>
                      Christersson. M. (2019). LaTeX on the Web. webpage. Retrieved March 7, 2019 from http://www.malinc.se/math/latex/latexontheweben.php
+                  </p>                                    <p>
+                     D2L Corporation. (2019). Brightspace Learning Platform. Retrieved on March 18, 2019 from https://www.d2l.com/
                   </p>
+                  <p>
+                   Desmos Inc. (2019). Desmos Graphing Calculator. Software. Retrieved on March 18, 2019 from https://www.desmos.com/
+                  </p>
+                  <p>
+                     GeoGebra Group. (2018). GeoGebra Online Math Applications. Retrieved on March 18, 2019 from https://www.geogebra.org/?lang=en
+                  </p>
+                  GeoGebra Group. (2018). LaTeX in GeoGebra. Retrieved on March 18, 2019 https://wiki.geogebra.org/en/LaTeX
+                  <p>
+                     Google Corp. (2019). Google Docs, G-Suite Application, https://www.google.com/docs/about/
+                  </p>
+                  <p>
+                     MathJax Consortium. (2019). MathJax JavaScript Library. Retrieved on March 18, 2019 from https://www.mathjax.org/
+                  </p>
+                  <p>
+                  Notuom.com (2017). Google Docs Equation Editor Unofficial Shortcuts List / Cheat Sheet. Retrieved on March 19, 2019 from
+                  http://www.notuom.com/google-docs-equation-shortcuts.html
+                  </p>
+                  <p>
+                     Overleaf Inc. (2019). Overleaf Cloud-based LaTeX Document Preparation Software. Retrieved on March 18, 2019 from https://www.overleaf.com/about
+                  </p>
+   
                </div>
             </div>
             <hr>

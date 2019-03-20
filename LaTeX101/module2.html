@@ -266,6 +266,36 @@ This single-page template is used for each learning module.
 	   \[ \large{a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2+\cfrac{1}{a_3}}}} \]	   
 	   </p>	
 	<br>
+	<h3> Radicals </h3>
+	<p> Some LaTeX commands require special parameters that are identified using square
+	brackets. The radical sign is one of these. When used on its own, it is the convential
+	square root<\p>
+<div class="dm-code">
+<pre>
+
+	y = \sqrt{x}	
+	
+</pre> 
+</div>
+
+	   which displays as: <br>
+	   \[ \large{y = \sqrt{x}} \]	   
+	   </p>	
+	<br>
+	
+	When a value is provided using square brackets, we can obtain other roots, for example:
+<div class="dm-code">
+<pre>
+
+	\sqrt[n]{x} = x^{\frac{1}{n}}	
+	
+</pre> 
+</div>
+
+	   which displays as: <br>
+	   \[ \large{\sqrt[n]{x} = x^{\frac{1}{n}}	} \]	   
+	   </p>	
+	<br>	
 	<h3> Some More Advanced Notation </h3>
 	
 	<p>
@@ -405,11 +435,13 @@ This single-page template is used for each learning module.
     <hr>
 
   </div> <!-- /container -->
-
 </main>
-
 <footer class="container">
-  <p><a href='./'>Back to Main</a></p>
+  <div class="btn-group" role="group" aria-label="nav-buttons">
+  	<button type="button" class="btn btn-outline-secondary"><a href="./module1.html">Back</a></button>
+    <button type="button" class="btn btn-outline-secondary"><a href="./">Home</a></button>
+    <button type="button" class="btn btn-outline-secondary"><a href="./module3.html">Next</a></button>
+  </div>
 </footer>
 <script>
 MathJax.Hub.Typeset();

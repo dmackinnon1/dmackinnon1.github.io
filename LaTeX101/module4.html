@@ -106,13 +106,17 @@
             <div class="row" id="before">
                <div class="col-md-8">
                   <h2>Before You Start</h2>
-                  <p> Recall that LaTeX can be used not just to insert math equations, but to format entire documents. LaTeX is used for
-                  scientific reports, books, resumes, slideshows, and really any other type of document. </p>
-                  <p> Scan, but do not read all of, the <a href="https://en.wikibooks.org/w/index.php?title=LaTeX/Installation">
+                  <ol>
+                  <li> Recall that LaTeX can be used not just to insert math equations, but to format entire documents. LaTeX is used for
+                  scientific reports, books, resumes, slideshows, and really any other type of document. 
+                  Check out the <a href="https://www.overleaf.com/gallery/tagged/cv">Overleaf LaTeX CV Gallery</a> for examples
+                  of how LaTeX can be used to create resumes.</li>
+                  <li> Scan, but do not read all of, the <a href="https://en.wikibooks.org/w/index.php?title=LaTeX/Installation">
                   LaTeX Wikibooks entry on installing LaTeX</a>. The steps on this page, and other configuration
                   required to run LaTeX on your local machine, is exactly what we are avoiding by looking to cloud-based LaTeX systems.                  
-                  </p>
-                  <p> Set up a free account on <a href="https://www.overleaf.com">Overleaf</a>.</p>
+                  </li>
+                  <li> Set up a free account on <a href="https://www.overleaf.com">Overleaf</a>.</li>
+                  </ol>
                </div>
             </div>
             <hr>
@@ -128,24 +132,119 @@
                   the rendered document side by side. 
                   </p>
                   <h3>Basic Document Layout</h3>
-                  
-                  <p>Create a "blank" document project within Overleaf.</p>
+                  <p> At it's simplest, a LaTeX document is very simple, as shown below. </p>                 
+<div class="dm-code">
+<pre>
 
+   \documentclass{article}
+   \usepackage[utf8]{inputenc}
+
+   \begin{document}
+   \noindent
+   Euler's formula shows the surprising relationship between 
+   the exponential function and the sine and cosine functions.
+   \[      
+      e^{i\theta} = \cos(\theta) + i\sin(\theta)
+   \]
+   When \(\theta = \pi \), Euler's formula provides 
+   the identity \(e^{i\pi}=-1\).
+   \end{document}
+	
+</pre> 
+</div>
+                   <p> The example above shows many of the elements of a typical LaTeX document: 
+                   <ul>
+                   <li>Preliminary commands to identify the document as a LaTeX document and identify its document class.</li>
+                   <li>Package imports that instruct LaTeX what groups of commands will be used (the ones shown are minimal).</li>     
+                   <li>Some formatting commands, like the <strong>\noindent</strong> shown.</li>
+                   <li>Plain text that will be rendered as typed.</li>
+                   <li>Inline mathematics, placed inside the backslash-round-bracket pattern shown.</li>
+                   <li>Display equations, placed inside the backslash-squareb-racket pattern shown.</li>
+                   </ul>
+
+                   </p>                 
+
+                  <div style="padding:10px;border:thin solid black;">
+                     <p><strong>Exercise 2:</strong> Create a "blank" document project within Overleaf. 
+                  Remove all text in the document and replace it with the example above. Recompile and note
+                  the difference between the inline math and displayed equation. </p>
+                  </div>
+                  
+                  <br>
+                  <div style="padding:10px;border:thin solid black;">
+                     <p><strong>Exercise 3:</strong> Create a "blank" document project within Overleaf. 
+                  Somewhere between
+                  the <strong> \begin{document} </strong> and <strong>\end{document}</strong>, insert
+                  a LaTeX command that you have learned, in between the backslash-square bracket pattern as 
+                  shown above. </p>
+                  </div>
+                  
+                  <br>
                   <h3>Advanced Options</h3>
 
-                 
-
-                  <p> As the formatting gets more complex, the LaTeX file will start to look more like
+                  <p>
+                  Some notation and formatting requires you to provide extra instructions to LaTeX.                 
+                  As the formatting gets more complex, the LaTeX file will start to look more like
                   a computer program than a document. If you end up using LaTeX as a complete formatting system,
                   you will need to learn more about using packages, defining macros, and other advanced features.</p>
+                  <p> For example, the <strong>\cfrac</strong> command and the <strong>align</strong> environments
+                  shown in module 2 require the <strong>amsmath</strong> package.
+                 
+<div class="dm-code">
+<pre>
+
+   \documentclass{article}
+   \usepackage[utf8]{inputenc}
+   \usepackage{amsmath}
+   \begin{document}
+   \noindent
+   \[
+     \cfrac{1}{1+\cfrac{1}{1+x}}
+   \]
+   \end{document}
+	
+</pre> 
+</div>
+ 
+                  <br>
+                  <p> Additional packages are included via the <strong>\usepackage</strong> commands, which
+                  must be added prior to the the <strong>\begin{document}</strong> directive.
+                  <div style="padding:4px;border:thin solid black;">
+                     <br>
+                     <p><strong>Exercise 4:</strong> In one of your doucments, add a usage of   
+                     the <strong>\cfrac</strong> command. Note the error that occurs when you
+                     compile this. Add the <strong>\usepackage{amsmath}</strong> command in the
+                     right part of your document, and see that it resolves the error.
+                   
+                  </div>
                   
-                  <p>Create an "example" document project within Overleaf.</p>
+                  <br>
+                  
+
+
+                  <h3>How Will I Use This?</h3>
+                  <p> Depending on your level of interest, you can use environments like Overleaf in various
+                  ways:
+                  <ul>
+                  <li> Use the environment like
+                  one of the LaTeX equation editors we saw previously - allowing you to create more involved
+                  math snippets that can be captured and imported as images into other documents.</li>
+                  <li> Produce simple handouts that do not require extensive formatting, downloaded and distributed
+                  as pdf files </li>
+                  <li> Create complete well-formatted notes, quizzes, tests, and slidesshows using special packages
+                  and custom formatting. </li>
+                  </ul>
 
                   <h3>Useful Packages and Templates</h3>
                   <p>As a teacher, you may be tempted to use LaTeX to create assignments, tests, and other documents
                   that might require special formatting. There are several LaTeX classes and templates that have been
-                  created to help do this.
-                   
+                  created to help do this. A few places to look for these kinds of resources
+                  include:
+                  <ul>
+                  <li>Samuel S. Watson's <a href="http://math.mit.edu/~sswatson/latexforteachers.html">page about LaTeX for teachers</a>.</li>
+                  <li>The LaTeX Wikibook's <a href="">Teacher's Corner</a>.</li> 
+                  <li> Overleaf's <a href="https://www.overleaf.com/latex/templates/tagged/homework">templates for homework assignments</a>.</li>
+                  </ul>
                   </p>
                </div>
             </div>
@@ -154,7 +253,9 @@
                <div class="col-md-8">
                   <h2>Learn More</h2>
                   <p>
-                
+                  Did we mention that LaTeX is an established technology? At this point, you're ready to take a 
+                  look at a LaTeX overview from (gasp!) 1995: David R. Wilkins's <a href="https://www.maths.tcd.ie/~dwilkins/LaTeXPrimer/GSWLaTeX.pdf">Getting Started with LaTeX</a> covers
+                  many aspects of document setup and formatting not discussed in this workshop.  
                   </p>
                </div>
             </div>
@@ -169,19 +270,19 @@
                   <div class="form-check">
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                      <label class="form-check-label" for="defaultCheck1">
-                     item 1  
+                     I created a free account in Overleaf.
                      </label><br>
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
                      <label class="form-check-label" for="defaultCheck2">
-                     item 2 
+                     I created and modified simple LaTeX documents. 
                      </label><br>
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
                      <label class="form-check-label" for="defaultCheck3">
-                     item 3
+                     I explored some of the available templates for LaTeX documents.
                      </label><br>
                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
                      <label class="form-check-label" for="defaultCheck4">
-                     item 4 
+                     I looked at some LaTeX resources available for teachers. 
                      </label><br> 	
                   </div>
                   </p>
@@ -198,11 +299,22 @@
                     LaTeX/Installation. (2019, February 15). Wikibooks, The Free Textbook Project. Retrieved 02:23, March 20, 2019 from https://en.wikibooks.org/w/index.php?title=LaTeX/Installation&oldid=3516765.  
                    </p>
                    <p>
+                   Lees-Miller, J (2017). An Interactive Introduction to LaTeX. Slides. Retrieved on March 21 from:
+                        https://learn.sharelatex.com/learn/Free_online_introduction_to_LaTeX_(part_1)                   
+                   </p>
+                   <p>
                    Overleaf Inc. (2019). Overleaf Cloud-based LaTeX Document Preparation Software. Retrieved on March 18, 2019 from https://www.overleaf.com/about
                    </p>
                    <p>
                    SageMath, Inc. (2019). CoCalc Online LaTeX Editor Software. Retrieved on March 20 from https://cocalc.com/doc/latex-editor.html     
                    </p>
+
+                   <p>
+                   Watson, S.S. (2013). LaTeX Resources for Teachers, webpage. Retrieved March 7, 2019 from http://math.mit.edu/~sswatson/latexforteachers.html
+                   </p>
+                   <p>
+                   Wilkins, D.R., (1995). Getting Started with LaTeX. Webpage. Retrieved February 26, 2019 from https://www.maths.tcd.ie/~dwilkins/LaTeXPrimer/GSWLaTeX.pdf
+                  <p>
                </div>
             </div>
             <hr>

@@ -126,11 +126,11 @@ This single-page template is used for each learning module.
 		exponents, subscripts, radical signs... can you think of some others?</li>
 		<li> Have you used or read about languages used in computer programming? LaTeX is sometimes 
 		described as a <strong>descriptive markup language</strong>. Take a moment to look at the Wikipedia
-		entry on <a href="https://en.wikipedia.org/wiki/Markup_language">markup languages</a>. </li>
+		entry on <a href="https://en.wikipedia.org/wiki/Markup_language" target="_blank">markup languages</a>. </li>
        </ol>
 		</p>
-		<p> As you work through this module, you can use the  <a href = "./simpleLaTex.html">Simple Renderer</a> to test commands, and when
-		you feel like assessing how much you have learned, try the <a href="./quiz.htm"l>Command Quiz</a>.  
+		<p> As you work through this module, you can use the  <a href = "./simpleLaTeX.html">Simple Renderer</a> to test commands, and when
+		you feel like assessing how much you have learned, try the <a href="./quiz.html">Command Quiz</a>.  
 		</p>
    		<p> For each new command you learn, consider building the document that you started for <strong>Exercise 1</strong> in module 1. </p>
    		
@@ -143,20 +143,16 @@ This single-page template is used for each learning module.
         <h2>Essential Commands</h2>
        <p> In this document, we will describe commands assuming that you are using them within LaTeX's <strong>math mode</strong>.
        If you are writing an entire LaTeX document, you need to mark the beginning and end of this mode within your document. In 
-       many online environemnts and simple equation editors, you do not need to do this.  Additional details on marking
-	   math mode are provided in later modules. LaTeX features two modes for displaying math, <strong>inline</strong> for when 
-	   you use math notation directly in a paragraph, and <strong>displayed equation</strong> mode, where the math is separated
-	   from the text (similar to inline quotations and block quotes). These distinctions
-	   are not important for this module, but will be touched on later.
+       many online environemnts and simple equation editors, you do not need to do this.  Additional details on 
+	   math mode are provided module 4. 
        <h3> Two Important Characters </h3>
        <p>
        Because LaTeX is included directly in documents, there has to be some way to tell the difference between LaTeX commands and
        normal words within the document. This is what the <strong>backslash</strong> (\) accomplishes - most LaTeX commands are prefixed
-	   by the backslahs, which functions as an <a href="https://en.wikipedia.org/wiki/Escape_character">escape character</a>. If you ever need to
-	   type an actual backslash within a LaTeX document, you must type a double backslash (\\).
-	   <\p>
+	   by the backslahs, which functions as an <a href="https://en.wikipedia.org/wiki/Escape_character" target="_blank">escape character</a>. 
+	   </p>
 	   <p> Not all math commands require a backslash. Exponents are created using the carrot (^) and subscripts are created using the underscore(_)
-	   without being prefixed by a backslash. <\p>
+	   without being prefixed by a backslash. </p>
 	   <p> The following snippet shows the use of underscore, carrots and a command requiring backslash (\theta).
 <div class="dm-code">
 <pre>
@@ -170,7 +166,7 @@ This single-page template is used for each learning module.
 	   \[ \large{x_0 = \theta^2} \]	   
 	   </p>
 	   <p> The other special character(s) that you need to be aware of are the <strong>curly braces</strong> ({}). These are used to 
-	   block off a set of latex commands that need to be considered as one unit, or if values need to be provided to
+	   block off a set of LaTeX commands that need to be considered as one unit, or if values need to be provided to
 	   be included as part of another command. If you need to include curly braces as part of the displayed math, you 
 	   must prefix them with a backslash.
 		</p>
@@ -187,7 +183,8 @@ This single-page template is used for each learning module.
 	   Which is rendered by LaTeX as:
 	   \[ \large{e^{i\theta} = \cos(\theta) + i\sin(\theta)} \]	   
 	   </p>
-	   <p> This next example shows how to include curly braces in the displayed math.
+	   <p> This next example shows how to include curly braces in the displayed math by
+	   prefixing them with a backslash:
 <div class="dm-code">
 <pre>
 
@@ -196,16 +193,16 @@ This single-page template is used for each learning module.
 </pre> 
 </div>
 
-	   Which is rendered by LaTeX as:
+	   Rendered by LaTeX as:
 	   \[ \large{\{\theta \in \textbf{R} | -\pi \leq \theta \leq \pi \}} \]	   
 	   </p>
-	   
+	 <br>  
 	<h3> Finding the Right Command </h3>
 		<p> The above examples used many commands, like <strong>\theta</strong>, <strong>\pi</strong>, <strong>\leq</strong>, and others. There are commands 
 		for virtually every symbol and notation that you might need - some of them are obvious,
 		as is the case for the greek letters, and some are memorable, like <strong>\leq</strong> for "less than or equal to."
-		Generally, you will need to look up commands using a reference. A <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols">good listing</a> is available
-		at the <a href="https://oeis.org/">Online Encyclopedia of Integer Sequences (OEIS)</a> - an interesting site to check out, if
+		Generally, you will need to look up commands using a reference. A <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols" target="_blank">good listing</a> is available
+		at the <a href="https://oeis.org/" target="_blank">Online Encyclopedia of Integer Sequences (OEIS)</a> - an interesting site to check out, if
 		you have the time.
 		</p>
 		<p> Some commands, like <strong>\cos</strong> and <strong>\sin</strong> do not seem to do much - but they do let LaTeX know 
@@ -217,7 +214,7 @@ This single-page template is used for each learning module.
     
 	<h3> Fractions </h3>
 	<p>Fractions are difficult to write without the help of something like LaTeX, and also provide
-	a good example of a command that takes arguments or parameters. In this case, to write a fraction,
+	a good example of a command that requires parameters. In this case, to write a fraction,
 	we need to provide two values, the numerator and the denominator. We do this in LaTeX like this:
 <div class="dm-code">
 <pre>
@@ -279,7 +276,7 @@ This single-page template is used for each learning module.
 	   </p>	
 	<br>
 	
-	When a value is provided using square brackets, we can obtain other roots, for example:
+	When a value is provided using square brackets, we can display other roots, for example:
 <div class="dm-code">
 <pre>
 
@@ -352,7 +349,7 @@ This single-page template is used for each learning module.
 	\end{align}} \]	   
 
 	<p> A good overview of more advanced math formatting is provided by the 
-	<a href= "https://en.wikibooks.org/wiki/LaTeX/Mathematics">LaTeX Wikibook</a>.
+	<a href= "https://en.wikibooks.org/wiki/LaTeX/Mathematics" target="_blank">LaTeX Wikibook</a>.
 
 	</div>
     </div>
@@ -367,11 +364,11 @@ This single-page template is used for each learning module.
        Try out each of the examples above using the <a href="./simpleLaTeX.html">Simple LaTeX Renderer</a>. Experiment by
        changing each example.	   
        </li>
-       <li> Look over the commands listed on the <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols"> OEIS wiki</a>. Choose some that you think
+       <li> Look over the commands listed on the <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols" target="_blank"> OEIS wiki</a>. Choose some that you think
        you might want to use and <a href="./simpleLaTeX.html">test them out</a>.
 	   </li>
 	   <li> Give the <a href="./quiz.html">Command Quiz</a> a try.</li>
-	   <li> Review the page on Mathematics notation in the <a href= "https://en.wikibooks.org/wiki/LaTeX/Mathematics">LaTeX Wikibook</a>.
+	   <li> Review the page on Mathematics notation in the <a href= "https://en.wikibooks.org/wiki/LaTeX/Mathematics" target="_blank">LaTeX Wikibook</a>.
 	   </ul>	
     </div>
     </div>	
@@ -414,16 +411,24 @@ This single-page template is used for each learning module.
       <div class="col-md-8">
         <h2>References</h2>
         <p> Forgues, D. and other OEIS contributors. (2013,2019). List of LaTeX mathematical symbols.
-        from OIES Wiki. Retrieved March 17, 2019 from https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
+        from OIES Wiki. Retrieved March 17, 2019 from 
+        <a href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols" target="_blank">
+		https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols</a>
         </p>
         <p>
-        Wikipedia contributors. (2019, March 7). Markup language. In Wikipedia, The Free Encyclopedia. Retrieved 19:13, March 17, 2019, from https://en.wikipedia.org/w/index.php?title=Markup_language&oldid=886646213
+        Wikipedia contributors. (2019, March 7). Markup language. In Wikipedia, The Free Encyclopedia. Retrieved 19:13, March 17, 2019, from 
+        <a href="https://en.wikipedia.org/w/index.php?title=Markup_language&oldid=886646213" target="_blank">
+        https://en.wikipedia.org/w/index.php?title=Markup_language&oldid=886646213</a>
         </p>
         <p>
-        LaTeX Project. (2019) <em>An introduction to LaTeX</em>. Webpage. Retrieved February 27, 2019 from https://www.latex-project.org/about/
+        LaTeX Project. (2019) <em>An introduction to LaTeX</em>. Webpage. Retrieved February 27, 2019 from 
+        <a href="https://www.latex-project.org/about/" target="_blank">https://www.latex-project.org/about/</a>
+
         </p>
         <p>
-        LaTeX/Introduction. (2019, February 4). Wikibooks, The Free Textbook Project. Retrieved March 15, 2019 from https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336.
+        LaTeX/Introduction. (2019, February 4). Wikibooks, The Free Textbook Project. Retrieved March 15, 2019 from 
+        <a href= "https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336" target="_blank">
+        https://en.wikibooks.org/w/index.php?title=LaTeX/Introduction&oldid=3514336</a>.
         </p>
 
        </div>

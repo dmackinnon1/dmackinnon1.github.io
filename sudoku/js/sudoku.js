@@ -358,15 +358,17 @@ class Board {
                 if (this.n == 9 && (j == 2 || j == 5)) {
                     html += " style='border-right:3px solid #000000'";
                 }
-                html += "><button data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"
+                let style = "style='height:35px; width:35px; padding-top:5px; ";
+                html += "><div data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"
                 if (!this.cells[j][i].editable) {
-                    html += " style='background-color:darkgrey;'";
+                    style += " background-color:lightgrey;";
                 } else if ((this.cells[j][i].valence() == 1 && this.cells[j][i].value == 0) && this.hints) {
-                    html += " style='background-color:lightgreen;'"
+                    style += " background-color:lightgreen;"
                 } else if ((!this.cells[j][i].valid && this.cells[j][i].editable) && this.hints) {
-                    html += " style='background-color:pink;'"
+                    style += " background-color:pink;";
                 }
-                html += ">" + this.cells[j][i].value + "</button></td>";
+                style += "'";
+                html += style + ">" + this.cells[j][i].value + "</div></td>";
             }
             html += "</tr>"
         }

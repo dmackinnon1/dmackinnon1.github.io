@@ -358,7 +358,7 @@ class Board {
                 if (this.n == 9 && (j == 2 || j == 5)) {
                     html += " style='border-right:3px solid #000000'";
                 }
-                let style = "style='height:35px; width:35px; padding-top:5px; ";
+                let style = "style='height:30px; width:30px; padding-top:3px; ";
                 html += "><div data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"
                 if (!this.cells[j][i].editable) {
                     style += " background-color:lightgrey;";

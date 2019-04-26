@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <title>Sudoku</title>
+   </head>
+   <style>
+      table, th, td {
+      padding: 4px;
+      text-align: center;
+      border: 1px solid black;
+      border-collapse: collapse; 
+      }
+      svg {
+      display: block; 
+      margin: auto ;
+      border: 1px solid black;
+      }
+      .centered {
+      text-align: center;
+      }
+   </style>
+   <script src="js/evnts.js"></script>
+   <script src="js/sudoku.js"></script>
+   <script>
+      //declare variables
+      let board = null;
+      let showHints = true;
+      
+      //register event
+      evnts.addCallback("positionUpdate", function(){
+      	board.updateFromCurrentPosition();
+      	refresh();
+      });
+      	
+      //define display functions
+      function refresh(){
+      	//refresh
+      	board.hints = showHints;
+      	$("#boardDisplay").html(board.drawBoard());
+      	let bValid = board.isValid();
+      	if (bValid){
+      		$("#boardValid").html("<h3>Board is Valid.</h3>");
+      	} else {
+      		$("#boardValid").html("<h3>Board is Not Valid.</h3>");
+      	}
+      	let bComplete = board.isComplete();
+      	if (bComplete){
+      		$("#boardComplete").html("<h3>Board is Complete.</h3>");
+      	} else {
+      		$("#boardComplete").html("<h3>Board is Not Complete.</h3>");
+      	}
+      }
+      
+      function reset(){
+      	board = new Generator().large();
+      	refresh();
+      }
+      
+      
+      //initialize board, register hint updater 
+      $(document).ready(function(){
+      	reset();
+      	$(".checkbox").on('click',function(e){
+      		let hints = $('#hint:checked').val();
+      		if (hints == 'yes') {
+      			showHints = true;
+      		} else {
+      			showHints = false;
+      		}
+      		refresh();
+      	});
+      });
+      
+   </script>
+   <body>
+      <nav class="navbar navbar-default" style="margin-bottom:0px">
+         <div class="container-fluid">
+            <div class="navbar-header">
+               <a class="navbar-brand" href="..">
+               <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+               </a>
+               <p class="navbar-text navbar-right">
+                  <a href=".." class="navbar-link">dmackinnon1.github.io</a>
+               </p>
+            </div>
+         </div>
+      </nav>
+      <br>
+      </div>
+      <div class="container-fluid">
+      <div class='row'>
+      <div class='col-sm-1'></div>
+      <div class='col-sm-10'>
+         <div class="page-header">
+            <h1>SUDOKU</h1>
+            <p> <strong>Sudoku</strong> puzzles require you to place the digits 1 through 9 in cells so that each
+               digit appears only once in each row, only once in each column, and only once in each
+               3x3 boxed area. 
+            <p>
+            <p>On this page, cells with value zero are empty - your goal is to replace
+               all of the empty (zero) cells with valid numbers. Click on a light-grey cell to cycle through the digit values.
+            </p>
+            <p> In the board below, if <strong>hints</strong> are turned on, then all cells that only
+               have one possible value are highlighted in <strong>green</strong>, while rows that have an invalid
+               values are highlighted in <strong>red</strong>. Note that the hints are updated based on the
+               values that you have entered, not based on the actual solution. 
+            </p>
+         </div>
+         <button id="newPuzzle" onClick="reset()" class="btn btn-default">New Puzzle</button>
+         <form>
+            <div class="checkbox">
+               <label><input id="hint" type="checkbox" value="yes" checked>show hints</label>
+            </div>
+         </form>
+         <hr>
+         <h3>
+            <div id="boardDisplay" style="text-align=center"></div>
+         </h3>
+         <hr>
+         <div id="boardValid" style="text-align=center"></div>
+         <div id="boardComplete" style="text-align=center"></div>
+         <br>
+      </div>
+      <div class='col-sm-1'></div>
+   </body>
+</html>

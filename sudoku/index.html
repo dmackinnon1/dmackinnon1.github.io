@@ -48,11 +48,14 @@
       	} else {
       		$("#boardValid").html("<h3>Board is Not Valid.</h3>");
       	}
+      	if (!showHints){
+      	      $("#boardValid").html("");
+      	}
       	let bComplete = board.isComplete();
-      	if (bComplete){
-      		$("#boardComplete").html("<h3>Board is Complete.</h3>");
+      	if (bComplete && bValid){
+      		$("#boardComplete").html("<h2 style='color:blue'>Solved!</h2>");
       	} else {
-      		$("#boardComplete").html("<h3>Board is Not Complete.</h3>");
+      		$("#boardComplete").html(" ");
       	}
       }
       
@@ -98,15 +101,20 @@
       <div class='col-sm-10'>
          <div class="page-header">
             <h1>SUDOKU</h1>
-            <p> <strong>Sudoku</strong> puzzles require you to place the digits 1 through 9 in cells so that each
-               digit appears only once in each row, only once in each column, and only once in each
-               3x3 boxed area. 
+            <p> <strong>Sudoku</strong> puzzles require you 
+               complete a grid of numbers by placing digits 
+               in available cells so that each
+               digit appears only once in each row, column, and
+               boxed area. In small Sudoku, the digits 1-4 are used to fill a 4x4 grid,
+               and in regular Sudoku the digits 1-9 are used to fill a 9x9 grid.  
             <p>
-            <p>On this page, cells with value zero are empty - your goal is to replace
-               all of the empty (zero) cells with valid numbers. Click on a light-grey cell to cycle through the digit values.
+            <p>On this page, cells with value zero are available - your goal is to replace
+               each zero with a valid digit. The grey cells are the fixed initial values of
+               the grid and cannot be changed.
             </p>
             <p> In the board below, if <strong>hints</strong> are turned on, then all cells that only
-               have one possible value are highlighted in <strong>green</strong>, while rows that have an invalid
+               have one possible value are highlighted in <strong>green</strong>, while rows that have 
+               conflicting 
                values are highlighted in <strong>red</strong>. Note that the hints are updated based on the
                values that you have entered, not based on the actual solution. 
             </p>

@@ -16,7 +16,7 @@ class Generator {
      * with cells with valence 1-3.
      */
     small() {
-        return this.validatedBoard(4, 3);
+        return this.validatedBoard(4, 4);
     }
 
 

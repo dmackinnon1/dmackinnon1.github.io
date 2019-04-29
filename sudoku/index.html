@@ -29,7 +29,7 @@
    <script>
       //declare variables
       let board = null;
-      let showHints = true;
+      let showHints = false;
       
       //register event
       evnts.addCallback("positionUpdate", function(){
@@ -59,15 +59,22 @@
       	}
       }
       
-      function reset(){
+      function resetLarge(){
       	board = new Generator().large();
       	refresh();
       }
-      
+
+      function resetSmall(){
+      	board = new Generator().small();
+      	refresh();
+      }
       
       //initialize board, register hint updater 
       $(document).ready(function(){
-      	reset();
+      	
+      	//star regular
+      	resetLarge();
+      	
       	$(".checkbox").on('click',function(e){
       		let hints = $('#hint:checked').val();
       		if (hints == 'yes') {
@@ -119,10 +126,14 @@
                values that you have entered, not based on the actual solution. 
             </p>
          </div>
-         <button id="newPuzzle" onClick="reset()" class="btn btn-default">New Puzzle</button>
+         <div class="btn-group" role="group">
+            <button type="button" onClick="resetSmall()" class="btn btn-secondary">New Small</button>
+            <button type="button" onClick="resetLarge()"class="btn btn-secondary">New Regular</button>
+         </div>
          <form>
             <div class="checkbox">
-               <label><input id="hint" type="checkbox" value="yes" checked>show hints</label>
+               <label><input id="hint" type="checkbox" value="yes" >show hints</label> 
+               <!-- add checked attribte to check by default -->
             </div>
          </form>
          <hr>

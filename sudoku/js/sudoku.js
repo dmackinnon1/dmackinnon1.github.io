@@ -55,7 +55,16 @@ class Generator {
     }
 
 }
-
+/*
+* A Cell represents one element in the Sudoku grid.
+* A Cell has a value (digit) and may or may not be editable.
+* In this implementation, empty cells are given value = 0;
+*
+* A Cell is aware of its row, colunm, and block. By looking
+* at the values in companion cells, we can determine if a
+* cell is valid, or how many possible values it can have 
+* (referred to here as its "valence").
+*/
 class Cell {
     constructor(x, y, b, v, brd) {
         this.column = x;
@@ -141,6 +150,9 @@ class Cell {
 
 }
 
+/*
+* Rows, Columns, and Blocks of Cells are modeled as Cell Groups.
+*/
 class Group {
     constructor(t, l) {
         this.type = t;
@@ -156,6 +168,25 @@ class Group {
     }
 }
 
+/*
+* The Board is an aggregate of Cells. The Board
+* must be initialized (filled with zeroed cells).
+* The Board can generate HTML to draw itself 
+* via the drawBoard() function.
+* 
+* There is a simple solving algorithm built into the
+* Board that looks for single-valence cells and completes
+* them until finished. If this method works, the 
+* puzzle associated with the board has a unique solution.
+* A board is solved using the solve() method. To test if 
+* a board can be solved, the canSolve() will clone the 
+* board and run the solve algorithm.
+*
+* An initial puzzle can be created using the Solver class,
+* which uses random guesses and recursion to solve, rather
+* than only filling in valence 1 cells.
+* 
+*/
 class Board {
     constructor(size) {
         this.n = size;
@@ -222,6 +253,15 @@ class Board {
                 col.push(cell);
             }
             this.cells.push(col);
+        }
+    }
+
+    reset() {
+        let all = this.allCells();
+        for (let c in all){
+            if (all[c].editable){
+                all[c].value = 0;
+            }
         }
     }
 
@@ -338,7 +378,7 @@ class Board {
         return complete;
 
     }
-
+    //Todo: extract styles into css classes
     drawBoard() {
         let html = "<table>"
         for (let i = 0; i < this.n; i++) {
@@ -358,17 +398,42 @@ class Board {
                 if (this.n == 9 && (j == 2 || j == 5)) {
                     html += " style='border-right:3px solid #000000'";
                 }
+                let value = this.cells[j][i].value;
+                let edit = this.cells[j][i].editable;
+                let valid = this.cells[j][i].valid;
+                let valence = this.cells[j][i].valence();
+
                 let style = "style='height:30px; width:30px; padding-top:3px; ";
                 html += "><div data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"
-                if (!this.cells[j][i].editable) {
+                
+                if (!edit) {
                     style += " background-color:lightgrey;";
-                } else if ((this.cells[j][i].valence() == 1 && this.cells[j][i].value == 0) && this.hints) {
-                    style += " background-color:lightgreen;"
-                } else if ((!this.cells[j][i].valid && this.cells[j][i].editable) && this.hints) {
-                    style += " background-color:pink;";
-                }
+                
+                } else if (!this.hints){
+                    if (value == 0){
+                       style += " background-color:white;color:white"  
+                    }
+                } else { 
+                    if (!valid){
+                        style += " background-color:pink;"    
+                    } else if (valence == 1){
+                        style += " background-color:lightgreen;"
+                    } else {
+                        style += " background-color:white;"
+                    }
+                    if (value ==0) {
+                        if (!valid){
+                           style += "color:pink;"    
+                        } else if (valence == 1){
+                            style += "color:lightgreen;"
+                        } else {
+                            style += "color:white;"
+                        }
+                    }
+                }    
+                
                 style += "'";
-                html += style + ">" + this.cells[j][i].value + "</div></td>";
+                html += style + "><p>" + this.cells[j][i].value + "</p></div></td>";
             }
             html += "</tr>"
         }
@@ -442,7 +507,6 @@ class Board {
      */
     solve() {
         while (!this.isComplete()) {
-
             let cell = this.getValenceOne();
             if (cell == undefined) {
                 console.log("could not find valence 1 cell");
@@ -464,6 +528,23 @@ class Board {
         test.cloneFrom(this);
         test.solve();
         return test.isComplete();
+    }
+
+    freeze(){
+        let all = this.allCells();
+        for (let c in all){
+                all[c].editable = false;
+        }
+    }
+
+    solution(){
+        let solution = new Board(this.n);
+        solution.init();
+        solution.cloneFrom(this);
+        solution.reset();
+        solution.solve();
+        solution.freeze();
+        return solution;
     }
 
     updateFromCurrentPosition() {
@@ -516,12 +597,17 @@ class Move {
 
 /*
  * Takes an initialized board and solves it.
- * Can be used to generate completed boards that are
+ * 
+ * Currently, is used to generate completed boards that are
  * then re-opened to create puzzles.
  * let b = new Board(4);
  * b.init();
  * let s = new Solver(b); 
  * s.solve();
+ *
+ * To do: adapt the behavior to skip over non-editable cells
+ * to allow this class to solve partially completed boards (i.e. a general
+ * Sudoku solver).
  */
 
 class Solver {
@@ -572,6 +658,7 @@ class Solver {
 
 }
 
+// When clicked, the board will update the currentPosition variable.
 function buttonClicked(e) {
     let r = e.currentTarget.getAttribute("data-row");
     let c = e.currentTarget.getAttribute("data-column");
@@ -579,6 +666,9 @@ function buttonClicked(e) {
     evnts.fireEvent("positionUpdate");
 }
 
+/*
+* Utility functions.
+*/
 
 function swapTwo(array) {
     let narray = [...array];

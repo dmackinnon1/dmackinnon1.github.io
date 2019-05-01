@@ -43,15 +43,7 @@
       	board.hints = showHints;
       	$("#boardDisplay").html(board.drawBoard());
       	let bValid = board.isValid();
-      	if (bValid){
-      		$("#boardValid").html("<h3>Board is Valid.</h3>");
-      	} else {
-      		$("#boardValid").html("<h3>Board is Not Valid.</h3>");
-      	}
-      	if (!showHints){
-      	      $("#boardValid").html("");
-      	}
-      	let bComplete = board.isComplete();
+       	let bComplete = board.isComplete();
       	if (bComplete && bValid){
       		$("#boardComplete").html("<h2 style='color:blue'>Solved!</h2>");
       	} else {
@@ -67,6 +59,20 @@
       function resetSmall(){
       	board = new Generator().small();
       	refresh();
+      }
+
+      function resetBoard() {
+            board.reset();
+            refresh();
+      }
+
+      function showSolution(){
+         let text = "<p>Solution:</p>";   
+         $("#solutionDisplay").html(text + board.solution().drawBoard());
+      }
+
+      function hideSolution(){
+          $("#solutionDisplay").html("");  
       }
       
       //initialize board, register hint updater 
@@ -115,12 +121,12 @@
                boxed area. In small Sudoku, the digits 1-4 are used to fill a 4x4 grid,
                and in regular Sudoku the digits 1-9 are used to fill a 9x9 grid.  
             <p>
-            <p>On this page, cells with value zero are available - your goal is to replace
-               each zero with a valid digit. The grey cells are the fixed initial values of
-               the grid and cannot be changed.
+            <p>On this page, blank white cells are available - your goal is to fill in each blank 
+            with a valid digit. The grey cells are the fixed initial values of
+            the grid and cannot be changed.
             </p>
             <p> In the board below, if <strong>hints</strong> are turned on, then all cells that only
-               have one possible value are highlighted in <strong>green</strong>, while rows that have 
+               have one possible value are highlighted in <strong>green</strong>, while cells that have 
                conflicting 
                values are highlighted in <strong>red</strong>. Note that the hints are updated based on the
                values that you have entered, not based on the actual solution. 
@@ -137,13 +143,19 @@
             </div>
          </form>
          <hr>
+         <div id="boardComplete" style="text-align=center"></div>
          <h3>
             <div id="boardDisplay" style="text-align=center"></div>
+         </h3>       
+         <hr>  
+         <div class="btn-group" role="group">
+            <button type="button" onClick="resetBoard()" class="btn btn-secondary">Reset</button>
+            <button type="button" onClick="showSolution()"class="btn btn-secondary">Show Solution</button>
+            <button type="button" onClick="hideSolution()"class="btn btn-secondary">Hide Solution</button>
+         </div>
+         <h3>
+            <div id="solutionDisplay" style="text-align=center"></div>
          </h3>
-         <hr>
-         <div id="boardValid" style="text-align=center"></div>
-         <div id="boardComplete" style="text-align=center"></div>
-         <br>
       </div>
       <div class='col-sm-1'></div>
    </body>

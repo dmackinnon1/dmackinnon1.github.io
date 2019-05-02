@@ -1,9 +1,20 @@
-let currentPosition = null;
+/*
+* Cell, Group, and Board are the main classes that model the
+* Sudoku puzzle. 
+*
+* Valid puzzles are created using the Generator class.
+* The Generator uses an instance of Solver to create the puzzle from
+* a blank board, and verifies that it is solvable using
+* methods provided by the Board class.
+*
+* Interaction is facilitated by callbacks and events that
+* update the currentPosition variable.
+*/
 
 
 /*
  * Generates boards of different sizes.
- * Diffic	ulty can be varied through the "openLevel" parameter
+ * Difficulty can be varied through the "openLevel" parameter
  * which determines the maximum valency (number of possible values)
  * of the cells. The higher the maximum valency, the more open 
  * spaces there are, and the more options there can be for some
@@ -19,13 +30,12 @@ class Generator {
         return this.validatedBoard(4, 4);
     }
 
-
     /*
      * Large boards are 9x9. Currently returns boards
      * with cells with valence 1-5.
      */
     large() {
-        return this.validatedBoard(9, 5);
+        return this.validatedBoard(9, 6);
     }
 
     validatedBoard(size, openLevel) {
@@ -34,6 +44,7 @@ class Generator {
             console.log("could not solve generated board, getting new one");
             b = this.openedBoard(size, openLevel);
         }
+        b.freezeNonZero();
         return b;
     }
 
@@ -189,7 +200,7 @@ class Group {
 */
 class Board {
     constructor(size) {
-        this.n = size;
+        this.n = size; // only size 4 and 9 are valid.
         this.available = [];
         this.rows = [];
         this.columns = [];
@@ -211,7 +222,6 @@ class Board {
                 let row = this.rows[j];
                 let column = this.columns[i];
                 let block = null;
-                //hardcode for n = 4 - will figure out algorithm
                 if (this.n == 4) {
                     if (i < 2 && j < 2) {
                         block = this.blocks[0];
@@ -378,62 +388,78 @@ class Board {
         return complete;
 
     }
-    //Todo: extract styles into css classes
+
+    consoleDisplay(){
+        for (let i = 0; i < this.n; i ++){
+            let row = "|";
+            for (let j = 0; j < this.n; j ++){
+                row += this.cells[j][i].value;
+                row += "|"
+            }
+            console.log(row);
+        }
+    }
+
     drawBoard() {
         let html = "<table>"
         for (let i = 0; i < this.n; i++) {
+            //row drawing and style (tr)
             html += "<tr";
             if (this.n == 4 && i == 1) {
-                html += " style='border-bottom:3px solid #000000'";
+                html += " class='tr-sudoku-border-bottom'";
             }
             if (this.n == 9 && (i == 2 || i == 5)) {
-                html += " style='border-bottom:3px solid #000000'";
+                html += " class='tr-sudoku-border-bottom'";;
             }
             html += ">";
             for (let j = 0; j < this.n; j++) {
+                //entry drawing and style (td)
+                let td_class = " class='";
                 html += "<td";
                 if (this.n == 4 && j == 1) {
-                    html += " style='border-right:3px solid #000000'";
+                    td_class += "td-sudoku-border-right "; 
                 }
                 if (this.n == 9 && (j == 2 || j == 5)) {
-                    html += " style='border-right:3px solid #000000'";
+                    td_class += "td-sudoku-border-right ";
                 }
+                td_class += "'";
+                html += td_class;
+                //inner cell draw and style (div)
                 let value = this.cells[j][i].value;
                 let edit = this.cells[j][i].editable;
                 let valid = this.cells[j][i].valid;
                 let valence = this.cells[j][i].valence();
-
-                let style = "style='height:30px; width:30px; padding-top:3px; ";
-                html += "><div data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"
-                
+                let cell_class = " class='cell-sudoku ";
+                html += "><div data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"                
                 if (!edit) {
-                    style += " background-color:lightgrey;";
-                
+                    cell_class += "cell-sudoku-noedit ";                
                 } else if (!this.hints){
                     if (value == 0){
-                       style += " background-color:white;color:white"  
+                       cell_class += "cell-sudoku-edit-zero ";  
+                    } else{
+                        cell_class += "cell-sudoku-edit";
                     }
                 } else { 
                     if (!valid){
-                        style += " background-color:pink;"    
+                        cell_class += "cell-sudoku-error "    
                     } else if (valence == 1){
-                        style += " background-color:lightgreen;"
+                        cell_class += "cell-sudoku-hint ";
                     } else {
-                        style += " background-color:white;"
+                        cell_class += "cell-sudoku-edit ";
                     }
-                    if (value ==0) {
+                    if (value == 0) {
                         if (!valid){
-                           style += "color:pink;"    
+                           cell_class += "cell-sudoku-error-zero "    
                         } else if (valence == 1){
-                            style += "color:lightgreen;"
+                            cell_class += "cell-sudoku-hint-zero "
                         } else {
-                            style += "color:white;"
+                            cell_class += "cell-sudoku-edit-zero "
                         }
                     }
                 }    
                 
-                style += "'";
-                html += style + "><p>" + this.cells[j][i].value + "</p></div></td>";
+                cell_class += "'";
+                html += cell_class + "><p>" + this.cells[j][i].value + "</p></div></td>";
             }
             html += "</tr>"
         }
@@ -537,6 +563,15 @@ class Board {
         }
     }
 
+    freezeNonZero(){       
+        let all = this.allCells();
+        for (let c in all){
+            if (all[c].value != 0){
+                all[c].editable = false;
+            }
+        }
+    }
+
     solution(){
         let solution = new Board(this.n);
         solution.init();
@@ -552,6 +587,23 @@ class Board {
         if (!cell.editable) return;
         cell.updateValue((cell.value + 1) % (board.n + 1));
     }
+}
+
+/*
+* The currentPositon variable, buttonClicked() function, and Position class 
+* are used to interact with the generated board. It relies on the 
+* display logic to regester with the 'positionUpdate' event.
+* In particular, the board instance needs to be invoked with
+* updateFromCurrentPosition() as part of the postionUpdate event flow.
+*/
+
+let currentPosition = null;
+
+function buttonClicked(e) {
+    let r = e.currentTarget.getAttribute("data-row");
+    let c = e.currentTarget.getAttribute("data-column");
+    currentPosition = new Position(c, r);
+    evnts.fireEvent("positionUpdate");
 }
 
 class Position {
@@ -574,23 +626,41 @@ class Move {
     }
 
     reset() {
-        this.cell.value = 0;
-        this.cell.editable = true;
+        if (this.cell.editable){
+            this.cell.value = 0;
+        }
     }
 
     options() {
         return this.cell.optionList().filter(x => !this.exclude.includes(x));
-    }
+    }    
 
+    /*
+    * An editiable cell can be moved if it has options available,
+    * A non-editable cell can be moved only if it has not been 
+    * visited as part of the current attempt.
+    */
     canMove() {
-        return this.options().length != 0;
+        if (this.cell.editable){
+            return this.options().length != 0;
+        } else {
+            return this.exclude.length == 0;
+        }        
     }
 
+    /*
+    * If a cell is editable, take one of the not previously used
+    * options. If a cell is not editable, use the only value available,
+    * and count it as excluded for the next time.
+    */
     move() {
-        let v = randomElement(this.options());
-        this.cell.value = v;
-        this.cell.editable = false;
-        this.exclude.push(v);
+        if (this.cell.editable) {
+            let v = randomElement(this.options());
+            this.cell.value = v;
+            this.exclude.push(v);
+        } else {
+            this.exclude.push(this.cell.value);
+        }
     }
 
 }
@@ -605,17 +675,20 @@ class Move {
  * let s = new Solver(b); 
  * s.solve();
  *
- * To do: adapt the behavior to skip over non-editable cells
- * to allow this class to solve partially completed boards (i.e. a general
- * Sudoku solver).
+ * The solving logic is in the Move class - a random digit is chosen
+ * from the values currently available to the cell.
+ * The recusive backtracking is done in the Solver class,
+ * if the random choice at a given level leads to a dead end, it
+ * backs up to the previous move and tries again.
  */
 
+//Todo: fix issues with solver so it can operate on partial boards.
 class Solver {
     constructor(b) {
         this.board = b;
         this.index = 0;
         this.moves = [];
-        this.cells = this.board.allCells();
+        this.cells = this.board.allCells().sort(cellComp);
     }
 
     forward() {
@@ -657,14 +730,7 @@ class Solver {
     }
 
 }
-
-// When clicked, the board will update the currentPosition variable.
-function buttonClicked(e) {
-    let r = e.currentTarget.getAttribute("data-row");
-    let c = e.currentTarget.getAttribute("data-column");
-    currentPosition = new Position(c, r);
-    evnts.fireEvent("positionUpdate");
-}
+// end solver classes.
 
 /*
 * Utility functions.
@@ -700,4 +766,21 @@ function baseList(n) {
 function randomElement(l) {
     let index = Math.floor(Math.random() * l.length);
     return l[index];
+}
+
+
+//uses general solver on a partially complete board;
+function runFullSolveTest(){
+    console.log("Beginning board generation -> ignore preliminary solver failures");
+    let board = new Generator().large();
+    board.consoleDisplay();
+    console.log("Solving provided board -> no failures expected");
+    let solver = new Solver(board);;
+    console.log(solver.solve());
+    board.consoleDisplay();
+    console.log("end test");    
+}
+
+function cellComp(a,b){
+    return a.valence() - b.valence();
 }

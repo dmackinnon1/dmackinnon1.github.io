@@ -83,17 +83,19 @@
       
       function resetLarge(){
       	board = new Generator().large();
+      	hideSolution();
       	refresh();
       }
 
       function resetSmall(){
       	board = new Generator().small();
+      	hideSolution();
       	refresh();
       }
 
       function resetBoard() {
-            board.reset();
-            refresh();
+         board.reset();
+         refresh();
       }
 
       function showSolution(){

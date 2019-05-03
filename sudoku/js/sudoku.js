@@ -353,6 +353,16 @@ class Board {
         this.cells[i][j].editable = true;
     }
 
+    openValenceOne(){
+        let cell = this.getValenceOne();
+        if (cell != undefined){
+            let target = cell.getCompanions().filter(x => x.value != 0)[0];
+            target.value = 0;
+            target.editable = true;
+        }
+    }
+
+
     openToValence(k) {
         while (this.maxValence() < k) {
             this.randomOpen();
@@ -477,6 +487,10 @@ class Board {
                 }
             }
         }
+    }
+
+    getAllValence(v){
+        return this.allCells().filter(x => x.valence == v);
     }
 
     getValenceZero() {

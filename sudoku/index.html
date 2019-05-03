@@ -83,12 +83,16 @@
       
       function resetLarge(){
       	board = new Generator().large();
+
+      	new Stats(board).print();
       	hideSolution();
       	refresh();
       }
 
       function resetSmall(){
       	board = new Generator().small();
+	     
+	    new Stats(board).print();
       	hideSolution();
       	refresh();
       }
@@ -122,7 +126,6 @@
       		}
       		refresh();
       	});
-      	//runFullSolveTest();
       });
 
    </script>

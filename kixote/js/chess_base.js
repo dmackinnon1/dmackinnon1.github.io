@@ -256,6 +256,17 @@ class Cell {
 		return false;
 	}
 	
+	isLeastNeighborOffPath(cell, path) {
+		if (! this.isNeighbor(cell)) return false;
+		let l = 100; //absurdly high number :)
+		let n = cell.neighbors().filter(x => !path.contains(x));
+		for (let c in n){
+			let t = parseInt(n[c].decoration);
+			if (t <= l) l = t;
+		}
+		return parseInt(this.decoration) === l;
+	}
+	
 	degree(){
 		return this.neighbors().length;
 	}
@@ -512,13 +523,14 @@ function randomInt(lessThan){
 };
 
 
-function svgMap(path) {
+function svgMap(path, size=8) {
 	var svg = new Bldr("svg");
-	svg.att("align", "center").att("width","240").att("height","240");
+	let width = size*30;
+	svg.att("align", "center").att("width",width).att("height",width);
 	svg.att("style","display:block");
 	//first the board
-	for (var i = 0; i < 8; i++) {
-		for (var j = 0; j < 8; j ++) {
+	for (var i = 0; i < size; i++) {
+		for (var j = 0; j < size; j ++) {
 			var x = i*30;
 			var y = j*30;
 			if (i%2==0 && j%2==0){

@@ -7,12 +7,13 @@
 */
 class Tourist {
 	
-	constructor() {
-		this.board = new Board(8,8);
+	constructor(size = 8) {
+		this.board = new Board(size,size);
 		this.board.init();
 		this.path = new Path(this.board, this.board.randomStart());
 		this.wrong = [];
 		this.backtracks = 0;
+		this.size = size;
 	}
 
 	toString(){
@@ -46,19 +47,35 @@ class Tourist {
 		this.colourCells();
 		gameDisplay.statusMessage = "";
 		gameDisplay.backtracks = new Bldr("h3").att("align","center").text("backtracks: " + 0).build();
-		gameDisplay.map = svgMap(this.path.cells);
+		gameDisplay.map = svgMap(this.path.cells, this.size);
 		evnts.fireEvent("refreshStatus");
 		evnts.fireEvent("refreshSteps");
 		evnts.fireEvent("refreshMap");
 	}
+	
 
 	colourCells(){
+
+		this.updateCellDegrees();
+		this.updateColours();
+	}
+
+	updateCellDegrees(){
+		var current = this.path.tail();	
+		for (var i = 0; i < this.board.rowNum; i++) {
+			for (var j = 0; j < this.board.colNum; j++) {
+				var cell = this.board.cells[i][j];		
+				cell.decoration = this.path.freeDegree(cell);	
+			}
+		}	
+	}
+
+	updateColours(){
 		var current = this.path.tail();	
 		for (var i = 0; i < this.board.rowNum; i++) {
 			for (var j = 0; j < this.board.colNum; j++) {
 				var cell = this.board.cells[i][j];
 				var div = getDiv(i, j);
-				cell.decoration = this.path.freeDegree(cell);
 				if (!cell.isEqual(current)) {
 					if (this.path.contains(cell)) {
 						div.html(checkGlyph(i,j));
@@ -66,7 +83,10 @@ class Tourist {
 						div.html(cell.decoration);
 					}
 				}
-				if (cell.isNeighbor(current) && !this.path.contains(cell)){
+				if (cell.isLeastNeighborOffPath(current, this.path) && !this.path.contains(cell)){
+					div.css("color","white");
+					div.css("background","darkgreen");
+				} else if (cell.isNeighbor(current) && !this.path.contains(cell)){
 					div.css("color","#004d00");
 					div.css("background","#99ff99");					
 				} else if (cell.isEqual(current)) {
@@ -104,7 +124,7 @@ class Tourist {
 		this.backtracks ++;	
 		
 		this.colourCells();
-		gameDisplay.map = svgMap(this.path.cells);
+		gameDisplay.map = svgMap(this.path.cells, this.size);
 		evnts.fireEvent("refreshMap");
 
 		gameDisplay.statusMessage = ""; 
@@ -138,7 +158,7 @@ class Tourist {
 		
 		parentTarget.innerHTML = cellTypeGlyph(i,j);
 		this.colourCells();
-		gameDisplay.map = svgMap(this.path.cells);
+		gameDisplay.map = svgMap(this.path.cells, this.size);
 		evnts.fireEvent("refreshMap");
 	
 		if (this.getIsDone()){
@@ -155,7 +175,7 @@ class Tourist {
 	}
 	
 	getIsDone() {
-		return this.path.cells.length === 8*8;
+		return this.path.cells.length === this.size*this.size;
 	}			
 		
 };

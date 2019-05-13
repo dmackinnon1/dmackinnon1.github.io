@@ -199,7 +199,7 @@ class Group {
 * 
 */
 class Board {
-    constructor(size) {
+    constructor(size, name='default') {
         this.n = size; // only size 4 and 9 are valid.
         this.available = [];
         this.rows = [];
@@ -207,6 +207,7 @@ class Board {
         this.blocks = [];
         this.cells = [];
         this.hints = true;
+        this.name = name;
     }
 
     init() {
@@ -444,7 +445,9 @@ class Board {
                 let valid = this.cells[j][i].valid;
                 let valence = this.cells[j][i].valence();
                 let cell_class = " class='cell-sudoku ";
-                html += "><div data-row='" + i + "' data-column='" + j + "'onclick='buttonClicked(event)'"                
+                html += "><div data-row='" + i + "' data-column='" + j;
+                html += "' data-name='" + this.name;  
+                html += "'onclick='buttonClicked(event)'"                
                 if (!edit) {
                     cell_class += "cell-sudoku-noedit ";                
                 } else if (!this.hints){
@@ -616,8 +619,9 @@ let currentPosition = null;
 function buttonClicked(e) {
     let r = e.currentTarget.getAttribute("data-row");
     let c = e.currentTarget.getAttribute("data-column");
+    let name = e.currentTarget.getAttribute("data-name");
     currentPosition = new Position(c, r);
-    evnts.fireEvent("positionUpdate");
+    evnts.fireEvent(name);
 }
 
 class Position {

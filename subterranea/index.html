@@ -1,0 +1,172 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/puzzle-utils.js"></script>
+<script src="js/underground.js"></script>
+<title>Subterranea</title>
+</head>
+<style>
+ul {
+    padding-left: 40px;
+    list-style-type: none;
+}
+li {
+    padding-bottom: 10px;
+}
+table, tr {
+    padding: 4px;
+    text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse; 
+    margin: auto;
+}
+th, td {
+    padding: 10px;
+}
+.buttonDiv {
+    display: inline-block;
+    padding: 2px;
+    border: 2px;
+}
+.centered {
+    text-align: center;
+}
+.prop-column {
+	font-size:large;
+}
+.main-column {
+	background-color:white;
+}
+</style>
+<script>
+let puzzleData = [];
+let puzzle = null;
+//load data
+$(document).ready(function(){
+	console.log("about to fetch remote data");
+	$.getJSON("data/underground.json", function(data){
+		puzzleData = data;
+	}).done(function() {
+		initialize();
+		set();
+	});
+});
+//associated display elements
+$(document).ready(function(){
+	$("#resetButton").on("click", function(){
+		reset();
+	});
+	$("#solve").on("click", function(event){
+			if (display.disabled) return;
+			$("#reset").addClass("btn-success");
+			solvePuzzle();
+	});
+	$("#explain").on("click", function(event){
+			$("#reset").addClass("btn-success");
+			display.disabled = true;
+			explainPuzzle();
+	});
+	display.puzzleIntro = document.getElementById("puzzleIntro");
+	display.solutionDisplay  = document.getElementById("solutionDisplay");
+	display.puzzleDescription = document.getElementById("puzzleDescription");
+	display.dayDisplay = document.getElementById("dayDisplay");
+	display.puzzleTitle = document.getElementById("puzzleTitle");	
+	//display.explanationDisplay = document.getElementById("explanationDisplay");
+});
+function initialize(){
+	underground.puzzles = puzzleData;	
+}
+function set(){
+	puzzleReset(window.location.href);
+}
+function reset() {
+	puzzleReset();
+};
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+		</div>
+</nav>
+
+<div class="container-fluid">
+	<div class='row'>
+	<div class='col-sm-1 col-lg-3'></div>
+	<div class='col-sm-10 col-lg-6 main-column'>
+	<div class="page-header">
+		<h1>Subterranea: Day-Knights and Night-Knights</h1>
+	</div> 		
+	<p class='puzzle-text'>
+	<em>Some logic puzzles inspired by those found in Raymond Smullyan's <strong>To Mock a Mockingbird</strong>.</em>
+	</p>
+	<button type='button' 
+	class='btn btn-info' data-toggle='collapse' data-target='#mainText'>
+		About </button>
+	<div id='mainText' class='collapse'> <br>
+		<p class='puzzle-text'>
+			Click the <strong>Solve</strong> 
+			button to confirm your selection. If you are stumped, use the <strong>Reveal Explanation
+			</strong> button (once this is clicked, you can no longer submit a solution).
+		</p>
+	</div>
+	<hr>
+	<h2 id="puzzleTitle"></h2>
+	<div class='puzzle-text'>
+		<p>
+		The city of Subterranea is completely underground; the inhabitants have never
+		seen the light of day. Clocks, watches, and all other timepieces are strictly
+		forbidden. Yet, the inhabitants have an uncanny sense of time, they always know
+		when it is day or night. Each inhabitant is the city is one of two types
+		day-knights and night-knights. <strong>Day-knights</strong> tell the truth during the day and lie at night, while <strong>night-knights</strong> tell the truth at night and lie during the day.
+		</p>
+		<hr>
+		<p>
+		 Suppose you are visiting Subterranea - naturally, you loose your sense of time and would like to know whether it is day or night. You encounter two inhabitants, and each makes a statement...
+		
+	</div>
+	<div id="puzzleIntro" class='puzzle-text'></div>	
+	
+	<hr>
+	<div id="dayDisplay"></div>
+	<br>
+	<!--div id="explainButton">
+		<button type="button" id="explain" class="btn btn-primary typeButton">Reveal Explanation</span></button>
+	</div>
+	<div id="explanationDisplay" class="puzzle-text"></div -->		
+	<br>
+	<div id="soveButton">
+		<button type="button" id="solve" class="btn btn-primary typeButton">Solve</span></button>
+	</div>
+	<br>
+	<div id="solutionDisplay" class="puzzle-text"></div>	
+	<hr>
+	<div id="resetButtonHolder">
+		<button type="button" id="resetButton", class="btn btn-primary typeButton">New Puzzle</span></button>
+	</div>
+	<br>
+	<div class='centered'>
+	<img src="imgs/underground_city.png" style="max-width:400px" >		
+	<br>
+	<p> <em>Illustration from <a href='https://books.google.ca/books?id=38ZQx7u1Wa0C'>The Child of the Cavern:<br> Or, Strange Doings Underground</a></em> by Jules Vern</p> 
+	<br> 
+	</div>
+	<div class='col-sm-1 col-lg-3'></div>
+</div>
+</div>
+</div>
+</body>
+</html>

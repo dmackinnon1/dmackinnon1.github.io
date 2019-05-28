@@ -33,7 +33,7 @@ function formatPuzzle(pc) {
 	let solD = display.solutionDisplay;
 	solD.innerHTML ="";
 	let ed = display.explanationDisplay;
-	//ed.innerHTML = "";
+	ed.innerHTML = "";
 }
 
 // called from UI to reset the puzzle
@@ -128,8 +128,10 @@ class PuzzleController {
 	
 	explanationDisplay(){
 		let txt = "<br><p> Here is one way to think about it:<br>"
-		txt += this.puzzle.explanation;
-		txt += "</br>";
+		txt += "<p>" + this.puzzle.person1_explain;
+		txt += "</p><p>" + this.puzzle.person2_explain;
+		txt += "</p><p>" + this.puzzle.solution_explain;
+		txt += "</p></br>";
 		return txt;
 	}
 
@@ -144,6 +146,7 @@ function other(day){
 }
 
 function selectDay(event) {
+	if (display.disabled == true) return;
 	let id = event.currentTarget.id;
 	console.log(id)
 	let val = id.substring(0,id.indexOf("_"));

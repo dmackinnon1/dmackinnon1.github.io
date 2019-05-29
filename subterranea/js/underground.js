@@ -184,7 +184,7 @@ function solvePuzzle(){
 	display.disabled = true;
 	let solD = display.solutionDisplay;
 	let correct = true;
-	let txt = ""
+	let txt = "<br>"
 	if (guess.time == underground.selected.puzzle.time){
 		txt += "You said it is " + guess.time +".";
 		txt += " <em> You were right. </em><br>";

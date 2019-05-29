@@ -119,7 +119,9 @@ function reset() {
 	<div id='mainText' class='collapse'> <br>
 		<p class='puzzle-text'>
 			Click the <strong>Solve</strong> 
-			button to confirm your selection. If you are stumped, use the <strong>Reveal Explanation
+			button to confirm your selection. If you would like a little help, 
+			click the <strong> Hints </strong> button.
+			If you are stumped, use the <strong>Reveal Explanation
 			</strong> button (once this is clicked, you can no longer submit a solution).
 		</p>
 	</div>
@@ -143,23 +145,55 @@ function reset() {
 	<hr>
 	<div id="dayDisplay"></div>
 	<br>
-	<div id="explainButton">
-		<button type="button" id="explain" class="btn btn-primary typeButton">Reveal Explanation</span></button>
+
+	<div class="btn-group" role="group" aria-label="solving buttons">
+	<button type='button' 
+	class='btn btn-primary' data-toggle='collapse' data-target='#hintText'>
+		Hints </button>
+	<button type="button" id="solve" class="btn btn-primary typeButton">Solve</span></button>
+	<button type="button" id="explain" class="btn btn-primary typeButton">Reveal Explanation</span></button>
 	</div>
-	<div id="explanationDisplay" class="puzzle-text"></div -->		
-	<br>
-	<div id="soveButton">
-		<button type="button" id="solve" class="btn btn-primary typeButton">Solve</span></button>
+	<div id='hintText' class='collapse'> <br>
+		<p class='puzzle-text'>
+		There are two types of statements - simple statements and compound statements.
+		Compound statements join two simple statements with an 'and' conjunction.
+		</p>
+		<p>
+		Some simple statements provide a lot of information.</p>
+		<p>
+		If an inhabitant simply says "it is day," then they must be a day-knight: day-knights
+		will say this during the day (being truthful), and will also say it at night (when lying). 
+		Night-knights can never simply say "it is day" (either truthfully, or when lying).
+		</p>
+		If an inhabitant says "I am a day-knight" and nothing else, then it must be day. A day-knight
+		will say this truthfully during the day, and a night-knight will also say this during the day, 
+		but as a lie. At night, no one makes a simple statement claiming to be a day-knight.
+		<p><br>
+		Beware, however: these simple rules do not apply when simple statements are combined into compound statements... but compound statements are also very helpful.
+		For example:
+		</p>
+		<p>
+		If an inhabitant says "I am a day-knight and it is night" they cannot be telling the truth. Moreover, you know
+		they cannot be a day-knight during the day, or a night-knight during the night (as then they would have to be
+		truthful): you can conclude that it is day and that they are a night-knight.
+		</p>
+		<p> If an inhabitant says "I am a day-knight and it is day" they may or may not be telling the truth, but you can
+		at least rule out the possibility that they are a night-knight at night.
+		</p>
+		You may be able to work out some other rules that will help you solve these puzzles... 
+		<hr>
 	</div>
-	<br>
 	<div id="solutionDisplay" class="puzzle-text"></div>	
+	
+	<br>
+	<div id="explanationDisplay" class="puzzle-text"></div>		
 	<hr>
 	<div id="resetButtonHolder">
 		<button type="button" id="resetButton", class="btn btn-primary typeButton">New Puzzle</span></button>
 	</div>
 	<br>
 	<div class='centered'>
-	<img src="imgs/underground_city.png" style="max-width:400px" >		
+	<img src="imgs/underground_city.png" style="max-width:380px" >		
 	<br>
 	<p> <em>Illustration from <a href='https://books.google.ca/books?id=38ZQx7u1Wa0C'>The Child of the Cavern:<br> Or, Strange Doings Underground</a></em> by Jules Vern</p> 
 	<br> 

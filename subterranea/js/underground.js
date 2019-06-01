@@ -136,7 +136,7 @@ class PuzzleController {
 	}
 
 	puzzleTitle(){
-		return "Puzzle " + this.puzzle.id
+		return "Puzzle " + this.puzzle.id + " of " + underground.puzzles.length
 	}
 }
 

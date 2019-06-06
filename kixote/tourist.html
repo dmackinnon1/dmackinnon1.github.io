@@ -44,9 +44,13 @@ td {
 
 <script>
 
+let showHint = false;
+let showCounts = true;
 function loadBoard() {
 	game= new Tourist(8);
 	game.init();
+	game.hints = showHint;
+	game.labels = showCounts;	
 	return htmlForBoard(game.getBoard());
 };
 
@@ -80,6 +84,14 @@ $(document).ready(function(){
 		game.startGame();
 	});
 
+	$(".checkbox").on('click',function(e){
+      		
+      		showCounts = ($('#counts:checked').val()=='yes');
+      		showHint = ($('#hint:checked').val()=='yes');
+      		game.hints = showHint;
+      		game.labels = showCounts;
+      		game.updateColours();
+     });
 
 });
 
@@ -156,11 +168,27 @@ About </button>
   </a>
   <div class="media-body">
     <h4 class="media-heading">Chess Tourist</h4>
+<p>
 When a chess piece has traveled around a chessboard touching every square exactly once, it has complted a "tour" of the board.
-Your task is to complete a tour on the board below using the selected chess piece. Your tour has been started on a randomly
-selected square. Green squares indicate a legal move, and the numbers on each 
-square tell you how many open moves are available from that square. The "Warnsdorff" heuristic for finding a tour is to 
-always move to a square with the lowest number of available moves. 
+Your task is to complete a tour on the board below using the selected chess piece. 
+</p>
+<p>
+Your tour has been started on a randomly
+selected square. 
+</p>
+<p>
+<ul>
+<li>The light green squares indicate a legal move. This is based on the type of chess piece you have selected.</li> 
+<li>If <strong> show counts</strong> is checked, the numbers on each 
+square tell you how many open moves are available from that square.</li> 
+<li> If <strong> show hints</strong> is checked, the legal moves with the 
+lowest number of move options are highlighted in dark green. 
+ </ul>
+<p> The recommended strategy for building knight tours is to follow the 
+The <em>Warnsdorff heuristic</em> which states that you should  
+always move to a square with the lowest number of available moves from it (the ones in dark green when
+hints are turned on).
+</p>
 </div>
 </div>
 <br>
@@ -183,7 +211,16 @@ always move to a square with the lowest number of available moves.
 </div>
 </h3>
 <hr>
-
+<form>
+            <div class="checkbox centered">
+               <label><input id="counts" type="checkbox" checked=true value="yes" >show counts</label> 
+               <!-- add checked attribte to check by default -->
+            </div>
+            <div class="checkbox centered">
+               <label><input id="hint" type="checkbox"  value="yes" >show hints</label> 
+               <!-- add checked attribte to check by default -->
+            </div>
+</form>
 <div class="backtrackDisplay">
 <button id="backtrack" style="text-align=center" class="btn btn-default">Backtrack</button>
 <div id="missteps" style="text-align=center"></div>

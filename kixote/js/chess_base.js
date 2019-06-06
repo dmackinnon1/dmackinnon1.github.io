@@ -674,6 +674,12 @@ function checkGlyph(i,j){
 	return glyph;		
 };
 
+function circleGlyph(i,j){
+	var glyph = "<span class='glyphicon glyphicon-ok-circle' ";
+	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
+	return glyph;		
+};
+
 function cellTypeGlyph(i,j) {
 	if (CellType == "knight"){
 			return knightGlyph(i,j);

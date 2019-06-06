@@ -14,6 +14,8 @@ class Tourist {
 		this.wrong = [];
 		this.backtracks = 0;
 		this.size = size;
+		this.labels = true;
+		this.hints = true;
 	}
 
 	toString(){
@@ -78,21 +80,44 @@ class Tourist {
 				var div = getDiv(i, j);
 				if (!cell.isEqual(current)) {
 					if (this.path.contains(cell)) {
-						div.html(checkGlyph(i,j));
+						div.html(circleGlyph(i,j));
 					} else {
 						div.html(cell.decoration);
 					}
 				}
-				if (cell.isLeastNeighborOffPath(current, this.path) && !this.path.contains(cell)){
-					div.css("color","white");
+				if (this.hints && cell.isLeastNeighborOffPath(current, this.path) && !this.path.contains(cell)){
+					if (this.labels){div.css("color","white");
+					} else {
+						div.css("color", "darkgreen")
+					};
 					div.css("background","darkgreen");
 				} else if (cell.isNeighbor(current) && !this.path.contains(cell)){
-					div.css("color","#004d00");
+					if (this.labels) {
+						div.css("color","#004d00");
+					} else {
+						div.css("color","#99ff99" )
+					}
 					div.css("background","#99ff99");					
 				} else if (cell.isEqual(current)) {
-					div.attr("style", "color:black");
+					div.css("color", "black");
+					div.css("background", "white");
 				} else {				
-					div.attr("style", "color:grey");
+					if (i%2 != j%2){
+						if (this.labels || this.path.contains(cell)){
+							div.css("color", "grey");
+						} else {
+							div.css("color", "white");
+						}
+						div.css("background","white");
+					} else {
+						if (this.labels || this.path.contains(cell)){
+							div.css("color", "white");
+						} else {
+							div.css("color", "grey");
+						}
+						div.css("background","grey");
+				
+					} 
 				}	
 			}
 		}
@@ -116,7 +141,7 @@ class Tourist {
 		}
 		var last = this.path.cells.pop();
 		var lastDiv = getDiv(last.rowNum,last.colNum);
-		lastDiv.html(last.decoration);	
+		if (this.labels) lastDiv.html(last.decoration);	
 	
 		var current = this.path.tail();
 		var currentDiv = getDiv(current.rowNum,current.colNum);

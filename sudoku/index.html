@@ -56,19 +56,32 @@
    </style>
    <script src="js/evnts.js"></script>
    <script src="js/sudoku.js"></script>
+   <script src="js/latex-builders.js"></script>
    <script>
       //declare variables
       let board = null;
       let boardName = "main";
       let showHints = false;
       let toggleSolution = false;
-
-      
       //register event
       evnts.addCallback(boardName, function(){
       	board.updateFromCurrentPosition();
       	refresh();
       });
+      
+      function latexDocument(b){
+            let doc = new LaTeXDoc();
+            let docEnv = doc.defaultPackages()
+	           .command("pagestyle","empty",true)
+	           .package("sudoku").env()
+	           .begin("document");
+            docEnv.env().begin("center").command("Huge","Sudoku", true);
+            docEnv.env().begin("sudoku").p(b.latexDisplay());
+            docEnv.command("pagebreak");
+            docEnv.env().begin("center").command("Large","Solution", true);
+            docEnv.env().begin("sudoku").p(b.solution().latexDisplay());
+            return encodeURI(doc.build());
+      }
       	
       //define display functions
       function refresh(){
@@ -81,15 +94,18 @@
       		$("#boardComplete").html("<h2 style='color:blue'>Solved!</h2>");
       	} else {
       		$("#boardComplete").html(" ");
-      	}
+      	}      	
       }
-      
+            
       function resetLarge(){
       	board = new Generator().large();
       	board.name = boardName;
       	new Stats(board).print();
       	toggleSolution = false;
       	updateSolutionButton();
+      	document.getElementById("overleaf-btn").style.display = "block";
+        let latex = latexDocument(board);          	
+      	$("#overleaf").attr("value",latex)
       	refresh();
       }
 
@@ -99,6 +115,7 @@
 	    new Stats(board).print();
 	    toggleSolution = false;
       	updateSolutionButton();
+      	document.getElementById("overleaf-btn").style.display = "none";
       	refresh();
       }
 
@@ -183,6 +200,10 @@
                values are highlighted in <strong>red</strong>. Note that the hints are updated based on the
                fixed values and the values that you have entered, not on the actual solution.                
             </p>
+            <p>You can download a printable version of the regular size puzzles by clicking on the 
+            <strong>Open in Overleaf</strong> button. This will open the puzzle as a LaTeX file that
+            can be downloaded as a PDF. 
+            </p>
          </div>
          <div class="btn-group" role="group">
             <button type="button" onClick="resetSmall()" class="btn btn-secondary">New Small</button>
@@ -198,13 +219,16 @@
          <div id="boardComplete" style="text-align=center"></div>
          <h3>
             <div id="boardDisplay" style="text-align=center"></div>
-         </h3>       
+         </h3>            
          <hr>  
         <div class="btn-group" role="group">
             <button type="button" onClick="resetBoard()" class="btn btn-secondary">Reset</button>
             <button type="button" id="solution-btn" onClick="showSolution()"class="btn btn-secondary">Show Solution</button>
-         </div>             
-
+         </div>  
+         <form method="POST" action="https://www.overleaf.com/docs" target="_blank" class="ng-pristine ng-valid">
+         <div class="form-group text-center"><input type="hidden" id='overleaf' name="encoded_snip" value="" autocomplete="off">
+         <input id="overleaf-btn" class="btn-success btn btn-sm" type="submit" value="Open in Overleaf">
+         </div></form>            
          <h3>
             <div id="solutionDisplay" style="text-align=center"></div>
          </h3>

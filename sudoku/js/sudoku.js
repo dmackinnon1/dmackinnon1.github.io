@@ -41,7 +41,7 @@ class Generator {
     validatedBoard(size, openLevel) {
         let b = this.openedBoard(size, openLevel);
         while (!b.canSolve()) {
-            console.log("could not solve generated board, getting new one");
+            //console.log("could not solve generated board, getting new one");
             b = this.openedBoard(size, openLevel);
         }
         b.freezeNonZero();
@@ -57,7 +57,7 @@ class Generator {
         b.init();
         let s = new Solver(b);
         while (!s.solve()) {
-            console.log("failed to generate initial board - retry");
+            //console.log("failed to generate initial board - retry");
             b = new Board(size);
             b.init();
             s = new Solver(b);
@@ -267,6 +267,29 @@ class Board {
         }
     }
 
+    fromRawString(s){
+        let sCount = 0;
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.n; j++) {
+                let v = parseInt(s[sCount]);
+                this.cells[j][i].value = v;
+                if (v !== 0){
+                    this.cells[j][i].editable = false;
+                } else {
+                    this.cells[j][i].editable = true;
+                }
+                sCount++;
+            }
+        }
+    }
+
+    json(name){
+        let json = {};
+        json['name'] = name;
+        json['values'] = this.rawString();
+        return json;
+    }
+
     reset() {
         let all = this.allCells();
         for (let c in all){
@@ -274,6 +297,14 @@ class Board {
                 all[c].value = 0;
                 all[c].valid = true;
             }
+        }
+    }
+
+    zeroOut() {
+        let all = this.allCells();
+        for (let c in all){
+            all[c].value = 0;
+            all[c].valid = true;
         }
     }
 
@@ -416,6 +447,36 @@ class Board {
         }
     }
 
+    latexDisplay(){
+        let result = "";
+        for (let i = 0; i < this.n; i ++){
+            let row = "|";
+            for (let j = 0; j < this.n; j ++){
+                let val = this.cells[j][i].value;
+                if (parseInt(val) != 0){
+                    row += val;
+                }
+                row += "|"
+            }
+            row += ".\n";
+            result += row;
+        }
+        return result;
+    }
+
+    rawString(){
+        let result = "";
+        for (let i = 0; i < this.n; i ++){
+            let row = "";
+            for (let j = 0; j < this.n; j ++){
+                let val = this.cells[j][i].value;
+                row += val;
+            }
+            result += row;
+        }
+        return result;
+    }
+
     drawBoard() {
         let html = "<table>"
         for (let i = 0; i < this.n; i++) {
@@ -553,7 +614,7 @@ class Board {
         while (!this.isComplete()) {
             let cell = this.getValenceOne();
             if (cell == undefined) {
-                console.log("could not find valence 1 cell");
+                //console.log("could not find valence 1 cell");
                 return;
             }
             let value = cell.optionList()[0];
@@ -822,4 +883,11 @@ function runFullSolveTest(){
 
 function cellComp(a,b){
     return (b.valence() - a.valence());
+}
+
+//for node export
+try{
+    module.exports = new Generator();
+} catch(err){
+    console.log("non-node execution context")
 }

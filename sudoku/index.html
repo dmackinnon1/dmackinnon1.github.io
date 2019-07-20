@@ -60,6 +60,8 @@
    <script>
       //declare variables
       let board = null;
+      let solution = null;
+      let difficulty = "";
       let boardName = "main";
       let showHints = false;
       let toggleSolution = false;
@@ -83,6 +85,9 @@
             return encodeURI(doc.build());
       }
       	
+      function prefresh(){
+           $("#boardDisplay").html("<h2>Loading puzzle...</h2>"); 
+      }	
       //define display functions
       function refresh(){
       	//refresh
@@ -98,7 +103,11 @@
       }
             
       function resetLarge(){
-      	board = new Generator().large();
+        prefresh();
+      	let triple = new Generator().large();
+      	board = triple.board;
+      	solution = triple.solution;
+        difficulty = triple.difficulty;    
       	board.name = boardName;
       	new Stats(board).print();
       	toggleSolution = false;
@@ -106,16 +115,24 @@
       	document.getElementById("overleaf-btn").style.display = "block";
         let latex = latexDocument(board);          	
       	$("#overleaf").attr("value",latex)
+      	$("#difficultyDisplay").html(difficulty);
+      	
       	refresh();
       }
 
       function resetSmall(){
-      	board = new Generator().small();
+        prefresh();
+      	let triple = new Generator().small();
+      	board = triple.board;
+      	solution = triple.solution;
+        difficulty = triple.difficulty; 
       	board.name = boardName;
 	    new Stats(board).print();
 	    toggleSolution = false;
       	updateSolutionButton();
       	document.getElementById("overleaf-btn").style.display = "none";
+      	$("#difficultyDisplay").html(difficulty);
+      	
       	refresh();
       }
 
@@ -129,7 +146,7 @@
       function showSolution(){
          toggleSolution = !toggleSolution;
          if (toggleSolution){     
-            $("#boardDisplay").html(board.solution().drawBoard());
+            $("#boardDisplay").html(solution.drawBoard());
          } else {
             $("#boardDisplay").html(board.drawBoard());
          }
@@ -219,7 +236,8 @@
          <div id="boardComplete" style="text-align=center"></div>
          <h3>
             <div id="boardDisplay" style="text-align=center"></div>
-         </h3>            
+         </h3>
+         <h2><div id="difficultyDisplay" style="text-align=center"></div></h2>           
          <hr>  
         <div class="btn-group" role="group">
             <button type="button" onClick="resetBoard()" class="btn btn-secondary">Reset</button>

@@ -164,5 +164,5 @@ class LaTeXPackage {
 try{
     module.exports = new LaTeXDoc();
 } catch(err){
-    console.log(err);
+    console.log("non-node execution context");
 }

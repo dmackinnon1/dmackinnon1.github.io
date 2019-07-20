@@ -11,6 +11,13 @@
 * update the currentPosition variable.
 */
 
+class PuzzleTriple {
+    constructor(board, solution, difficulty){
+        this.board = board;
+        this.solution = solution;
+        this.difficulty = difficulty;
+    }
+}
 
 /*
  * Generates boards of different sizes.
@@ -20,6 +27,14 @@
  * spaces there are, and the more options there can be for some
  * cells.
  */
+
+function boardCopy(b){
+    let bs = new Board(b.n);
+    bs.init();
+    bs.cloneFrom(b);
+    bs.freezeNonZero();
+    return bs;    
+} 
 class Generator {
 
     /*
@@ -35,22 +50,37 @@ class Generator {
      * with cells with valence 1-5.
      */
     large() {
+        //return this.validatedBoard(9, 6);
         return this.validatedBoard(9, 6);
     }
 
     validatedBoard(size, openLevel) {
-        let b = this.openedBoard(size, openLevel);
-        while (!b.canSolve()) {
-            //console.log("could not solve generated board, getting new one");
-            b = this.openedBoard(size, openLevel);
+        let b = this.baseBoard(size);  
+        let bsolution = boardCopy(b);
+        this.openBoard(b, openLevel);
+        let bworking = boardCopy(b)
+        let solver = new StagedSolver();
+        while (!solver.solve(bworking)) {
+            b = this.baseBoard(size);  
+            bsolution = boardCopy(b);
+            this.openBoard(b, openLevel);
+            bworking = boardCopy(b);
         }
         b.freezeNonZero();
+        return new PuzzleTriple(b,bsolution,solver.difficultyRating());
+    }
+
+    openBoard(b, openLevel) {
+        b.openCompleteRegions();
+        b.openSymmetric();
+        b.openSymmetric();
+        //increase difficulty by opening board to maximum valence level
+        if (Math.floor(Math.random() * 100) < 70 || b.n == 4){ 
+            b.openToValence(openLevel);
+        }
         return b;
     }
 
-    openedBoard(size, openLevel) {
-        return this.baseBoard(size).openToValence(openLevel);
-    }
 
     baseBoard(size) {
         let b = new Board(size);
@@ -92,6 +122,11 @@ class Cell {
         }
         this.valid = true;
         this.board = brd;
+        this.exclusions = [];
+    }
+
+    exclude(x){
+        this.exclusions.push(x);
     }
 
     cloneFrom(cell) {
@@ -132,8 +167,28 @@ class Cell {
         notIn = notIn && !(this.column.cells.filter(a => a != this).filter(a => a.value == x).length > 0);
         notIn = notIn && !(this.row.cells.filter(a => a != this).filter(a => a.value == x).length > 0);
         notIn = notIn && !(this.block.cells.filter(a => a != this).filter(a => a.value == x).length > 0);
+        
+        notIn = notIn && !this.exclusions.includes(x);
+        
         return notIn;
     }
+
+    hasCompletableRegion(){
+        let hasRegion = false;
+        hasRegion = hasRegion || this.column.cells.filter(a => a != this).filter(a => a.value == 0).length == 0;
+        hasRegion = hasRegion || this.row.cells.filter(a => a != this).filter(a => a.value == 0).length == 0;
+        hasRegion = hasRegion || this.block.cells.filter(a => a != this).filter(a => a.value == 0).length == 0;
+        return hasRegion;
+    }
+
+    allRegionsComplete(){
+        let hasRegion = true;
+        hasRegion = hasRegion && this.column.cells.filter(a => a != this).filter(a => a.value == 0).length == 0;
+        hasRegion = hasRegion && this.row.cells.filter(a => a != this).filter(a => a.value == 0).length == 0;
+        hasRegion = hasRegion && this.block.cells.filter(a => a != this).filter(a => a.value == 0).length == 0;
+        return hasRegion;
+    }
+
 
     optionList() {
         return baseList(this.board.n).filter(x => this.isOption(x));
@@ -157,6 +212,18 @@ class Cell {
 
     getNonZeroCompanions() {
         return this.getCompanions().filter(a => a.value != 0);
+    }
+
+    sameOptions(cell){
+        let myOptions = this.optionList();
+        let theirOptions = cell.optionList();
+        if (myOptions.length != theirOptions.length) return false;
+        let overlap = myOptions.filter(x => theirOptions.includes(x));
+        return overlap.length == myOptions.length;
+    }
+
+    asString(){
+        return "["+ this.row.label + ", " +this.column.label+"]("+ this.value +"){"+this.optionList()+"}";
     }
 
 }
@@ -208,13 +275,20 @@ class Board {
         this.cells = [];
         this.hints = true;
         this.name = name;
+        this.groups = [];
     }
 
     init() {
         for (let i = 0; i < this.n; i++) {
-            this.rows.push(new Group("row", i));
-            this.columns.push(new Group("column", i));
-            this.blocks.push(new Group("block", i));
+            let g = new Group("row", i);
+            this.groups.push(g);
+            this.rows.push(g);
+            g = new Group("column", i);
+            this.groups.push(g);
+            this.columns.push(g);
+            g = new Group("block", i);
+            this.groups.push(g);
+            this.blocks.push(g);
         }
 
         for (let i = 0; i < this.n; i++) {
@@ -326,6 +400,19 @@ class Board {
         return all;
     }
 
+    block(k){
+        return this.allCells().filter(x => x.block.label == k);
+    }
+
+    row(k){
+        return this.allCells().filter(x => x.row.label == k);
+        
+    }
+    column(k){
+        return this.allCells().filter(x => x.column.label == k);
+        
+    }
+
     // used by the fill methods below.
     setRow(row, pos) {
         for (let j = 0; j < this.n; j++) {
@@ -385,6 +472,38 @@ class Board {
         this.cells[i][j].value = 0;
         this.cells[i][j].editable = true;
     }
+    
+    //puts holes in puzzle that leaves regions completable
+    openCompleteRegions(){
+        this.blocks.forEach(function(b){
+            let pos = b.cells.filter(x => x.allRegionsComplete());
+            let rand = Math.floor(Math.random() * pos.length);
+            let cell = pos[rand];
+            cell.value = 0;
+            cell.editable = true;
+        })
+    }
+
+    openSymmetric(){
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.n; j++) {
+                let cell = this.cells[j][i];
+                if (cell.value == 0){
+                    this.cells[i][j].value = 0;
+                    this.cells[i][j].editable = true;
+                    
+                    this.cells[this.n-j-1][i].value = 0;
+                    this.cells[this.n-j-1][i].editable = true;
+
+                    this.cells[j][this.n-i-1].value = 0;
+                    this.cells[j][this.n-i-1].editable = true;
+
+                    this.cells[this.n-j-1][this.n-i-1].value = 0;
+                    this.cells[this.n-j-1][this.n-i-1].editable = true;
+                }
+            }
+        }
+    }
 
     openValenceOne(){
         let cell = this.getValenceOne();
@@ -402,6 +521,14 @@ class Board {
         }
         return this;
     }
+
+    openToMinimumValence(k){
+        while (this.minValence() < k) {
+            this.randomOpen();
+        }
+        return this;
+    }
+
 
     revalidate() {
         for (let i = 0; i < this.n; i++) {
@@ -558,6 +685,18 @@ class Board {
         }
     }
 
+    getCompletable() {
+        let cell = null;
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.n; j++) {
+                let cell = this.cells[i][j];
+                if (cell.valence() == 1 && cell.value == 0 && cell.hasCompletableRegion()) {
+                    return cell;
+                }
+            }
+        }
+    }
+
     getValenceZero() {
         return this.getValence(0);
     }
@@ -604,6 +743,19 @@ class Board {
         return valence;
     }
 
+    minValence(){
+     let valence = 9;
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.n; j++) {
+                let cv = this.cells[i][j].valence();
+                if (cv < valence) {
+                    valence = cv;
+                }
+            }
+        }
+        return valence;
+    }
+
     /*
      * This solve method makes no guesses.
      * It fills in values for cells that only
@@ -611,15 +763,8 @@ class Board {
      * or blocked.
      */
     solve() {
-        while (!this.isComplete()) {
-            let cell = this.getValenceOne();
-            if (cell == undefined) {
-                //console.log("could not find valence 1 cell");
-                return;
-            }
-            let value = cell.optionList()[0];
-            cell.value = cell.optionList()[0];
-        }
+        let solver = new StagedSolver();
+        return solver.solve(this);
     }
 
     /*
@@ -668,6 +813,210 @@ class Board {
     }
 }
 
+class StagedSolver {
+    
+    constructor(){
+        this.counts = {};
+        this.board = null;
+    }
+    
+    solve(board) {
+        this.board = board;
+        this.counts = {};
+        let solvers = [new RegionCompleteSolver(), new ValenceOneSolver(), new EliminatorSolver(), new NakedSolver(), new NakedTripleSolver(), new ValenceOneSolver()];
+        let result = false;
+        let solver = null;
+        while (!board.isComplete()) {            
+            for (let s in solvers){
+                solver = solvers[s];
+                result = solver.move(board);
+                
+                if (result == false) {
+                    //console.log("failed to solve using " + solver.name());
+                    continue;
+                }
+                if (result == true) {
+                    if (this.counts[solver.name()] == undefined){
+                        this.counts[solver.name()] = 1;
+                    } else {
+                        this.counts[solver.name()] = this.counts[solver.name()] +1;
+                    }
+                    break;          
+                }
+            }
+            if (result == false){
+                break;   
+            }                    
+        }
+        //console.log(this.counts); 
+        return result;
+    }
+
+    difficultyRating(){
+        if (this.board.n == 4) return "easy";
+        else if (this.board.allCells().filter(x => x.editable).length < 40){
+            return "easy";
+        } else if (Object.keys(this.counts).length == 2){
+            return "medium";
+        } else if (Object.keys(this.counts).length == 3){
+            return "difficult";
+        } else {
+            return "tricky";
+        }
+    }
+}
+
+class RegionCompleteSolver {
+    name(){
+        return "regionCompleter"; 
+    }
+
+    move(board) {
+            let cell = board.getCompletable();
+            if (cell == undefined) {
+                return false;
+            }
+            let value = cell.optionList()[0];
+            cell.value = cell.optionList()[0];
+            return true;
+    }
+
+}
+
+class ValenceOneSolver {
+    name(){
+        return "valenceOne";
+    }
+    move(board) {
+            let cell = board.getValenceOne();
+            if (cell == undefined) {
+                return false;
+            }
+            let value = cell.optionList()[0];
+            cell.value = cell.optionList()[0];
+            return true;
+    }
+}
+
+class EliminatorSolver {
+    name(){
+        return "eliminator";
+    }
+    move(board) {
+            let editables = board.allCells().filter(x => x.value == 0);
+            for (let c in editables){
+                let cell = editables[c];
+                let options = cell.optionList();
+                for (let o in options){
+                    let option = options[o];
+                    let good = cell.block.cells.filter(x => x != cell && x.value == 0 && x.optionList().includes(option)).length == 0;
+                    good = good || cell.row.cells.filter(x => x != cell && x.value == 0 && x.optionList().includes(option)).length == 0;
+                    good = good || cell.column.cells.filter(x => x != cell && x.value == 0 && x.optionList().includes(option)).length == 0;
+                    if (good){
+                        cell.updateValue(option);
+                        return true;
+                    }
+                }
+            }
+            return false;
+    }
+
+}
+
+
+class NakedSolver {
+
+   name(){
+        return "nakedPairs";
+    }
+    move(board) {           
+            let result = false;
+            board.groups.forEach(function(region){
+                let candidates = region.cells.filter(x => x.valence() == 2 && x.value == 0); 
+                if (candidates.size ==1) return;
+                let selected = null;
+                let cell = null;
+                while(candidates.length >1){
+                    cell = candidates.pop();
+                    let other = candidates.filter(x => cell.sameOptions(x));
+                    if (other.length == 1){
+                        selected = other[0];
+                        break;
+                    }
+                }
+                if (selected != null){               
+                    let options = cell.optionList();
+                    //console.log("pair found: " + cell.asString() +  " , " + selected.asString());
+                    
+                    let toBlock = region.cells.filter(x => (x!= cell)&&(x != selected)&&x.value==0);
+                    for (let c in toBlock){
+                        //console.log("updating: " + toBlock[c].asString());
+                        toBlock[c].exclusions.push(options[0]);
+                        toBlock[c].exclusions.push(options[1]);
+                       // console.log("to:" + toBlock[c].asString());
+                        
+                        if (toBlock[c].valence() == 1 && toBlock[c].value == 0){
+                            let value = toBlock[c].optionList()[0];
+                            toBlock[c].value = value;
+                            //console.log("+ updating: " + toBlock[c].asString());
+                            result = true;                        
+                        } 
+                          
+                    }                                          
+                }
+            });
+            return result;           
+    }
+}   
+
+class NakedTripleSolver {
+
+   name(){
+        return "nakedTriples";
+    }
+    move(board) {           
+            let result = false;
+            board.groups.forEach(function(region){
+                let candidates = region.cells.filter(x => x.valence() == 3 && x.value == 0); 
+                if (candidates.size <3) return;
+                let selected = null;
+                let second = null;
+                let cell = null;
+                while(candidates.length >2){
+                    cell = candidates.pop();
+                    let other = candidates.filter(x => cell.sameOptions(x));
+                    if (other.length == 2){
+                        selected = other[0];
+                        second = other[1]
+                    }
+                }
+                if (selected != null){               
+                    let options = cell.optionList();
+                    //console.log("triple found: " + cell.asString() +  " , " + selected.asString() + "," +second.asString());
+                    
+                    let toBlock = region.cells.filter(x => (x!= cell)&&(x != selected)&&(x != second) && x.value==0);
+                    for (let c in toBlock){
+                        //console.log("updating: " + toBlock[c].asString());
+                        toBlock[c].exclusions.push(options[0]);
+                        toBlock[c].exclusions.push(options[1]);
+                        toBlock[c].exclusions.push(options[2]);
+                        //console.log("to:" + toBlock[c].asString());
+                        
+                        if (toBlock[c].valence() == 1 && toBlock[c].value == 0){
+                            let value = toBlock[c].optionList()[0];
+                            toBlock[c].value = value;
+                            //console.log("+ updating: " + toBlock[c].asString());
+                            result = true;                        
+                        } 
+                          
+                    }                                          
+                }
+            });
+            return result;           
+    }
+}   
+
+
 /*
 * The currentPositon variable, buttonClicked() function, and Position class 
 * are used to interact with the generated board. It relies on the 
@@ -714,7 +1063,9 @@ class Stats {
 }
 
 /*
- * A step in the solution - tracks the current
+ * Randomizing backtracking solver classes
+ *
+ * A Move is a step in the solution - tracks the current
  * cell being considered, and a list of excluded (already tried) 
  * values.
  */
@@ -835,6 +1186,9 @@ class Solver {
 /*
 * Utility functions.
 */
+
+
+
 
 function swapTwo(array) {
     let narray = [...array];

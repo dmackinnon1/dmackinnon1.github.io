@@ -210,7 +210,7 @@ function explainPuzzle(){
 	let ed = display.explanationDisplay;
 	let txt = "The solution is that ";
 	txt = txt + "the first inhabitant is a " + godsAndDemons.selected.puzzle.A;
-	txt = txt + ", and the second inhabitant is a " +godsAndDemons.selected.puzzle.B
+	txt = txt + " and the second inhabitant is a " +godsAndDemons.selected.puzzle.B
 	txt = txt + "."
 	ed.innerHTML = txt;
 };

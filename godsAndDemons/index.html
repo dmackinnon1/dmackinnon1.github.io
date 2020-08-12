@@ -43,16 +43,33 @@ th, td {
 }
 </style>
 <script>
+
 let puzzleData = [];
 let puzzle = null;
+let puzzleData1 = [];
+let puzzleData2 = [];
+let puzzleData3 = [];
+let night = "night1";
 //load data
 $(document).ready(function(){
 	console.log("about to fetch remote data");
-	$.getJSON("data/godsAndDemons.json", function(data){
+	$.getJSON("data/godsAndDemonsDay1.json", function(data){
 		puzzleData = data;
+		puzzleData1 = data;
 	}).done(function() {
+		console.log("loaded first night data " + puzzleData1.length);
 		initialize();
 		set();
+	});
+	$.getJSON("data/godsAndDemonsDay2.json", function(data){
+		puzzleData2 = data;
+	}).done(function() {
+		console.log("loaded second night data " + puzzleData2.length)
+	});
+	$.getJSON("data/godsAndDemonsDay3.json", function(data){
+		puzzleData3 = data;
+	}).done(function() {
+		console.log("loaded thrid night data " + puzzleData3.length);
 	});
 });
 //associated display elements
@@ -77,9 +94,32 @@ $(document).ready(function(){
 	display.puzzleTitle = document.getElementById("puzzleTitle");	
 	display.explanationDisplay = document.getElementById("explanationDisplay");
 });
-function initialize(){
-	godsAndDemons.puzzles = puzzleData;	
+function setNight(event){
+	let id = event.currentTarget.id;
+    night = id;
+    initialize();
+    puzzleReset(url=null, activeReset=true);
+};
+
+function setNightData(){
+	let nightText = document.getElementById("nightText")
+	if (night == "night1"){
+        puzzleData = puzzleData1;
+        nightText.innerHTML = "On the first night, Craig could not tell what type of inhabitants were talkng to him." 
+	} else if (night== "night2"){
+        puzzleData = puzzleData2; 
+        nightText.innerHTML = "On the second night, Craig could sense that the two inhabitants were from the <strong>same dimension</strong>." 	
+	} else {
+		puzzleData = puzzleData3; 
+        nightText.innerHTML = "On the third night, Craig intuited that the two inhabitants were on the <strong>same side</strong>." 
+	}
 }
+
+function initialize(){
+	setNightData();
+	godsAndDemons.puzzles = puzzleData;		
+}
+
 function set(){
 	puzzleReset(window.location.href);
 }
@@ -127,22 +167,51 @@ function reset() {
 	<h2 id="puzzleTitle"></h2>
 	<div class='puzzle-text'>
 		<p>
-		Shortly after <a href="https://dmackinnon1.github.io/inspectorCraig/">Inspector Craig</a> returned to London from his strange experience in <a href="https://dmackinnon1.github.io/subterranea/">Subterranea</a>, he had a curious dream.
-		Curiously, on this occasion, he did not visit the <a href="https://dmackinnon1.github.io/inspectorCraig/dreamers.html">Isle of Dreams</a>.
-		He and been browsing that day in a library specializing in rare books on mythology, another of his many interests.
-		His head was filled with gods and demons, and so his dream was perhaps not so surprising.
+		Shortly after <a href="https://dmackinnon1.github.io/inspectorCraig/">Inspector Craig</a> 
+        returned to London from his strange experience in 
+        <a href="https://dmackinnon1.github.io/subterranea/">Subterranea</a>, he experienced
+        three nights of strange dreams.
+		During these nights, he did not visit the 
+		<a href="https://dmackinnon1.github.io/inspectorCraig/dreamers.html">Isle of Dreams</a>, but
+		experienced something equally odd.
+		</p><p>
+		On each of these days, he been browsing in a library specializing in 
+        rare books on mythology, another of his many interests.
+		His head was filled with gods and demons, and so his dreams were perhaps not so surprising.
         </p>
-        <p> Craig dreamed he spent nine days in a region in which dwelled gods, demons and immortals.
-        The gods always told the truth, and the demons always lied. As to the mortals, they were either
-        <a href="https://dmackinnon1.github.io/knaves/">knights or knaves</a>. As usual, the knights always told the truth and the knaves always lied.
-        </p>
+        <p> Each night, Craig dreamed he spent several days in a region in which dwelled gods, 
+        demons and mortals.</p>
+        
+        <p>The gods always told the truth, and the demons always lied. As to the mortals, they were either
+        <a href="https://dmackinnon1.github.io/knaves/">knights or knaves</a>. </p><p>As usual, 
+        the knights always told the truth and the knaves always lied. Although all four types
+        of beings were dwelling in the same region, they come from two different dimensions. 
+        Gods and demons are immortals from the same dimension.
+        This is a different dimension that the mortal knights and knaves share. Although from different dimensions, gods and 
+        knights are on the same side, 
+        a different side than the side that knaves and demons are on.
         <p>
-        In this dream, Inspector Craig encountered two inhabitants... what kind of islanders were they?
+        In these dreams, Inspector Craig encountered two inhabitants... what kind of creatures were they?
 		</p>
-		<hr>
-	</div>
+		</div>
+		<!--- NIGHT SELECTION --->
+		<div class="centered">
+		<div class="btn-group" role="group" aria-label="night buttons">
+	    <button type="button" id="night1" class="btn btn-primary typeButton" onclick='setNight(event)'>First Night </button>
+	    <button type="button" id="night2" class="btn btn-primary typeButton" onclick='setNight(event)'>Second Night</button>
+	    <button type="button" id="night3" class="btn btn-primary typeButton" onclick='setNight(event)'>Third Night</button>
+	    </div>
+	    </div>
+        <br>
+        <div id='nightText'>
+        </div>
+        <br>
+
+    <!-- PUZZLE DISPLAY -->
 	<div id="puzzleIntro" class='puzzle-text'></div>	
 	
+    
+
 	<hr>
 	<div id="typeDisplay"></div>
 	<br>

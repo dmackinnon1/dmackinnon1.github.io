@@ -36,12 +36,12 @@ function formatPuzzle(pc) {
 }
 
 // called from UI to reset the puzzle
-function puzzleReset(url = null) {	
+function puzzleReset(url = null, activeReset=false) {	
 	let id = null;
 	if (url != null){
 		id = getQueryParameter(url, 'id');
 	}
-	if  (godsAndDemons.activeSet.length == 0) {
+	if  (godsAndDemons.activeSet.length == 0 || activeReset==true) {
 	 godsAndDemons.activeSet = godsAndDemons.puzzles;
 	}
 	let p = null;
@@ -51,6 +51,7 @@ function puzzleReset(url = null) {
  	if (p == null) {
 		p = randomElement(godsAndDemons.activeSet);	
  	}
+ 	console.log("active set/puzzle set: " + godsAndDemons.activeSet.length + "/" + godsAndDemons.puzzles.length)
  	godsAndDemons.selected = new PuzzleController(p);
  	godsAndDemons.activeSet = removeElement(godsAndDemons.activeSet,p);
 	guess.A = "knight";

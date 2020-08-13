@@ -104,14 +104,14 @@ function setNight(event){
 function setNightData(){
 	let nightText = document.getElementById("nightText")
 	if (night == "night1"){
-        puzzleData = puzzleData1;
-        nightText.innerHTML = "On the first night, Craig could not tell what type of inhabitants were talkng to him." 
+        	puzzleData = puzzleData1;
+        	nightText.innerHTML = "On the first night, Craig could not tell what type of inhabitants were speaking to him." 
 	} else if (night== "night2"){
-        puzzleData = puzzleData2; 
-        nightText.innerHTML = "On the second night, Craig could sense that the two inhabitants were from the <strong>same dimension</strong>." 	
+        	puzzleData = puzzleData2; 
+        	nightText.innerHTML = "On the second night, Craig could sense that the two inhabitants were from the <strong>same dimension</strong>." 	
 	} else {
 		puzzleData = puzzleData3; 
-        nightText.innerHTML = "On the third night, Craig intuited that the two inhabitants were on the <strong>same side</strong>." 
+        	nightText.innerHTML = "On the third night, Craig intuited that the two inhabitants were on the <strong>same side</strong>." 
 	}
 }
 
@@ -168,38 +168,40 @@ function reset() {
 	<div class='puzzle-text'>
 		<p>
 		Shortly after <a href="https://dmackinnon1.github.io/inspectorCraig/">Inspector Craig</a> 
-        returned to London from his strange experience in 
-        <a href="https://dmackinnon1.github.io/subterranea/">Subterranea</a>, he experienced
-        three nights of strange dreams.
-		During these nights, he did not visit the 
+        	returned to London from his strange experience in 
+        	<a href="https://dmackinnon1.github.io/subterranea/">Subterranea</a>, he experienced
+       		three nights of strange dreams.
+		
+		During these nights, he did not dream that he was visiting the 
 		<a href="https://dmackinnon1.github.io/inspectorCraig/dreamers.html">Isle of Dreams</a>, but
-		experienced something equally odd.
-		</p><p>
-		On each of these days, he been browsing in a library specializing in 
-        rare books on mythology, another of his many interests.
+		he experienced something equally odd.
+		</p>
+		<p>
+		He had been browsing in a library specializing in 
+        	rare books on mythology, another of his many interests.
 		His head was filled with gods and demons, and so his dreams were perhaps not so surprising.
-        </p>
-        <p> Each night, Craig dreamed he spent several days in a region in which dwelled gods, 
-        demons and mortals.</p>
+        	</p>
+        	<p> Each night, Craig dreamed he was roaming a region in which dwelled gods, demons, and mortals.</p>
         
-        <p>The gods always told the truth, and the demons always lied. As to the mortals, they were either
-        <a href="https://dmackinnon1.github.io/knaves/">knights or knaves</a>. </p><p>As usual, 
-        the knights always told the truth and the knaves always lied. Although all four types
-        of beings were dwelling in the same region, they come from two different dimensions. 
-        Gods and demons are immortals from the same dimension.
-        This is a different dimension that the mortal knights and knaves share. Although from different dimensions, gods and 
-        knights are on the same side, 
-        a different side than the side that knaves and demons are on.
-        <p>
-        In these dreams, Inspector Craig encountered two inhabitants... what kind of creatures were they?
+        	<p>The gods always told the truth, and the demons always lied. As to the mortals, they were either
+        	<a href="https://dmackinnon1.github.io/knaves/">knights or knaves</a>. As usual, 
+        	the knights always told the truth and the knaves always lied.</p>
+		<p>
+		Although all four types
+        	of inhabitants were dwelling in the same region, they came from two different dimensions. 
+       		Gods and demons are immortals from the same dimension - a different dimension that the mortal knights and knaves share. 
+		Although from different dimensions, gods and knights are on the same side,a different side than the side that knaves and demons are on.
+		</p>
+		<p>
+        	In these dreams, Inspector Craig encountered two inhabitants... of what type were they?
 		</p>
 		</div>
 		<!--- NIGHT SELECTION --->
 		<div class="centered">
 		<div class="btn-group" role="group" aria-label="night buttons">
-	    <button type="button" id="night1" class="btn btn-primary typeButton" onclick='setNight(event)'>First Night </button>
-	    <button type="button" id="night2" class="btn btn-primary typeButton" onclick='setNight(event)'>Second Night</button>
-	    <button type="button" id="night3" class="btn btn-primary typeButton" onclick='setNight(event)'>Third Night</button>
+	    <button type="button" id="night1" class="btn btn-primary typeButton" onclick='setNight(event)'>1st night</button>
+	    <button type="button" id="night2" class="btn btn-primary typeButton" onclick='setNight(event)'>2nd night</button>
+	    <button type="button" id="night3" class="btn btn-primary typeButton" onclick='setNight(event)'>3rd night</button>
 	    </div>
 	    </div>
         <br>
@@ -226,14 +228,19 @@ function reset() {
 	<div id='hintText' class='collapse'> <br>
 		<p class='puzzle-text'>
 		There are two types of statements - simple statements and compound statements.
-		Compound statements join two simple statements with an 'and' or 'or' conjunction. If an inhabitant says "x or y", then to be a true statement, only one of x or y must to be true (both could be true) - both would need to be false for the inhabitant to be a liar. If an inhabitant says "x and y", then to be a true statement both x and y must be true - only one would need to be false for the inhabitant to be lying.
+		Compound statements join two simple statements with an 'and' or 'or' conjunction. If an inhabitant says "x or y", 
+		then to be a true statement, only one of x or y must be true (both could be true) - both would need to be false 
+		for the inhabitant to be a liar. 
+		If an inhabitant says "x and y", then to be a true statement both x and y must be true - only one of the statements 
+		would need to be false for the inhabitant to be lying.
 		</p>
 		<p>
 		Some simple statements provide a lot of information.</p>
 		<p>
-		If an inhabitant says "I am a demon", then they must by lying - no demon would say the truth. This means that they must be a knave.</p>
-		<p> If an inhabitant says "I am not a knight", they cannot be a god or demon, since this would be a truthful statement. Consequently, they must be a god.
-		</p>
+		If an inhabitant says "I am a demon", then they must by lying - no demon would say the truth. Consequently, if an inhabitant says "I am a demon" they 
+		must be a non-demonic liar: they must be a knave.</p>
+		<p> If an inhabitant says "I am not a knight", they cannot be a knaveor demon, since this would be a truthful statement. 
+		Consequently, an inhabitant that says "I am not a knight" must be telling the truth, so must be a god.</p>
 		You may be able to work out some other rules that will help you solve these puzzles... 
 		<hr>
 	</div>

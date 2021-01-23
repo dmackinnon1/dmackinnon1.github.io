@@ -32,7 +32,7 @@ function refreshFirstBoard(){
 	$("#firstBoard").html(globalFirstBoard.build());
 	translateTokens(globalFirstBoard, globalSecondBoard);
 	$("#secondBoard").html(globalSecondBoard.build());
-	$("#solution").html(statements(globalSecondBoard));
+	$("#solution").html(statements(globalSecondBoard)+"<br>"+moreStatements(globalSecondBoard));
 	
 }
 

@@ -256,22 +256,29 @@ function statements(sb){
     if (sb._xy == 2) s += "Some non-<em>x</em> are <em>y</em>.<br> ";
    
     if (sb._x_y == 1) s += "No non-<em>x</em> are not <em>y</em>. <br>";
-    if (sb._x_y == 2) s += "Some non-<em>x</em> are not <em>y</em>.<br> ";
-   
-    if (sb.xy == 2 && sb.x_y == 1) s += "All <em>x</em> are <em>y</em>.<br>";
-    if (sb._xy == 2 && sb.x_y == 1) s += "All <em>y</em> are <em>x</em>.<br>";
+    if (sb._x_y == 2) s += "Some non-<em>x</em> are not <em>y</em>.<br> ";      
+
+    console.log(s);
+    return s;
+}
+
+function moreStatements(sb){
+
+    let s = "";
+	if (sb.xy == 2 && sb.x_y == 1) s += "All <em>x</em> are <em>y</em>.<br>";
+    if (sb.xy == 2 && sb._xy == 1) s += "All <em>y</em> are <em>x</em>.<br>";
+    //if (sb._xy == 2 && sb.x_y == 1) s += "All <em>y</em> are <em>x</em>.<br>";
 
     if (sb.x_y == 2 && sb.xy == 1) s += "All <em>x</em> are not <em>y</em>.<br>";
     if (sb.x_y == 2 && sb._x_y == 1) s += "All non-<em>y</em> are <em>x</em>.<br>";
 
     if (sb._x_y == 2 && sb.x_y == 1) s += "All non-<em>y</em> are not <em>x</em>.<br>";
-    if (sb._x_y == 2 && sb._xy == 1) s += "All non-<em>x</em> are <em>y</em>.<br>";
+    if (sb._x_y == 2 && sb._xy == 1) s += "All non-<em>x</em> are not <em>y</em>.<br>";
 
 
     if (sb._xy == 2 && sb.xy ==1) s += "All <em>y</em> are not <em>x</em>.<br>";
-    if (sb._xy == 2 && sb._x_y ==1) s += "All non-<em>x</em> are <em>y</em>.<br>";      
+    if (sb._xy == 2 && sb._x_y ==1) s += "All non-<em>x</em> are <em>y</em>.<br>";
 
-    console.log(s);
     return s;
 }
 

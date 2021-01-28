@@ -25,8 +25,8 @@
 
 <script>
 isEditable = true;
-let syllogism = new RandomBlankSyllogism().build();	
-let solver = new Solver(syllogism,new FirstBoard());
+let syllogism = nonTrivialSyllogism();	
+let solver = new Solver(syllogism,new FirstBoard(),new SecondBoard());
 solver.solve();
 
 function getStatus(){
@@ -39,16 +39,22 @@ function getStatus(){
 
 function showSolution(){
 	console.log("show solution requested");
-	let newSolver = new Solver(syllogism, globalFirstBoard);
+	let newSolver = new Solver(syllogism, globalFirstBoard,globalSecondBoard);
 	globalFirstBoard.clear();
 	globalSecondBoard.clear();
 	newSolver.solve();
-	refreshFirstBoard();
+	solver = new Solver(syllogism,new FirstBoard(),new SecondBoard());
+	solver.solve();
+	console.log(solver, newSolver,solver.fb.equals(globalFirstBoard))
+	$("#firstBoard").html(globalFirstBoard.build());
+	$("#secondBoard").html(globalSecondBoard.build());
+	$("#status").html(getStatus());
+	$("#solution").html(statementsFrom(globalSecondBoard,syllogism.ps)+"<br>"+moreStatementsFrom(globalSecondBoard,syllogism.ps));	
 }
 
 function newPuzzle(){
-	syllogism = new RandomBlankSyllogism().build();
-	solver = new Solver(syllogism,new FirstBoard());
+	syllogism = nonTrivialSyllogism();
+	solver = new Solver(syllogism,new FirstBoard(),new SecondBoard);
     solver.solve();
 	globalFirstBoard.clear();
 	globalSecondBoard.clear();

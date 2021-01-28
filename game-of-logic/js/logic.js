@@ -2,6 +2,8 @@
 
 let isEditable = true;
 
+
+
 function rect(x,y,size){
 	let b = new Bldr("rect");
 	b.att("x",x).att("y",y).att("width", size).att("height",size)
@@ -60,7 +62,7 @@ function tokenValue(token){
 
 class FirstBoard {
 
-constructor(size=290){
+    constructor(size=290){
 		this.size = size;
 		
 		this.xym = 0;
@@ -72,6 +74,21 @@ constructor(size=290){
 		this._x_ym = 0;
 		this._x_y_m = 0;	
 	}
+    
+    nonTrivial(){
+
+    	let result = 	
+    	this.xym +
+		this.xy_m + 		
+		this.x_ym +
+		this._xym +
+		this.x_y_m +
+		this._xy_m +
+		this._x_ym +
+		this._x_y_m;
+
+		return result > 0;
+    }
 
     clear(){
     	this.xym = 0;
@@ -92,7 +109,7 @@ constructor(size=290){
                 this.x_y_m == other.x_y_m &&
                 this._xy_m == other._xy_m &&
                 this._x_ym == other._x_ym &&
-                this._x_y_m == other.x_y_m;
+                this._x_y_m == other._x_y_m;
     }
 
 	init(){
@@ -202,6 +219,19 @@ constructor(size=200){
 		this._x_y = 0;
 	}
 
+	 nonTrivial(){
+
+    	let result = 	
+    	this.xy +
+		this.x_y +
+		this._xy +
+		this.x_y;
+		
+
+		return result > 0;
+    }
+
+
 	init(){
 		let height = this.size/2;
 		let width = this.size/2;
@@ -263,6 +293,12 @@ constructor(size=200){
 		return this.svgBldr.build();
 	}
 }
+
+var globalFirstBoard = new FirstBoard();
+globalFirstBoard.init();
+
+var globalSecondBoard = new SecondBoard();
+globalSecondBoard.init();
 
 function translateTokens(fb,sb){
     
@@ -327,11 +363,6 @@ function evalTokens(token1, token2){
 	 
 }
 
-var globalFirstBoard = new FirstBoard();
-globalFirstBoard.init();
-
-var globalSecondBoard = new SecondBoard();
-globalSecondBoard.init();
 
 /***
 * Puzzles and solvers
@@ -355,7 +386,6 @@ class PuzzleSet {
 	}
 }
 
-//build statement from board 2
 class Statement{
 	constructor(q, v1, v2){		
 	this.quant = q;
@@ -421,7 +451,6 @@ class RandomStatement {
 
 let blankPuzzleSet = new PuzzleSet("<em>x</em>","not <em>x</em>","<em>y</em>","not <em>y</em>", "<em>m</em>", "not <em>m</em>");
 class RandomBlankSyllogism {
-
 	constructor(){};
 	build(){
 		let s1 = new RandomStatement("x").build();
@@ -441,6 +470,21 @@ function noFromAll(s){
 	console.log(statement);
 	return statement;
 }
+
+//no idea how bad this loop will be
+function nonTrivialSyllogism(){
+
+    let nonTrivial = false;
+    let syl = null;
+    while (!nonTrivial){
+    	syl = new RandomBlankSyllogism().build();
+    	let sol = new Solver(syl, new FirstBoard(), new SecondBoard());
+    	sol.solve();
+    	nonTrivial = sol.sb.nonTrivial();
+    }
+    return syl;
+}
+
 
 
 class Syllogism{
@@ -475,9 +519,10 @@ class Move{
 }
 
 class Solver {
-	constructor(syllogism, firstBoard){
+	constructor(syllogism, firstBoard, secondBoard){
 		this.s = syllogism;
 		this.fb = firstBoard;
+		this.sb = secondBoard;
 		this.noMoves = [];
 		this.someMoves=[];
 	}
@@ -489,6 +534,7 @@ class Solver {
 
       this.buildPositiveMoves();
       this.applyPositiveMoves();
+      translateTokens(this.fb, this.sb);
 	}
 
 	applyNegativeMoves(){
@@ -585,7 +631,7 @@ let testStatement = new Statement("No","m","y");
 let testStatement2 = new Statement("No","x","_m");
 let syl1 = new Syllogism(testSet,testStatement,testStatement2);
 
-puzzles.push(new Solver(syl1,globalFirstBoard));
+puzzles.push(new Solver(syl1,globalFirstBoard,globalSecondBoard));
 
 //2
 let testSet2 = new PuzzleSet("cheating",
@@ -601,7 +647,7 @@ let ts1 = new Statement("No","m","x");
 let ts2 = new Statement("No","_m","y");
 let syl2 = new Syllogism(testSet2,ts1,ts2);
 
-puzzles.push(new Solver(syl2,globalFirstBoard));
+puzzles.push(new Solver(syl2,globalFirstBoard,globalSecondBoard));
 //3
 let testSet3 = new PuzzleSet("new",
     "old",
@@ -616,7 +662,7 @@ let ts1a = new Statement("Some","x","_m");
 let ts2a = new Statement("No","y","_m");
 let syl2a = new Syllogism(testSet3,ts1a,ts2a);
 
-puzzles.push(new Solver(syl2a,globalFirstBoard));
+puzzles.push(new Solver(syl2a,globalFirstBoard,globalSecondBoard));
 
 //4
 
@@ -633,7 +679,7 @@ let ts1b = new Statement("All","x","_m");
 let ts2b = new Statement("All","y","m");
 let syl2b = new Syllogism(testSet4,ts1b,ts2b);
 
-puzzles.push(new Solver(syl2b,globalFirstBoard));
+puzzles.push(new Solver(syl2b,globalFirstBoard,globalSecondBoard));
 
 //5
 
@@ -647,7 +693,7 @@ let testSet5 = new PuzzleSet("hard boiled",
     );
 let syl2c = new Syllogism(testSet5,new Statement("Some","m","x"),new Statement("No","m","_y"));
 
-puzzles.push(new Solver(syl2c,globalFirstBoard));
+puzzles.push(new Solver(syl2c,globalFirstBoard,globalSecondBoard));
 
 //6
 let testSet6 = new PuzzleSet("soldiers",
@@ -660,7 +706,7 @@ let testSet6 = new PuzzleSet("soldiers",
     );
 let syl2d = new Syllogism(testSet6,new Statement("No","m","x"),new Statement("All","m","y"));
 
-puzzles.push(new Solver(syl2d,globalFirstBoard));
+puzzles.push(new Solver(syl2d,globalFirstBoard,globalSecondBoard));
 
 //7
 let testSet7 = new PuzzleSet("pigs",
@@ -673,4 +719,4 @@ let testSet7 = new PuzzleSet("pigs",
     );
 let syl2e = new Syllogism(testSet7,new Statement("All","x","m"),new Statement("No","y","m"));
 
-puzzles.push(new Solver(syl2e,globalFirstBoard));
+puzzles.push(new Solver(syl2e,globalFirstBoard,globalSecondBoard));

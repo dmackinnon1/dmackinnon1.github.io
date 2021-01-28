@@ -24,18 +24,46 @@
 <script src="js/logic.js"></script>
 
 <script>
-let firstBoard = null;
-isEditable = true;	
-//setting up the interface
+isEditable = true;
+let syllogism = new RandomBlankSyllogism().build();	
+let solver = new Solver(syllogism,new FirstBoard());
+solver.solve();
+
+function getStatus(){
+	if(solver.fb.equals(globalFirstBoard)){
+        return "Solved!";    
+	} else {
+		return "Not Solved Yet!";
+	}
+}
+
+function showSolution(){
+	console.log("show solution requested");
+	let newSolver = new Solver(syllogism, globalFirstBoard);
+	globalFirstBoard.clear();
+	globalSecondBoard.clear();
+	newSolver.solve();
+	refreshFirstBoard();
+}
+
+function newPuzzle(){
+	syllogism = new RandomBlankSyllogism().build();
+	solver = new Solver(syllogism,new FirstBoard());
+    solver.solve();
+	globalFirstBoard.clear();
+	globalSecondBoard.clear();
+	refreshFirstBoard();
+	$("#syllogism").html(syllogism.toString());
+	$("#status").html(getStatus());
+}
 
 function refreshFirstBoard(){
 	console.log("event fired")
 	$("#firstBoard").html(globalFirstBoard.build());
 	translateTokens(globalFirstBoard, globalSecondBoard);
 	$("#secondBoard").html(globalSecondBoard.build());
-	$("#solution").html(statementsFrom(globalSecondBoard,blankPuzzleSet)
-	    +"<br>"+moreStatementsFrom(globalSecondBoard,blankPuzzleSet));
-	
+	$("#status").html(getStatus());
+	$("#solution").html(statementsFrom(globalSecondBoard,syllogism.ps)+"<br>"+moreStatementsFrom(globalSecondBoard,syllogism.ps));	
 }
 
 evnts.addCallback("refreshFirstBoard",refreshFirstBoard);
@@ -43,6 +71,9 @@ evnts.addCallback("refreshFirstBoard",refreshFirstBoard);
 $(document).ready(function(){
     $("#firstBoard").html(globalFirstBoard.build());
     $("#secondBoard").html(globalSecondBoard.build());
+    
+    $("#syllogism").html(syllogism.toString());
+    refreshFirstBoard();
 	});
 
 </script>
@@ -61,9 +92,9 @@ $(document).ready(function(){
 		<div class="page-header">
 			<h1>the game of logic
 			<div class="btn-group btn-group-md " role="group">
-					<a class="btn nav-button-default btn-default" href="./puzzles.html">Puzzles</a>
-					<a class="btn nav-button-primary btn-primary" href=".">Explorer</a>
-					<a class="btn nav-button-default btn-default" href="./examples.html">Examples</a>
+					<a class="btn nav-button-primary btn-primary" href="./puzzles.html">Puzzles</a>
+					<a class="btn nav-button-default btn-default" href=".">Explorer</a>
+					<a class="btn nav-button-default btn-default" href="./examples.html">Examples</a>	
 			</div>
 			</h1>
 		</div> 	
@@ -80,24 +111,37 @@ $(document).ready(function(){
 	</div>
 	<div class='col-sm-1 col-lg-3'></div>
 </div>
-<div id='syllogism' class='framed'></div>
+<div class="centered">
+<button type="button" class="btn btn-primary" onclick="newPuzzle()">New Puzzle</button>
+</div>
+<br>
+<br>
+<div id='syllogism' class='framed'></div> <br>
 <div id='firstBoard' class='framed'></div>
 <br>
 <hr>
+<br>
+<div class="centered">
+<div class="btn-group btn-group-md" role="group">
+	<button class="btn  btn-default"  onclick="showSolution()">Show Solution</button>
+</div>
+</div>
 <br>
 
 <div id='secondBoard' class='framed'></div>
 
 <br>
+<div id='status' class='framed'></div>
 <hr>
 <br>
 <div id='solution' class='framed'></div>
-
+<!--
 	<div class='row'>
 	<div class='col-sm-1 col-lg-3'></div>
 	<div class='col-sm-10 col-lg-6 main-column'></div>
 	<div class='col-sm-1 col-lg-3'></div>
 	</div>
+	-->
 </div>
 </body>
 </html>

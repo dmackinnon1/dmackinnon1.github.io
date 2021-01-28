@@ -24,18 +24,24 @@
 <script src="js/logic.js"></script>
 
 <script>
-let firstBoard = null;
-isEditable = true;	
-//setting up the interface
+isEditable = false;	
+let solver = puzzles[Math.floor(Math.random()*puzzles.length)];
+
+function newPuzzle(){
+	globalFirstBoard.clear();
+	globalSecondBoard.clear();
+	solver = puzzles[Math.floor(Math.random()*puzzles.length)];
+	solver.solve();
+	refreshFirstBoard();
+	$("#syllogism").html(solver.s.toString());
+}
 
 function refreshFirstBoard(){
 	console.log("event fired")
 	$("#firstBoard").html(globalFirstBoard.build());
 	translateTokens(globalFirstBoard, globalSecondBoard);
 	$("#secondBoard").html(globalSecondBoard.build());
-	$("#solution").html(statementsFrom(globalSecondBoard,blankPuzzleSet)
-	    +"<br>"+moreStatementsFrom(globalSecondBoard,blankPuzzleSet));
-	
+	$("#solution").html(statementsFrom(globalSecondBoard,solver.s.ps)+"<br>"+moreStatementsFrom(globalSecondBoard,solver.s.ps));	
 }
 
 evnts.addCallback("refreshFirstBoard",refreshFirstBoard);
@@ -43,6 +49,12 @@ evnts.addCallback("refreshFirstBoard",refreshFirstBoard);
 $(document).ready(function(){
     $("#firstBoard").html(globalFirstBoard.build());
     $("#secondBoard").html(globalSecondBoard.build());
+    
+    $("#syllogism").html(solver.s.toString());
+
+
+    solver.solve();
+    refreshFirstBoard();
 	});
 
 </script>
@@ -62,8 +74,9 @@ $(document).ready(function(){
 			<h1>the game of logic
 			<div class="btn-group btn-group-md " role="group">
 					<a class="btn nav-button-default btn-default" href="./puzzles.html">Puzzles</a>
-					<a class="btn nav-button-primary btn-primary" href=".">Explorer</a>
-					<a class="btn nav-button-default btn-default" href="./examples.html">Examples</a>
+					<a class="btn nav-button-default btn-default" href=".">Explorer</a>
+					<a class="btn nav-button-primary btn-primary" href="./examples.html">Examples</a>
+	
 			</div>
 			</h1>
 		</div> 	
@@ -80,7 +93,12 @@ $(document).ready(function(){
 	</div>
 	<div class='col-sm-1 col-lg-3'></div>
 </div>
-<div id='syllogism' class='framed'></div>
+<div class = "centered">
+<button type="button" class="btn btn-primary" onclick="newPuzzle()">New Puzzle</button>
+</div>
+<br>
+<br>
+<div id='syllogism' class='framed'></div> <br>
 <div id='firstBoard' class='framed'></div>
 <br>
 <hr>

@@ -449,13 +449,17 @@ class RandomStatement {
     }
 }
 
-let blankPuzzleSet = new PuzzleSet("<em>x</em>","not <em>x</em>","<em>y</em>","not <em>y</em>", "<em>m</em>", "not <em>m</em>");
+let sets = {};
+sets.plainSet = new PuzzleSet("<em>x</em>","not <em>x</em>","<em>y</em>","not <em>y</em>", "<em>m</em>", "not <em>m</em>");
+sets.goDogGoSet = new PuzzleSet("blue","not blue","big","small","fast","slow", " dogs ");
+let defaultPuzzleSet = sets.plainSet;
+
 class RandomBlankSyllogism {
 	constructor(){};
 	build(){
 		let s1 = new RandomStatement("x").build();
 		let s2 = new RandomStatement("y").build();
-		return new Syllogism(blankPuzzleSet, s1,s2);
+		return new Syllogism(defaultPuzzleSet, s1,s2);
 	}
 }
 

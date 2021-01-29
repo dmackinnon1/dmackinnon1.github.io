@@ -28,6 +28,7 @@ isEditable = true;
 let syllogism = nonTrivialSyllogism();	
 let solver = new Solver(syllogism,new FirstBoard(),new SecondBoard());
 solver.solve();
+let selectedSet = "plainSet";
 
 function getStatus(){
 	if(solver.fb.equals(globalFirstBoard)){
@@ -74,6 +75,18 @@ function refreshFirstBoard(){
 
 evnts.addCallback("refreshFirstBoard",refreshFirstBoard);
 
+function setSelect(event){
+	let id = event.target.id;
+	console.log(id);
+    $("#"+selectedSet).removeClass("btn-primary");
+    $("#"+id).removeClass("btn-default");
+	$("#"+id).addClass("btn-primary");
+	selectedSet = id;
+	defaultPuzzleSet = sets[selectedSet];
+	newPuzzle();
+
+}
+
 $(document).ready(function(){
     $("#firstBoard").html(globalFirstBoard.build());
     $("#secondBoard").html(globalSecondBoard.build());
@@ -114,9 +127,17 @@ $(document).ready(function(){
 		</div>
 		<hr>	
 		<br>
-<div class="centered">
+<div class="text-center">
 <button type="button" class="btn btn-primary" onclick="newPuzzle()">New Puzzle</button>
 </div>
+<br>
+<div class="text-center">
+<div class="text-center btn-group mr-2" role="group">
+    <button id="plainSet" type="button" class="btn btn-primary" onclick="setSelect(event)">plain variables</button>
+    <button id="goDogGoSet" type="button" class="btn btn-default" onclick="setSelect(event)">Go, Dog, Go!</button>
+</div>
+</div>
+
 <br>
 <br>
 <div id='syllogism' class='framed'></div> <br>
@@ -124,7 +145,7 @@ $(document).ready(function(){
 <br>
 <hr>
 <br>
-<div class="centered">
+<div class="text-center">
 <div class="btn-group btn-group-md" role="group">
 	<button class="btn  btn-default"  onclick="showSolution()">Show Solution</button>
 </div>

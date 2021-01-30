@@ -454,6 +454,27 @@ sets.plainSet = new PuzzleSet("<em>x</em>","not <em>x</em>","<em>y</em>","not <e
 sets.goDogGoSet = new PuzzleSet("blue","not blue","big","small","fast","slow", " dogs ");
 let defaultPuzzleSet = sets.plainSet;
 
+function randomGoDogGo(){
+    let blue = ["blue", "not blue"];
+    let big = ["big","small"];
+    let fast = ["fast","slow"];
+    let tall = ["tall","short"];
+    let green = ["green", "not green"];
+    let awake = ["awake", "sleeping"];
+    let driving =["car driving", "non car driving"];
+    let climbing = ["tree climbing", "non tree climbing"];
+    let red = ["red","not red"];
+
+    let colors =[blue, green,red];
+    let aOne = [big, tall, fast];
+    let aTwo = [awake, driving, climbing];
+
+    let r1 = colors[Math.floor(Math.random()*colors.length)];
+    let r2 = aOne[Math.floor(Math.random()*aOne.length)];
+    let r3 = aTwo[Math.floor(Math.random()*aTwo.length)];
+    return new PuzzleSet(r1[0],r1[1],r2[0],r2[1],r3[0],r3[1]," dogs ");
+}
+
 class RandomBlankSyllogism {
 	constructor(){};
 	build(){

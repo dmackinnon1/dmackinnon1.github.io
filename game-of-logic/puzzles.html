@@ -54,6 +54,9 @@ function showSolution(){
 }
 
 function newPuzzle(){
+	if(selectedSet == "goDogGoSet"){
+		defaultPuzzleSet = randomGoDogGo(); //hacky way to introduce randomGoDogGo
+	}
 	syllogism = nonTrivialSyllogism();
 	solver = new Solver(syllogism,new FirstBoard(),new SecondBoard);
     solver.solve();
@@ -81,7 +84,7 @@ function setSelect(event){
     $("#"+selectedSet).removeClass("btn-primary");
     $("#"+id).removeClass("btn-default");
 	$("#"+id).addClass("btn-primary");
-	selectedSet = id;
+	selectedSet = id;	
 	defaultPuzzleSet = sets[selectedSet];
 	newPuzzle();
 
@@ -144,18 +147,16 @@ $(document).ready(function(){
 <div id='firstBoard' class='framed'></div>
 <br>
 <hr>
-<br>
-<div class="text-center">
-<div class="btn-group btn-group-md" role="group">
-	<button class="btn  btn-default"  onclick="showSolution()">Show Solution</button>
-</div>
-</div>
+
 <br>
 
 <div id='secondBoard' class='framed'></div>
 
 <br>
 <div id='status' class='framed'></div>
+<div class="text-center">
+	<button id="solveButton" class="btn  btn-default"  onclick="showSolution()">Show Solution</button>
+</div>
 <hr>
 <br>
 <div id='solution' class='framed'></div>

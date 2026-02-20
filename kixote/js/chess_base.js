@@ -266,6 +266,17 @@ class Cell {
 		}
 		return parseInt(this.decoration) === l;
 	}
+
+	isMaxNeighborOffPath(cell, path) {
+		if (! this.isNeighbor(cell)) return false;
+		let l = -1; 
+		let n = cell.neighbors().filter(x => !path.contains(x));
+		for (let c in n){
+			let t = parseInt(n[c].decoration);
+			if (t >= l) l = t;
+		}
+		return parseInt(this.decoration) === l;
+	}
 	
 	degree(){
 		return this.neighbors().length;
@@ -523,13 +534,17 @@ function randomInt(lessThan){
 };
 
 
-function svgMap(path, size=8) {
+function svgMap(path, size=8, secondary=0) {
+	if (secondary == 0){
+		secondary = size;
+	}
 	var svg = new Bldr("svg");
-	let width = size*30;
-	svg.att("align", "center").att("width",width).att("height",width);
+	let width = secondary*30;
+	let height = size*30;
+	svg.att("align", "center").att("width",width).att("height",height);
 	svg.att("style","display:block");
 	//first the board
-	for (var i = 0; i < size; i++) {
+	for (var i = 0; i < secondary; i++) {
 		for (var j = 0; j < size; j ++) {
 			var x = i*30;
 			var y = j*30;

@@ -248,7 +248,11 @@ class Cell {
 	toString() {
 		return "Cell [" + this.rowNum + "][" + this.colNum +"]: " + this.decoration;
 	}
-	
+
+	position(){
+		return "(" +this.rowNum + "," + this.colNum + ")";
+	}
+
 	isEqual(other) {
 		let result =(this.rowNum === other.rowNum) && (this.colNum === other.colNum);
 		return result;
@@ -342,6 +346,13 @@ gameDisplay.map = "";
 gameDisplay.score = "";
 gameDisplay.status = "";
 
+/**
+ * utilities
+ */
+function randomInt(lessThan){
+	var selection = Math.floor(Math.random()*(lessThan));
+	return selection;
+};
 
 function svgMap(pieces, cover, size) {
 	let svg = new Bldr("svg");

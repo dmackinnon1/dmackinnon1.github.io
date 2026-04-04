@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Take All</title>
+</head>
+
+<style>
+    table, th, td {
+        padding: 4px;
+        text-align: center;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    svg {
+        display: block;
+        margin: auto ;
+        border: 1px solid black;
+    }
+
+    .buttonDiv {
+        display: inline-block;
+        padding: 2px;
+        border: 2px;
+    }
+
+    .centered {
+        text-align: center;
+    }
+
+</style>
+</head>
+<script src="js/evnts.js"></script> <!-- required for callback registration-->
+<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<script src="js/chess_base.js"></script>
+<script src="js/capture.js"></script>
+
+<script>
+     var maxDepth = 5;
+     var gameBoard;
+     var puzzle;
+     var depth = 0;
+     var game;
+     var levelAdjustment = 2;
+     var backup;
+
+    function refresh(level = 1){
+        depth = level;
+        console.log("depth is: " + depth);
+        gameBoard = new Board(8);
+        gameBoard.init();
+        let generator = new PuzzleGenerator(gameBoard);
+        puzzle = generator.puzzleOfDepth(depth+levelAdjustment);
+        puzzle.resetPieceCounts();
+        game = puzzle;
+        $("#boardDisplay").html(htmlForBoard(gameBoard));
+        puzzle.colourCells();
+        $("#solutionDisplay").html(puzzle.solutionHTML());
+        $("#messageDisplay").html(puzzle.messageHTML());
+        setLevel();
+        backup = puzzle.clone();
+    }
+
+    function setButtons() {
+        $(".btn-primary").addClass("btn-secondary");
+        $(".btn-primary").removeClass("btn-primary");
+
+        $("#" + gameType.type).removeClass("btn-secondary");
+        $("#" + gameType.type).addClass("btn-primary");
+        $(".nav-button-default").addClass("btn-default");
+        $(".nav-button-primary").addClass("btn-primary");
+    }
+
+    function setLevel() {
+        $("#levelDisplay").html("<img src=\"imgs/level" + depth + ".svg\" width=\"190\" height=\"50\"/>");
+    }
+
+    $(document).ready(function(){
+    
+        $("#resetButton").on("click", function(event){
+            refresh();
+        });
+        //depth = (depth % maxDepth) + 1;
+        $("#advanceButton").on("click", function(event){
+            if (puzzle.checkForSolved()){
+              refresh(depth = (depth % maxDepth) + 1);
+            } else {
+                $("#messageDisplay").html("Solve the current puzzle brfore moving on to the next");
+            }
+        });
+
+        evnts.addCallback("refreshMessage", function () {
+            $("#messageDisplay").html(puzzle.messageHTML());
+        });
+        refresh();
+
+    });
+
+
+</script>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="..">
+                <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+            </a>
+            <p class="navbar-text navbar-right">
+                <a href=".." class="navbar-link">dmackinnon1.github.io</a>
+            </p>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class='row'>
+        <div class='col-sm-1'></div>
+        <div class='col-sm-10'>
+            <div class="page-header">
+                <h1>
+                    <div class="btn-group btn-group-md " role="group">
+                        <a class="btn btn-default nav-button-default" href="./puzzles.html">Puzzles</a>
+                        <a class="btn btn-default nav-button-default" href=".">Explorer</a>
+                        <a class="btn btn-primary nav-button-primary" href="./capture.html">Take All</a>
+                    </div>
+                    Take All <small> capture all the pieces </small>
+                </h1>
+            </div>
+            <button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
+                About
+            </button>
+            <div id='full' class='collapse '>
+                <br>
+                <div class="media">
+                    <a class="media-left media-middle" href="#">
+                        <img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">Take All</h4>
+                        Take All puzzles have these simple rules:
+                        <ol>
+                            <li>The pieces are all the same colour, and must capture each other.</li>
+                            <li>The King make the last capture and be the last piece standing.</li>
+                            <li>Every move must be one that takes another piece.</li>
+                            <li>Each piece can only make up to two moves.</li>
+                        </ol>
+                        This puzzle was inspired by the NYT "Capture" puzzle.
+                    </div>
+                </div>
+                <br>
+            </div>
+
+            <!-- hr>
+            <div id="puzzleDescription" style="text-align=center"></div>
+            <hr>
+            <h4><div id="puzzleStatus" style="text-align=center"></div></h4>
+            -->
+            <hr>
+            <h3><div id="boardDisplay" style="text-align=center"></div></h3>
+            <hr>
+            <h4><div id="messageDisplay" style="text-align=center"></div></h4>
+            <hr>
+            <div id="levelGroup"">
+                <div id="levelDisplay">
+                    <img src="imgs/level1.svg" width="190" height="50">
+                </div>
+                    <div id="advanceButtonHolder">
+                        <button type="button" id="advanceButton", class="btn btn-secondary">Advance to next</span></button>
+                    </div>
+            </div>
+           <hr> 
+            <button type='button' class='btn btn-info' data-toggle='collapse' data-target='#solution'>
+                Solution
+            </button>
+            <div id='solution' class='collapse '>
+                <h4><div id="solutionDisplay" style="text-align=center"></div></h4>
+            </div>
+
+            <hr>
+            
+            <div id="resetButtonHolder">
+                <button type="button" id="resetButton", class="btn btn-primary">New Puzzle Set</span></button>
+                <!--button type="button" id="goBackButton", class="btn btn-primary">Reset Current Puzzle</span></button -->
+            </div>
+            <hr>
+            <div id="mapDisplay" style="text-align=center"></div>
+            <hr>
+        </div>
+        <div class='col-sm-1'></div>
+</body>
+</html>

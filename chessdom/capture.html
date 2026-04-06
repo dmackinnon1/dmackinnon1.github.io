@@ -45,7 +45,7 @@
      var puzzle;
      var depth = 0;
      var game;
-     var levelAdjustment = 2;
+     var levelAdjustment = 3;
      var backup;
 
     function refresh(level = 1){
@@ -84,12 +84,11 @@
         $("#resetButton").on("click", function(event){
             refresh();
         });
-        //depth = (depth % maxDepth) + 1;
         $("#advanceButton").on("click", function(event){
             if (puzzle.checkForSolved()){
               refresh(depth = (depth % maxDepth) + 1);
             } else {
-                $("#messageDisplay").html("Solve the current puzzle brfore moving on to the next");
+                $("#messageDisplay").html("Solve the current puzzle or start a new puzzle set");
             }
         });
 
@@ -128,7 +127,7 @@
                         <a class="btn btn-default nav-button-default" href="./puzzles.html">Puzzles</a>
                         <a class="btn btn-default nav-button-default" href=".">Explorer</a>
                         <a class="btn btn-primary nav-button-primary" href="./capture.html">Take All</a>
-                    </div>
+                    </div><br/>
                     Take All <small> capture all the pieces </small>
                 </h1>
             </div>
@@ -171,7 +170,7 @@
                     <img src="imgs/level1.svg" width="190" height="50">
                 </div>
                     <div id="advanceButtonHolder">
-                        <button type="button" id="advanceButton", class="btn btn-secondary">Advance to next</span></button>
+                        <button type="button" id="advanceButton", class="btn btn-secondary">Advance to next puzzle</span></button>
                     </div>
             </div>
            <hr> 

@@ -56,18 +56,18 @@ class CapturePuzzle {
 		let i = parseInt(target.getAttribute("data-row"));
 		let j = parseInt(target.getAttribute("data-col"));
 		let targetCell = this.board.cells[i][j];
-		//let parentTarget = target;
-		//if (target.localName === 'span' || target.localName ==='svg') {
-		//	parentTarget = target.parentNode;
-		//}
         console.log("clicked on: " + targetCell.decoration);
         console.log("clicked on: " + this.getCapturePiece(i,j));
 
 		let clickedOn =this.getCapturePiece(i,j);
 		if (this.selected == null && clickedOn!=null){
 			this.selected = clickedOn;
-			this.message = "You selected a " + clickedOn.type;
-		} else if (this.selected == clickedOn){
+            if (this.selected.remainingMoves() === 1){
+                this.message = "You selected a " + clickedOn.type + " with only one move left.";
+            } else {
+                this.message = "You selected a " + clickedOn.type + " with " + this.selected.remainingMoves() + " moves left.";
+            }
+        } else if (this.selected == clickedOn){
 			console.log("double clicked on same");
 		} else if(clickedOn == null) {
 			console.log("clicked on empty");
@@ -75,8 +75,11 @@ class CapturePuzzle {
 			this.message = "No piece is slelected";
 		} else if(this.selected.pieceIsReachable(clickedOn)) {
 			console.log(this.selected.type +" can capture " + clickedOn.type);
-			if (clickedOn.type == "king"){
-				this.message = "You cannot capture the King";
+			if (this.selected.remainingMoves() == 0) {
+                this.message = "No moves left for this piece";
+                this.selected = null;
+            } else if (clickedOn.type == "king"){
+				this.message = "You cannot capture the king";
 				this.selected = null;
 			} else {
 				this.message = "The " + this.selected.type + " captures the " + clickedOn.type;
@@ -90,18 +93,7 @@ class CapturePuzzle {
 		if(this.checkForSolved()){
 			this.message = "You solved the puzzle!";
 		}
-		
-        /*
-		if (this.isInSet(i, j, this.pieces)) {
-			this.remove(i,j);
-			targetCell.decoration = "";
-			parentTarget.innerHTML = emptyCell(i,j);	
-		} else {
-			targetCell.decoration = gameType.type;
-			this.pieces.push(targetCell);
-			parentTarget.innerHTML = gameGlyph(i,j, targetCell.decoration);
-		}
-        */
+
 		this.colourCells();
 		evnts.fireEvent("refreshMessage");
 	}
@@ -142,20 +134,34 @@ class CapturePuzzle {
                 var cell = this.board.cells[i][j];
                 if (cell.decoration !=""){
                     div.html(gameGlyph(i,j, cell.decoration));
-                   // div.css("background","#99ff99");
+                    //div.css("background","#99ff99");
                 }
 
             }
         }
 
         if (this.selected != null){
+            let si = this.selected.cell.rowNum;
+            let sj= this.selected.cell.colNum;
+            let sdiv = getDiv(si, sj);
+            if (this.selected.remainingMoves() == 0) {
+                sdiv.css("background","rgb(128,128,128,1)");
+            } else if (this.selected.remainingMoves() == 1) {
+                sdiv.css("background","rgb(128,128,128,0.5)");
+            }else if(this.selected.remainingMoves() == 2){
+                sdiv.css("background","rgb(128,128,128,0.2)");
+            }
+
+
 			let nbs = this.selected.neighbors();
             for (let l = 0; l < nbs.length; l++){
                 let nbCell = nbs[l];
                 let i = nbCell.rowNum;
                 let j = nbCell.colNum;
-	            let div = getDiv(i, j);
-                div.css("background","#99ff99");
+                if (this.selected.cellIsReachable(nbCell)&&nbCell.decoration!==""){
+                    let div = getDiv(i, j);
+                    div.css("background","#99ff99");
+                }
             }
         }
     }
@@ -167,6 +173,10 @@ class CapturePiece {
         this.count = 0;
         this.type = "knight";
         this.cell = null;
+    }
+
+    remainingMoves(){
+        return 2 - this.count;
     }
 
 	toString(){
@@ -218,7 +228,7 @@ class CapturePiece {
             return false;
         }
         let thetype = this.type;
-        if(thetype=="king" | thetype=="knight"){ return true;}
+        if(thetype==="king" | thetype==="knight"){ return true;}
         let this_row = this.cell.rowNum;
         let this_col = this.cell.colNum;
         let other_row = cell.rowNum;
@@ -243,7 +253,7 @@ class CapturePiece {
                 for (let i = this_row + 1; i < other_row; i++) {
                     for (let j = this_col +1; j < other_col; j++) {
                         let space = this.board.cells[i][j];
-                        if (space.decoration != "") {
+                        if (space.decoration !== "") {
                             console.log("-- found " + space.decoration + " in path");
                             return false;
                         }
@@ -253,7 +263,7 @@ class CapturePiece {
                 for (let i = this_row + 1; i < other_row; i++) {
                     for (let j = this_col -1; j > other_col; j--) {
                         let space = this.board.cells[i][j];
-                        if (space.decoration != "") {
+                        if (space.decoration !== "") {
                             console.log("-- found " + space.decoration + " in path");
                             return false;
                         }
@@ -265,7 +275,7 @@ class CapturePiece {
                 for (let i = this_row - 1; i > other_row; i--) {
                     for (let j = this_col +1; j < other_col; j++) {
                         let space = this.board.cells[i][j];
-                        if (space.decoration != "") {
+                        if (space.decoration !== "") {
                             console.log("-- found " + space.decoration + " in path");
                             return false;
                         }
@@ -275,7 +285,7 @@ class CapturePiece {
                 for (let i = this_row - 1; i > other_row; i--) {
                     for (let j = this_col -1; j > other_col; j--) {
                         let space = this.board.cells[i][j];
-                        if (space.decoration != "") {
+                        if (space.decoration !== "") {
                             console.log("-- found " + space.decoration + " in path");
                             return false;
                         }
@@ -284,40 +294,6 @@ class CapturePiece {
             }
         }
         return true;
-        /**
-        let rr = this_row - other_row;
-        let cc = this_col - other_col;
-        let minRow = Math.min(this_row, other_row);
-        let maxRow = Math.max(this_row, other_row);
-        let minCol = Math.min(this_col, other_col);
-        let maxCol = Math.max(this_col, other_col);
-        let diagDirection = (rr*cc > 0);
-        if (diagDirection){
-            console.log("-- diagonal direction is positive");
-            for (let i = minRow + 1; i < maxRow - 1; i++) {
-                for (let j = minCol + 1; j < maxCol - 1; j++) {
-                    let space = this.board.cells[i][j];
-                    if (space.decoration != "") {
-                        console.log("-- found " + space.decoration + " in path");
-                        return false;
-                    }
-                }
-            }
-        } else {
-            console.log("-- diagonal direction is negative");
-            for (let i = maxRow - 1; i > minRow + 1; i--) {
-                for (let j = minCol + 1; j < maxCol - 1; j++) {
-                    let space = this.board.cells[i][j];
-                    if (space.decoration != "") {
-                        console.log("-- found " + space.decoration + " in path");
-                        return false;
-                    }
-                }
-            }
-        }
-        console.log("-- found nothing in bishop path");
-        return true;
-         **/
     }
     cellIsReachableRook(cell){
         let this_row = this.cell.rowNum;
@@ -341,7 +317,7 @@ class CapturePiece {
         } else if (this_col == other_col){
             for (let i = minRow + 1; i < maxRow; i++) {
                 let space = this.board.cells[i][this_col];
-                if (space.decoration !=""){
+                if (space.decoration !==""){
                     console.log("-- found " + space.decoration + " in path");
                     return false;
                 }
@@ -351,10 +327,14 @@ class CapturePiece {
         return true;
     }
     hasEmptyNeighbors(){
-        let nbs = this.cell.neighbors();
-        let nonEmpties = nbs.filter(n => n.decoration == "");
-        return nonEmpties.length > 0;
+        let nbs = this.reachableUnoccupiedNeighbors();
+        return nbs.length > 0;
     }
+
+    reachableUnoccupiedNeighbors(){
+        return this.cell.neighbors().filter(n => (this.cellIsReachable(n) && n.decoration === ""));
+    }
+
 }
 
 class PuzzleGenerator{
@@ -376,17 +356,17 @@ class PuzzleGenerator{
     }
     existingCapture(){
         let op = this.puzzle.randomAvailablePiece();
-        console.log("og piece: " + op.type);
         let newPiece = new CapturePiece(this.board);
         newPiece.type = this.randomType();
         console.log("new piece: " + newPiece.type);
         this.puzzle.addPiece(newPiece);
+
+        let nbs = op.reachableUnoccupiedNeighbors();
+        console.log("creating puzzle -- selected " + op);
+
         let ogCell = op.getCell();
-        let newCell = op.getNeighborCell();
-        while(!op.cellIsReachable(newCell)){
-            console.log("new cell is reachable: " + op.cellIsReachable(newCell) + " choosing new cell");
-            newCell = op.getNeighborCell();
-        }
+        let newCell = nbs[Math.floor(Math.random() * nbs.length)];
+
         console.log("new cell is reachable: " + op.cellIsReachable(newCell));
         op.moveTo(newCell);
         newPiece.setCell(ogCell);

@@ -32,7 +32,8 @@ class CapturePuzzle {
 		this.pieces = this.pieces.filter(p => p !== target);
 		let div = getDiv(source.cell.rowNum, source.cell.colNum);
 		div.html(emptyCell(source.cell.rowNum,source.cell.colNum));
-		source.cell.decoration = "";
+        source.cell.decoration = "";
+        target.cell.decoration = "";
 		source.setCell(target.cell);
 		source.count++;
 		console.log(source.type + " count: " + source.count);
@@ -250,46 +251,56 @@ class CapturePiece {
         let other_col =  cell.colNum;
         if (this_row < other_row){ //other is ahead in row
             if (this_col < other_col){ //other is ahead in column
-                for (let i = this_row + 1; i < other_row; i++) {
-                    for (let j = this_col +1; j < other_col; j++) {
-                        let space = this.board.cells[i][j];
-                        if (space.decoration !== "") {
-                            console.log("-- found " + space.decoration + " in path");
-                            return false;
-                        }
+                let i = this_row + 1;
+                let j = this_col + 1;
+                while (i < other_row && j < other_col){
+                    let space = this.board.cells[i][j];
+                    if (space.decoration !== "") {
+                        console.log("-- found " + space.decoration + " in path");
+                        return false;
                     }
+                    i++;
+                    j++;
                 }
+
             } else { //other is behind on column
-                for (let i = this_row + 1; i < other_row; i++) {
-                    for (let j = this_col -1; j > other_col; j--) {
-                        let space = this.board.cells[i][j];
-                        if (space.decoration !== "") {
-                            console.log("-- found " + space.decoration + " in path");
-                            return false;
-                        }
+                let i = this_row + 1;
+                let j = this_col - 1;
+                while (i < other_row && j > other_col){
+                    let space = this.board.cells[i][j];
+                    if (space.decoration !== "") {
+                        console.log("-- found " + space.decoration + " in path");
+                        return false;
                     }
+                    i++;
+                    j--;
                 }
             }
         } else {
             if (this_col < other_col){ //other is ahead in column
-                for (let i = this_row - 1; i > other_row; i--) {
-                    for (let j = this_col +1; j < other_col; j++) {
-                        let space = this.board.cells[i][j];
-                        if (space.decoration !== "") {
-                            console.log("-- found " + space.decoration + " in path");
-                            return false;
-                        }
+                let i = this_row - 1;
+                let j = this_col + 1;
+                while (i > other_row && j < other_col){
+                    let space = this.board.cells[i][j];
+                    if (space.decoration !== "") {
+                        console.log("-- found " + space.decoration + " in path");
+                        return false;
                     }
+                    i--;
+                    j++;
                 }
+
             } else { //other is behind on column
-                for (let i = this_row - 1; i > other_row; i--) {
-                    for (let j = this_col -1; j > other_col; j--) {
-                        let space = this.board.cells[i][j];
-                        if (space.decoration !== "") {
-                            console.log("-- found " + space.decoration + " in path");
-                            return false;
-                        }
+                let i = this_row - 1;
+                let j = this_col - 1;
+                while (i > other_row && j > other_col){
+                    let space = this.board.cells[i][j];
+                    if (space.decoration !== "") {
+                        console.log("-- found " + space.decoration + " in path");
+                        return false;
                     }
+                    i--;
+                    j--;
                 }
             }
         }

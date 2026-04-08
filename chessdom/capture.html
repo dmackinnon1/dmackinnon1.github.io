@@ -45,16 +45,16 @@
      var puzzle;
      var depth = 0;
      var game;
-     var levelAdjustment = 3;
+     var levels = [3,5,7,8,9];
      var backup;
 
-    function refresh(level = 1){
+    function refresh(level = 0){
         depth = level;
         console.log("depth is: " + depth);
         gameBoard = new Board(8);
         gameBoard.init();
         let generator = new PuzzleGenerator(gameBoard);
-        puzzle = generator.puzzleOfDepth(depth+levelAdjustment);
+        puzzle = generator.puzzleOfDepth(levels[depth]);
         puzzle.resetPieceCounts();
         game = puzzle;
         $("#boardDisplay").html(htmlForBoard(gameBoard));
@@ -76,7 +76,7 @@
     }
 
     function setLevel() {
-        $("#levelDisplay").html("<img src=\"imgs/level" + depth + ".svg\" width=\"190\" height=\"50\"/>");
+        $("#levelDisplay").html("<img src=\"imgs/level" + (depth+1) + ".svg\" width=\"190\" height=\"50\"/>");
     }
 
     $(document).ready(function(){
@@ -86,7 +86,7 @@
         });
         $("#advanceButton").on("click", function(event){
             if (puzzle.checkForSolved()){
-              refresh(depth = (depth % maxDepth) + 1);
+              refresh(depth = ((depth +1) % maxDepth));
             } else {
                 $("#messageDisplay").html("Solve the current puzzle or start a new puzzle set");
             }

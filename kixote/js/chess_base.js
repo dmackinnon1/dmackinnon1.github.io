@@ -323,13 +323,42 @@ class Board {
 		}
 		return allButIJ;
 	}
+
+	randomTop(){
+		var i = 0;
+		var j = randomInt(this.colNum);
+		return this.cells[i][j];
+	}
+
+	randomBottom(){
+		var i = this.colNum -1;
+		var j = randomInt(this.colNum);
+		return this.cells[i][j];
+	}
 	
 	randomStart() {
 		var i = randomInt(this.rowNum);
 		var j = randomInt(this.colNum);
 		return this.cells[i][j];
 	}
-	
+
+	topCorner(){
+		return this.cells[0][0];
+	}
+
+	bottomCorner(){
+		return this.cells[this.rowNum-1][this.colNum-1];
+	}
+
+	topEdge(){
+		return this.cells[0][Math.floor((this.colNum -1)/2)];
+	}
+
+	bottomEdge(){
+		return this.cells[this.rowNum-1][Math.ceil(this.colNum/2)];
+	}
+
+
 	toString () {
 		var result = "";
 		for (var i = 0; i < this.rowNum; i ++){

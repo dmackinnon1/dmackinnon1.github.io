@@ -69,12 +69,6 @@ $(document).ready(function(){
 		game.startGame();
 	});	
 
- /*   $("#backtrack").on("click", function(event){
-		console.log("backtrack button clicked");
-		//$("#boardDisplay").html(loadBoard());
-		game.backtrack();
-	});	*/
-
 	$(".typeButton").on("click", function(event){
 		CellType = event.currentTarget.id;
 		setButtons();
@@ -191,6 +185,7 @@ Your goal is to block your adversary from making any further moves before they b
 
 <div id="finish" style="text-align=center"></div>
 <hr>
+	<button id="refresh" class="btn btn-default">New Puzzle</button>
 <h3><div id="boardDisplay" style="text-align=center">
 </div>
 </h3>

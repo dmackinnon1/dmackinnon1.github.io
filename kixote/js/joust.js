@@ -1,5 +1,3 @@
-//references common framework from kixote_base.js
-
 /*
 * Joust is an implementation of pooping knights
 *  
@@ -12,8 +10,8 @@ class Joust {
 		}
 		this.board = new Board(size,secondary);
 		this.board.init();
-		this.path = new Path(this.board, this.board.randomStart());
-		this.antipath = new Path(this.board, this.board.randomStart());
+		this.path = new Path(this.board, this.board.randomTop());
+		this.antipath = new Path(this.board, this.board.randomBottom());
 		this.totalpath = new Path(this.board, null);
 
 		this.size = size;

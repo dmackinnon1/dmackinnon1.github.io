@@ -227,26 +227,22 @@ class Joust {
 			evnts.fireEvent("refreshStatus");
 			return;
 		}
-		var best = null;
-		var secondbest = null;
-		for (var i = 0; i < this.board.rowNum; i++) {
-			for (var j = 0; j < this.board.colNum; j++) {
-				var cell = this.board.cells[i][j];
-				if (this.isAdversaryFirstChoice(cell)){
-					best = cell;
-				} else if (cell.isNeighbor(currentCell) && !this.totalpath.contains(cell)){
-					secondbest = cell;
-				}
-			}
+		//begin cell selection
+		let available = currentCell.neighbors().filter(cell => !this.totalpath.contains(cell));
+		if (available.length == 0) {
+			console.log("error: free degrew not zero and no available cells");
+			gameDisplay.statusMessage = new Bldr("h2").att("align","center").text("Error").build();
+			this.adversaryBlocked = true;
+			evnts.fireEvent("refreshStatus");
+			return;
 		}
-		console.log("best: " + best);
-		console.log("secondbest: " + secondbest);
 		var selected = null;
-		if (best !== null) {
-			selected = best;
-		} else if (secondbest !== null) {
-			selected = secondbest;
+		if(this.smartAdversary){
+			selected = this.smartMove(available);
+		} else {
+			selected = this.regularMove(available);
 		}
+		//end cell celection
 		if (selected !== null) {
 			this.antipath.add(selected);
 			this.totalpath.add(selected);
@@ -255,7 +251,44 @@ class Joust {
 			var alast = getDiv(ai, aj);
 			alast.html(antiGlyph(ai,aj));
 		}
+	}
 
+	smartMove(cells){
+		let player = this.path.head();
+		let pSet = new Set(player.neighbors());
+		let cSet = new Set(cells);
+
+		let intersect = cSet.intersection(pSet);
+		if (intersect.length > 0){
+			return intersect.entries()[0];
+		}
+		
+		let max = 0; 
+		let selected = cells[0]
+		for (let index = 0; index < cells.length; index++) {
+			let currentDegree = this.totalpath.freeDegree(cells[index]);
+			if (currentDegree > max){
+				selected = cells[index];
+				max = currentDegree;
+			}	
+		}
+		return selected;
+		
+	}
+
+	regularMove(cells){
+		let min = 64; 
+		let selected = cells[0]
+		for (let index = 0; index < cells.length; index++) {
+			let currentDegree = this.totalpath.freeDegree(cells[index]);
+			if (currentDegree < min){
+				selected = cells[index];
+				min = currentDegree;
+			}	
+		}
+		return selected;
+		
+		
 	}
 	
 	getIsDone() {

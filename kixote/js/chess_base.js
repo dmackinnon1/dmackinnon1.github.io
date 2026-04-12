@@ -342,23 +342,6 @@ class Board {
 		return this.cells[i][j];
 	}
 
-	topCorner(){
-		return this.cells[0][0];
-	}
-
-	bottomCorner(){
-		return this.cells[this.rowNum-1][this.colNum-1];
-	}
-
-	topEdge(){
-		return this.cells[0][Math.floor((this.colNum -1)/2)];
-	}
-
-	bottomEdge(){
-		return this.cells[this.rowNum-1][Math.ceil(this.colNum/2)];
-	}
-
-
 	toString () {
 		var result = "";
 		for (var i = 0; i < this.rowNum; i ++){

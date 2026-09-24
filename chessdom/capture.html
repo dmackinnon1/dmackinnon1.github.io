@@ -47,13 +47,14 @@
      var game;
      var levels = [3,5,7,9,11];
      var backup;
+     var kings = true;
 
     function refresh(level = 0){
         depth = level;
         console.log("depth is: " + depth);
         gameBoard = new Board(8);
         gameBoard.init();
-        let generator = new PuzzleGenerator(gameBoard);
+        let generator = new PuzzleGenerator(gameBoard,kings);
         puzzle = generator.puzzleOfDepth(levels[depth]);
         puzzle.resetPieceCounts();
         game = puzzle;
@@ -96,6 +97,11 @@
             $("#messageDisplay").html(puzzle.messageHTML());
         });
         refresh();
+
+        $(".checkbox").on('click',function(e){	
+            kings = $('#kings:checked').val()=='yes';
+            console.log("kings setting updated to " + kings);
+     });
 
     });
 
@@ -145,15 +151,21 @@
                         Piece Meal puzzles have these simple rules:
                         <ol>
                             <li>The pieces are all the same colour, and must capture each other.</li>
-                            <li>The King make the last capture and be the last piece standing.</li>
                             <li>Every move must be one that takes another piece.</li>
                             <li>Each piece can only make up to two moves.</li>
+                            <li>If there is a king on the board, the king makes the last capture and is the last piece standing.</li>
                         </ol>
                         This puzzle was inspired by the NYT "Capture" puzzle.
                     </div>
                 </div>
                 <br>
             </div>
+
+            <form>
+<div class="checkbox centered">
+<label><input id="kings" type="checkbox" checked=true value="yes">include king?</label>
+</div>
+</form>
 
             <!-- hr>
             <div id="puzzleDescription" style="text-align=center"></div>

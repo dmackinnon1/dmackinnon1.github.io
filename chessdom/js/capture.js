@@ -8,6 +8,7 @@ class CapturePuzzle {
         this.selected = null;
         this.target = null;
 		this.message = "Choose a piece";
+		this.includeKing = true;
     }
 
 	clone(){
@@ -349,9 +350,11 @@ class CapturePiece {
 }
 
 class PuzzleGenerator{
-    constructor(board) {
+    constructor(board, kings=true) {
         this.board = board;
+		this.includeKing = kings ;
         this.puzzle = new CapturePuzzle(board);
+		this.puzzle.includeKing = this.includeKing;
     }
 
     randomType(){
@@ -361,7 +364,11 @@ class PuzzleGenerator{
     initialPosition(){
         let startposition = this.board.randomStart();
         let firstpiece = new CapturePiece(this.board);
-        firstpiece.type = "king";
+        if (this.includeKing){
+			firstpiece.type = "king";
+		} else {
+			firstpiece.type = this.randomType();
+		}
         firstpiece.setCell(startposition);
         this.puzzle.addPiece(firstpiece);
     }

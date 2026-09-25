@@ -350,16 +350,23 @@ class CapturePiece {
 }
 
 class PuzzleGenerator{
-    constructor(board, kings=true) {
+    constructor(board, kings=true, pieceType='all') {
         this.board = board;
 		this.includeKing = kings ;
         this.puzzle = new CapturePuzzle(board);
 		this.puzzle.includeKing = this.includeKing;
+		this.pieceType = pieceType;
+		this.puzzle.pieceType = this.pieceType;
+		
     }
 
     randomType(){
-        let types = ["knight","bishop","rook","queen"];
-        return types[Math.floor(Math.random() * types.length)];
+		if (this.pieceType == 'all'){
+	        let types = ["knight","bishop","rook","queen"];
+	        return types[Math.floor(Math.random() * types.length)];
+		} else {
+			return this.pieceType;
+		}
     }
     initialPosition(){
         let startposition = this.board.randomStart();

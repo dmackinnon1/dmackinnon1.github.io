@@ -48,13 +48,14 @@
      var levels = [3,5,7,9,11];
      var backup;
      var kings = true;
+     var pieces = 'all';
 
     function refresh(level = 0){
         depth = level;
         console.log("depth is: " + depth);
         gameBoard = new Board(8);
         gameBoard.init();
-        let generator = new PuzzleGenerator(gameBoard,kings);
+        let generator = new PuzzleGenerator(gameBoard,kings,pieces);
         puzzle = generator.puzzleOfDepth(levels[depth]);
         puzzle.resetPieceCounts();
         game = puzzle;
@@ -70,8 +71,8 @@
         $(".btn-primary").addClass("btn-secondary");
         $(".btn-primary").removeClass("btn-primary");
 
-        $("#" + gameType.type).removeClass("btn-secondary");
-        $("#" + gameType.type).addClass("btn-primary");
+        $("#" + pieces).removeClass("btn-secondary");
+        $("#" + pieces).addClass("btn-primary");
         $(".nav-button-default").addClass("btn-default");
         $(".nav-button-primary").addClass("btn-primary");
     }
@@ -96,12 +97,21 @@
         evnts.addCallback("refreshMessage", function () {
             $("#messageDisplay").html(puzzle.messageHTML());
         });
-        refresh();
 
         $(".checkbox").on('click',function(e){	
             kings = $('#kings:checked').val()=='yes';
             console.log("kings setting updated to " + kings);
-     });
+            refresh();
+         });
+        
+        $(".typeButton").on("click", function(event){
+        pieces = event.currentTarget.id;
+        console.log(pieces);
+		setButtons();
+        refresh();
+	});
+        setButtons();
+        refresh();
 
     });
 
@@ -148,6 +158,7 @@
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">Piece Meal</h4>
+                        <p>his puzzle was inspired by the NYT "Capture" puzzle.</p>T
                         Piece Meal puzzles have these simple rules:
                         <ol>
                             <li>The pieces are all the same colour, and must capture each other.</li>
@@ -155,12 +166,27 @@
                             <li>Each piece can only make up to two moves.</li>
                             <li>If there is a king on the board, the king makes the last capture and is the last piece standing.</li>
                         </ol>
-                        This puzzle was inspired by the NYT "Capture" puzzle.
+                        <p>You can choose to play with a final king or without.</p>
+                        <p>You can select to play with all pieces of the same type (except for the optional final king), or opt for a random mix of piece types.</p>
                     </div>
                 </div>
                 <br>
             </div>
 
+</br>
+</br>
+<div class="centered">
+<div class="btn-group btn-group-lg " role="group">
+  <button type="button" id="all" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-asterisk'></span></button>
+  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
+  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
+  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
+   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
+
+</div>
+</div>
+
+            
             <form>
 <div class="checkbox centered">
 <label><input id="kings" type="checkbox" checked=true value="yes">include king?</label>

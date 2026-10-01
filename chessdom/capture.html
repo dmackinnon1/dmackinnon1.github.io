@@ -66,6 +66,9 @@
         setLevel();
         backup = puzzle.clone();
         $('#solution').collapse('hide');
+        $("#advanceButton").removeClass("btn-primary");
+        $("#advanceButton").addClass("btn-secondary");
+          
     }
 
     function setButtons() {

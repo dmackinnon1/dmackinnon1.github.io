@@ -65,6 +65,7 @@
         $("#messageDisplay").html(puzzle.messageHTML());
         setLevel();
         backup = puzzle.clone();
+        $('#solution').collapse('hide');
     }
 
     function setButtons() {
@@ -94,8 +95,29 @@
             }
         });
 
+         $("#undoButton").on("click", function(event){
+               puzzle.undoLastMove();
+        });
+
         evnts.addCallback("refreshMessage", function () {
             $("#messageDisplay").html(puzzle.messageHTML());
+        });
+
+        evnts.addCallback("refreshMessage", function () {
+          if(puzzle.canUndo()){
+              $("#undoButton").removeClass("btn-secondary");
+              $("#undoButton").addClass("btn-primary");
+          } else {
+              $("#undoButton").removeClass("btn-primary");
+              $("#undoButton").addClass("btn-secondary");
+          }
+            if(puzzle.checkForSolved()){
+              $("#advanceButton").removeClass("btn-secondary");
+              $("#advanceButton").addClass("btn-primary");
+          } else {
+              $("#advanceButton").removeClass("btn-primary");
+              $("#advanceButton").addClass("btn-secondary");
+          }
         });
 
         $(".checkbox").on('click',function(e){	
@@ -201,6 +223,10 @@
             -->
             <hr>
             <h3><div id="boardDisplay" style="text-align=center"></div></h3>
+           
+            <div id="undoButtonHolder">
+                        <button type="button" id="undoButton", class="btn btn-secondary">Undo last Move</span></button>
+            </div>
             <hr>
             <h4><div id="messageDisplay" style="text-align=center"></div></h4>
             <hr>
@@ -213,11 +239,12 @@
                     </div>
             </div>
            <hr> 
-            <button type='button' class='btn btn-info' data-toggle='collapse' data-target='#solution'>
-                Solution
+            <button id="solutionButton" type='button' class='btn btn-info' data-toggle='collapse' data-target='#solution'>
+                A solution...
             </button>
             <div id='solution' class='collapse '>
-                <h4><div id="solutionDisplay" style="text-align=center"></div></h4>
+                <h5>Here's one possible solution to this puzzle.</h5>
+                <h5><div id="solutionDisplay" style="text-align=center"></div></h5>
             </div>
 
             <hr>

@@ -9,6 +9,7 @@ class CapturePuzzle {
         this.target = null;
 		this.message = "Choose a piece";
 		this.includeKing = true;
+		this.moveStack = [];
     }
 
 	clone(){
@@ -35,10 +36,25 @@ class CapturePuzzle {
 		div.html(emptyCell(source.cell.rowNum,source.cell.colNum));
         source.cell.decoration = "";
         target.cell.decoration = "";
+		let ogCell = source.cell;
 		source.setCell(target.cell);
 		source.count++;
 		console.log(source.type + " count: " + source.count);
-		this.selected = null;	
+		this.selected = null;
+		this.moveStack.push(new PuzzleMove(this, source, target,ogCell))
+	}
+
+	canUndo(){
+		return this.moveStack.length !=0 && !this.checkForSolved();
+	}
+	undoLastMove(){
+		if (!this.canUndo()){
+			return;
+		}
+		let move = this.moveStack.pop();
+		move.reverseMove();
+		this.colourCells();
+		evnts.fireEvent("refreshMessage");
 	}
 
     getCell(i, j) {
@@ -347,6 +363,22 @@ class CapturePiece {
         return this.cell.neighbors().filter(n => (this.cellIsReachable(n) && n.decoration === ""));
     }
 
+}
+
+class PuzzleMove{
+	constructor(puzzle, activePiece, targetPiece, startCell){
+		this.puzzle = puzzle;
+		this.activePiece = activePiece;
+		this.targetPiece = targetPiece;
+		this.startCell = startCell;
+	}
+
+	reverseMove(){
+		this.activePiece.count--;
+		this.targetPiece.setCell(this.activePiece.cell);
+		this.activePiece.setCell(this.startCell);
+		this.puzzle.addPiece(this.targetPiece);
+	}
 }
 
 class PuzzleGenerator{

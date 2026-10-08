@@ -7,7 +7,7 @@ class CapturePuzzle {
         this.pieces=[];
         this.selected = null;
         this.target = null;
-		this.message = "Choose a piece";
+		this.message = "Choose a piece.";
 		this.includeKing = true;
 		this.moveStack = [];
     }
@@ -25,6 +25,7 @@ class CapturePuzzle {
 		}
 	}
     addPiece(piece) {
+		piece.puzzle = this;
         this.pieces.push(piece);
     }
     piecesWithMovesAndSpace(){
@@ -54,6 +55,9 @@ class CapturePuzzle {
 		let move = this.moveStack.pop();
 		move.reverseMove();
 		this.colourCells();
+		this.message = "Choose a piece";
+		this.selected = null;
+		this.colourCells();
 		evnts.fireEvent("refreshMessage");
 	}
 
@@ -68,6 +72,85 @@ class CapturePuzzle {
 
 	checkForSolved(){
 		return this.pieces.length == 1;
+	}
+
+	checkForStuck(){
+		let isStuck = false;
+		let stuckReasons = [];
+		let stuckMessage = "You may be stuck";
+		const hasMoves =  this.pieces.filter((p) => p.count < 2);
+		const zeroMoves = this.pieces.filter((p) => p.count == 2);
+		const totalMoves = this.pieces.reduce((sum, p) => sum + (2 - p.count), 0);
+		const totalPieces = this.pieces.length;
+		const king = this.pieces.filter((p) => p.type == 'king')[0];
+		const isolated = this.pieces.filter((p) => (p.inNeighbors().length == 0) && (p.outNeighbors().length == 0));
+		const paralized = this.pieces.filter((p) => (p.count == 2) && (p.inNeighbors().length == 0));
+		const twoMovers = this.pieces.filter((p) => p.count ==0);
+		
+
+		if (this.includeKing){
+			if ((king.count ==2) && (this.pieces.length > 1)){
+				isStuck = true;
+				stuckReasons.push("king is out of moves");
+			}
+			if (king.outNeighbors().length == 0){
+				isStuck = true;
+				stuckReasons.push("king cannot capture");
+			}
+		}
+
+		if (this.pieces.length == 2 && king == null){
+			const p1 = this.pieces[0];
+			const p2 = this.pieces[1];
+			if ((!p1.pieceIsReachable(p2)) && (!p2.cellIsReachable(p1))){
+				isStuck = true;
+				stuckReasons.push("no final move available");
+			}
+		}
+		
+		if (totalMoves < this.pieces.length -1){
+			isStuck = true;
+			stuckReasons.push("not enough moves left to capture pieces");
+		}
+
+		if (hasMoves.length == 0){
+			isStuck = true;
+			stuckReasons.push("all pieces are out of moves");
+		} else {
+			if (paralized.length != 0 && twoMovers.length == 0){
+				isStuck = true;
+				stuckReasons.push("there is a piece with no moves that can't be captured");
+			}
+		}	
+
+		if (isolated.length == totalPieces){
+			isStuck = true;
+			stuckReasons.push("all pieces are isolated");
+		} else {
+			if (isolated.length != 0 && twoMovers.length == 0){
+				isStuck = true;
+				stuckReasons.push("there is an isolated piece");
+			}
+		}
+
+		if(isStuck){
+			if (stuckReasons.length == 1){
+				stuckMessage += ": " + stuckReasons[0];	
+			} else {	
+				for (let i=0; i < stuckReasons.length; i++){
+					if (i == 0){
+						stuckMessage += ": " + stuckReasons[i];	
+					} else {
+						if (i == stuckReasons.length -1){
+							stuckMessage += " and " + stuckReasons[i];	
+						} else {
+							stuckMessage += ", " + stuckReasons[i];	
+						}
+					}
+				}
+			}
+			this.message = stuckMessage +".";
+		}
 	}
 
     selectCell(cell, target) {
@@ -90,17 +173,17 @@ class CapturePuzzle {
 		} else if(clickedOn == null) {
 			console.log("clicked on empty");
 			this.selected = null;
-			this.message = "No piece is slelected";
+			this.message = "No piece is slelected, please choos a piece.";
 		} else if(this.selected.pieceIsReachable(clickedOn)) {
 			console.log(this.selected.type +" can capture " + clickedOn.type);
 			if (this.selected.remainingMoves() == 0) {
-                this.message = "No moves left for this piece";
+                this.message = "No moves left for this piece.";
                 this.selected = null;
             } else if (clickedOn.type == "king"){
-				this.message = "You cannot capture the king";
+				this.message = "You cannot capture the king.";
 				this.selected = null;
 			} else {
-				this.message = "The " + this.selected.type + " captures the " + clickedOn.type;
+				this.message = "The " + this.selected.type + " captures the " + clickedOn.type +".";
 				this.capture(this.selected,clickedOn);
 			}
 		} else{ 
@@ -110,10 +193,13 @@ class CapturePuzzle {
 
 		if(this.checkForSolved()){
 			this.message = "You solved the puzzle!";
+		} else {
+			this.checkForStuck();
 		}
-
 		this.colourCells();
 		evnts.fireEvent("refreshMessage");
+		
+		
 	}
 
     getCapturePiece(i, j) {
@@ -191,6 +277,7 @@ class CapturePiece {
         this.count = 0;
         this.type = "knight";
         this.cell = null;
+		this.puzzle = null;
     }
 
     remainingMoves(){
@@ -226,6 +313,16 @@ class CapturePiece {
         return this.canMove() && this.hasEmptyNeighbors();
     }
 
+	inNeighbors(){
+		return this.puzzle.pieces.filter(p => p.pieceIsReachable(this));
+	}
+
+	//piece neighbors
+	outNeighbors(){
+		return this.puzzle.pieces.filter(p => this.pieceIsReachable(p));
+	}
+
+	//cell neighbors
 	neighbors(){
 		return this.cell.neighbors();
 	}

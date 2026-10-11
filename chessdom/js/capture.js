@@ -173,7 +173,7 @@ class CapturePuzzle {
 		} else if(clickedOn == null) {
 			console.log("clicked on empty");
 			this.selected = null;
-			this.message = "No piece is slelected, please choos a piece.";
+			this.message = "No piece is slelected, please choose a piece.";
 		} else if(this.selected.pieceIsReachable(clickedOn)) {
 			console.log(this.selected.type +" can capture " + clickedOn.type);
 			if (this.selected.remainingMoves() == 0) {

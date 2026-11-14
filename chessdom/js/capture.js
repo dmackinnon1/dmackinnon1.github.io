@@ -326,6 +326,10 @@ class CapturePiece {
 	neighbors(){
 		return this.cell.neighbors();
 	}
+
+	neumannNeighbors(){
+		return this.cell.neumannNeighbors();
+	}
 	
     getNeighborCell(){
         let nbs = this.cell.neighbors();

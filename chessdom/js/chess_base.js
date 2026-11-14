@@ -232,6 +232,16 @@ class Cell {
 		return list;
 	}
 
+	neumannNeighbors(){
+		var list = [];
+		if(this.north() != null) list.push(this.north());
+		if(this.south() != null) list.push(this.south());
+		if(this.east() != null) list.push(this.east());
+		if(this.west() != null) list.push(this.west());
+		return list;
+	}
+
+
 	
 	isNeighbor(cell) {
 		let nbrs = this.neighbors();
@@ -431,6 +441,12 @@ function queenGlyph(i,j){
 	return glyph;	
 };
 
+function blankGlyph(i,j){
+	let glyph = "<span class='glyphicon glyphicon-square-empty' ";
+	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
+	return glyph;	
+};
+
 function gameGlyph(i,j, type) {
 	if (type == "knight"){
 		return knightGlyph(i,j);
@@ -447,4 +463,5 @@ function gameGlyph(i,j, type) {
 	if (type == "queen") {
 		return queenGlyph(i,j);
 	}
+	return blankGlyph(i,j);
 }

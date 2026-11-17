@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <title>Piece Meal</title>
+    <title>Safe Harbour</title>
 </head>
 
 <style>
@@ -67,7 +67,9 @@
         //puzzle = new AvoidancePuzzle(gameBoard, descriptor);
         puzzle.descriptor = descriptor;
         puzzle.init(); 
-        puzzle.colourCells();  
+        puzzle.colourCells();
+        $('#solution').collapse('hide');
+        $("#solutionDisplay").html(puzzle.solutionHTML());
      }
 
     function setButtons() {
@@ -148,7 +150,9 @@
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">Safe Harbour</h4>
-                        Place a piece in each region such that every region has one piece and no peices can capture each other.
+                        <p>Place a piece in each region such that every region has one piece and no peices can capture each other.</p>
+                        <p>Click on the piece selection button to choose the piece type used for the puzzle. Piece selection will generate a new puzzle based on that type.</p>
+                        <p>Generally, king, knight, and rook puzzles are easiest, while bishop and queen puzzles can be more challenging.</p>
                     </div>
                 </div>
                 <br>
@@ -190,32 +194,27 @@
             <hr>
             <h4><div id="messageDisplay" style="text-align=center"></div></h4>
             <hr>
-            <div id="levelGroup"">
-                <div id="levelDisplay">
-                    <!img src="imgs/level1.svg" width="190" height="50">
-                </div>
-                    <div id="advanceButtonHolder">
-                        <button type="button" id="advanceButton", class="btn btn-secondary">Advance to next puzzle</span></button>
-                    </div>
+           
+            <div id="advanceButtonHolder">
+            <button type="button" id="advanceButton", class="btn btn-secondary">New puzzle</span></button>
             </div>
+           
            <hr> 
             <button id="solutionButton" type='button' class='btn btn-info' data-toggle='collapse' data-target='#solution'>
                 A solution...
             </button>
             <div id='solution' class='collapse '>
+                <h5>Consider the board as a grid of rows and columns that are numbered from 0 to 7. 
+                    Each cell on the board has a coordinate represented by an ordered pair <var>(row, col)</var>. 
+                    For example, the top left corner would be <var>(0,0)</var> and the bottom right corner would be <var>(7,7)</var>.
+                </h5>
                 <h5>Here's one possible solution to this puzzle.</h5>
+               
                 <h5><div id="solutionDisplay" style="text-align=center"></div></h5>
             </div>
 
             <hr>
             
-            <div id="resetButtonHolder">
-                <button type="button" id="resetButton", class="btn btn-primary">New Puzzle Set</span></button>
-                <!--button type="button" id="goBackButton", class="btn btn-primary">Reset Current Puzzle</span></button -->
-            </div>
-            <hr>
-            <!div id="mapDisplay" style="text-align=center"></div>
-            <hr>
         </div>
         <div class='col-sm-1'></div>
 </body>

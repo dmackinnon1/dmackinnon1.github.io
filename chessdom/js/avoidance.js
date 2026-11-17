@@ -32,6 +32,9 @@ class PuzzleDescriptorPosition {
 		this.row = i;
 		this.col = j;
 	}
+	toString(){
+		return "("+this.row + ", " + this.col + ")";
+	}
 }
 
 class PuzzleDescriptor {
@@ -45,16 +48,14 @@ class PuzzleDescriptor {
 		this.cells.push(new PuzzleDescriptorPosition(i,j));
 	}
 
-	addDiagonal(){
-		this.addCell(0,0);
-		this.addCell(1,1);
-		this.addCell(2,2);
-		this.addCell(3,3);
-		this.addCell(4,4);
-		this.addCell(5,5);
-		this.addCell(6,6);
-		this.addCell(7,7);
-		
+	toHTML(){
+		let html = "<h5>Place "+ this.type + "s at these positions: </br>";
+		html = html +	"<ul>";
+		for (let i = 0; i< this.cells.length; i++){
+			html = html + "<li>" + this.cells[i].toString() + "</li>"
+		}
+		html = html + "</ul></h5>";
+		return html;
 	}
 }
 
@@ -161,6 +162,9 @@ class AvoidancePuzzle {
 		evnts.fireEvent("refreshMessage");
 	}
 
+	solutionHTML(){
+		return this.descriptor.toHTML();
+	}
 	removePieces(){
 		for(let i=0; i< this.pieces.length; i++){
 			this.pieces[i].getCell().decoration = "";

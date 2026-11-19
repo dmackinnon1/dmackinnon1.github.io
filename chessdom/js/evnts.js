@@ -7,11 +7,8 @@ let evnts = {};
 evnts.dict = {};
 
 evnts.fireEvent = function(eventName) {
-	let callbacks = evnts.dict[eventName];
-	if (callbacks == null) return;
-	for(let i=0; i< callbacks.length; i++) {
-		callbacks[i]();
-	}
+	let callbacks = evnts.dict[eventName] ?? [];
+	callbacks.forEach(callback => callback());
 };
 
 evnts.addCallback = function (eventName, callback) {

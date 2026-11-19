@@ -1,113 +1,51 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <title>Safe Harbour</title>
-</head>
-
-<style>
-    table, th, td {
-        padding: 4px;
-        text-align: center;
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    svg {
-        display: block;
-        margin: auto ;
-        border: 1px solid black;
-    }
-
-    .buttonDiv {
-        display: inline-block;
-        padding: 2px;
-        border: 2px;
-    }
-
-    .centered {
-        text-align: center;
-    }
-
-</style>
-</head>
-<script src="js/evnts.js"></script> <!-- required for callback registration-->
-<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safe Harbour</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
 <script src="js/chess_base.js"></script>
 <script src="js/avoidance.js"></script>
-
 <script>
     let pieces = "queen";
-    let gameBoard = new Board(8);
-    gameBoard.init();
-    
-    let set = new IndependentSet(pieces,8);
-    set.init();
-    set.buildSet();
+    let puzzle;
 
-    let descriptor = set.getDescriptor();
-    
-    let puzzle = new AvoidancePuzzle(gameBoard, descriptor);
-    puzzle.init();
-    let game = puzzle;
-    
+    // a new puzzle: a fresh board, a random independent set, and regions grown around it
     function refresh(){
-        console.log("refresh")
-         $("#boardDisplay").html(htmlForBoard(gameBoard)); 
-
-       set = new IndependentSet(pieces,8);
-       set.init();
-       set.buildSet();
-
-        descriptor = set.getDescriptor();
-        //gameBoard.init();
-        //puzzle = new AvoidancePuzzle(gameBoard, descriptor);
-        puzzle.descriptor = descriptor;
-        puzzle.init(); 
-        puzzle.colourCells();
-        $('#solution').collapse('hide');
-        $("#solutionDisplay").html(puzzle.solutionHTML());
-     }
-
-    function setButtons() {
-        $(".btn-primary").addClass("btn-secondary");
-        $(".btn-primary").removeClass("btn-primary");
-
-        $("#" + pieces).removeClass("btn-secondary");
-        $("#" + pieces).addClass("btn-primary");
-        $(".nav-button-default").addClass("btn-default");
-        $(".nav-button-primary").addClass("btn-primary");
+        let gameBoard = new Board(8);
+        byId("boardDisplay").innerHTML = htmlForBoard(gameBoard);
+        let descriptor = new IndependentSet(pieces, 8).getDescriptor();
+        puzzle = new AvoidancePuzzle(gameBoard, descriptor);
+        game = puzzle;
+        byId("solution").open = false;
+        byId("solutionDisplay").innerHTML = avoidanceSolutionHTML(descriptor);
+        showAvoidance(puzzle);
     }
 
-   
-    $(document).ready(function(){
+    // DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+    document.addEventListener("DOMContentLoaded", function(){
 
-        $("#advanceButton").on("click", function(event){
+        onClick("#advanceButton", () => refresh());
+
+        onClick(".typeButton", function(event){
+            pieces = event.currentTarget.id;
+            selectButton(".typeButton", pieces);
             refresh();
         });
 
-        $(".typeButton").on("click", function(event){
-            pieces = event.currentTarget.id;
-            console.log(pieces);
-    		setButtons();
-            refresh();
-    	});
-        
-        setButtons();
-        
+        evnts.addCallback("gameChanged", function () {
+            showAvoidance(puzzle);
+        });
+
+        selectButton(".typeButton", pieces);
         refresh();
     });
-
-     evnts.addCallback("refreshMessage", function () {
-            $("#messageDisplay").html(puzzle.messageHTML());
-            $("#puzzleDescription").html("<h4>" + puzzle.descriptionHTML() +"</h4>");
-        });
-
-
 </script>
+</head>
 
 <body>
 
@@ -115,7 +53,7 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="..">
-                <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+                <img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
             </a>
             <p class="navbar-text navbar-right">
                 <a href=".." class="navbar-link">dmackinnon1.github.io</a>
@@ -125,24 +63,22 @@
 </nav>
 
 <div class="container-fluid">
-    <div class='row'>
-        <div class='col-sm-1'></div>
-        <div class='col-sm-10'>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
             <div class="page-header">
                 <h1>
-                    <div class="btn-group btn-group-md " role="group">
-                        <a class="btn btn-default nav-button-default" href="./puzzles.html">Puzzles</a>
-                        <a class="btn btn-default nav-button-default" href=".">Explorer</a>
-                        <a class="btn btn-primary nav-button-default" href="./capture.html">Piece Meal</a>
-                        <a class="btn btn-primary nav-button-primary" href="./avoidance.html">Safe Harbour</a>
-                    </div><br/>
+                    <span class="btn-group" role="group">
+                        <a class="btn btn-default" href="./puzzles.html">Puzzles</a>
+                        <a class="btn btn-default" href=".">Explorer</a>
+                        <a class="btn btn-default" href="./capture.html">Piece Meal</a>
+                        <a class="btn btn-primary" href="./avoidance.html">Safe Harbour</a>
+                    </span><br>
                     Safe Harbour <small> place non-capturing pieces </small>
                 </h1>
             </div>
-            <button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
-                About
-            </button>
-            <div id='full' class='collapse '>
+            <details id="full">
+                <summary class="btn btn-info">About</summary>
                 <br>
                 <div class="media">
                     <a class="media-left media-middle" href="#">
@@ -150,72 +86,54 @@
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">Safe Harbour</h4>
-                        <p>Place a piece in each region such that every region has one piece and no peices can capture each other.</p>
+                        <p>Place a piece in each region such that every region has one piece and no pieces can capture each other.</p>
                         <p>Click on the piece selection button to choose the piece type used for the puzzle. Piece selection will generate a new puzzle based on that type.</p>
                         <p>Generally, king, knight, and rook puzzles are easiest, while bishop and queen puzzles can be more challenging.</p>
                     </div>
                 </div>
                 <br>
+            </details>
+
+            <br>
+            <br>
+            <div class="centered">
+                <div class="btn-group btn-group-lg" role="group">
+                    <button type="button" id="king" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-king"></span></button>
+                    <button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+                    <button type="button" id="rook" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-tower"></span></button>
+                    <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-bishop"></span></button>
+                    <button type="button" id="queen" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-queen"></span></button>
+                </div>
             </div>
 
-</br>
-</br>
-<div class="centered">
-<div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
-  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
-  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
-  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
-   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
+            <hr>
+            <div id="puzzleDescription"></div>
+            <hr>
+            <div id="boardDisplay" class="h3"></div>
 
-</div>
-</div>
+            <hr>
+            <div id="messageDisplay" class="h4"></div>
+            <hr>
 
-<!--            
-<form>
-<div class="checkbox centered">
-<label><input id="kings" type="checkbox" checked=true value="yes">include king?</label>
-</div>
-</form>
--->
-            <hr>
-            <div id="puzzleDescription" style="text-align=center"></div>
-            <!--
-            <h4><div id="puzzleStatus" style="text-align=center"></div></h4>
-            -->
-            <hr>
-            <h3><div id="boardDisplay" style="text-align=center"></div></h3>
-
-            <!--
-            <div id="undoButtonHolder">
-                        <button type="button" id="undoButton", class="btn btn-secondary">Undo last Move</span></button>
-            </div>
-            -->
-            <hr>
-            <h4><div id="messageDisplay" style="text-align=center"></div></h4>
-            <hr>
-           
             <div id="advanceButtonHolder">
-            <button type="button" id="advanceButton", class="btn btn-secondary">New puzzle</span></button>
+                <button type="button" id="advanceButton" class="btn btn-secondary">New puzzle</button>
             </div>
-           
-           <hr> 
-            <button id="solutionButton" type='button' class='btn btn-info' data-toggle='collapse' data-target='#solution'>
-                A solution...
-            </button>
-            <div id='solution' class='collapse '>
-                <h5>Consider the board as a grid of rows and columns that are numbered from 0 to 7. 
-                    Each cell on the board has a coordinate represented by an ordered pair <var>(row, col)</var>. 
+
+            <hr>
+            <details id="solution">
+                <summary class="btn btn-info">A solution...</summary>
+                <h5>Consider the board as a grid of rows and columns that are numbered from 0 to 7.
+                    Each cell on the board has a coordinate represented by an ordered pair <var>(row, col)</var>.
                     For example, the top left corner would be <var>(0,0)</var> and the bottom right corner would be <var>(7,7)</var>.
                 </h5>
                 <h5>Here's one possible solution to this puzzle.</h5>
-               
-                <h5><div id="solutionDisplay" style="text-align=center"></div></h5>
-            </div>
+                <div id="solutionDisplay" class="h5"></div>
+            </details>
 
             <hr>
-            
         </div>
-        <div class='col-sm-1'></div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
 </body>
 </html>

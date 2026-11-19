@@ -8,6 +8,8 @@ def att(name, value):
     result = "\""+ name +"\": "
     if (isinstance(value, int)):
         result += str(value)
+    elif value in ("true", "false"):
+        result += value  # JSON booleans, not strings
     elif (value[0] == '['):
         result += str(value)
     else:

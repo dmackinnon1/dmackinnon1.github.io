@@ -1,28 +1,30 @@
 'use strict';
 
+/*
+* Piece Meal: every piece may capture a limited number of times (maxCaptures:
+* 2 in the original NYT puzzle; 1 to 3 here), and the goal is to finish with a
+* single piece (the king, if there is one). Captures are only allowed as real
+* chess moves, and the king may never be captured.
+*
+* CapturePuzzle holds the state of one puzzle and knows nothing about the page:
+* after every change it fires the "gameChanged" event, and the display code
+* (bottom of this file) draws the puzzle from its state.
+*/
 class CapturePuzzle {
-    constructor(board) {
+    constructor(board, maxCaptures = 2) {
         this.board = board;
+        this.maxCaptures = maxCaptures;  // how many captures each piece may make
         this.moves = [];
         this.pieces=[];
         this.selected = null;
-        this.target = null;
 		this.message = "Choose a piece.";
 		this.includeKing = true;
 		this.moveStack = [];
     }
 
-	clone(){
-		let clone = new CapturePuzzle(this.board);
-		clone.moves = this.moves;
-		clone.pieces = structuredClone(this.pieces);
-		return clone;
-	}
-
+	// give every piece its full allowance of captures
 	resetPieceCounts(){
-		for (let index = 0; index < this.pieces.length; index++) {
-			this.pieces[index].count = 0;
-		}
+		this.pieces.forEach(piece => piece.count = 0);
 	}
     addPiece(piece) {
 		piece.puzzle = this;
@@ -33,14 +35,11 @@ class CapturePuzzle {
     }
 	capture(source, target){
 		this.pieces = this.pieces.filter(p => p !== target);
-		let div = getDiv(source.cell.rowNum, source.cell.colNum);
-		div.html(emptyCell(source.cell.rowNum,source.cell.colNum));
         source.cell.decoration = "";
         target.cell.decoration = "";
 		let ogCell = source.cell;
 		source.setCell(target.cell);
 		source.count++;
-		console.log(source.type + " count: " + source.count);
 		this.selected = null;
 		this.moveStack.push(new PuzzleMove(this, source, target,ogCell))
 	}
@@ -54,21 +53,11 @@ class CapturePuzzle {
 		}
 		let move = this.moveStack.pop();
 		move.reverseMove();
-		this.colourCells();
 		this.message = "Choose a piece";
 		this.selected = null;
-		this.colourCells();
-		evnts.fireEvent("refreshMessage");
+		evnts.fireEvent("gameChanged");
 	}
 
-    getCell(i, j) {
-		return this.board.cells[i][j];
-	}
-    clicked(i,j, target){
-        console.log("received click event: " + i +"," +j+ ": "+ target);
-        let cell = this.getCell(i,j);
-		this.selectCell(cell, target);
-    }
 
 	checkForSolved(){
 		return this.pieces.length == 1;
@@ -78,18 +67,18 @@ class CapturePuzzle {
 		let isStuck = false;
 		let stuckReasons = [];
 		let stuckMessage = "You may be stuck";
-		const hasMoves =  this.pieces.filter((p) => p.count < 2);
-		const zeroMoves = this.pieces.filter((p) => p.count == 2);
-		const totalMoves = this.pieces.reduce((sum, p) => sum + (2 - p.count), 0);
+		const hasMoves =  this.pieces.filter((p) => p.canMove());
+		const totalMoves = this.pieces.reduce((sum, p) => sum + p.remainingMoves(), 0);
 		const totalPieces = this.pieces.length;
-		const king = this.pieces.filter((p) => p.type == 'king')[0];
+		const king = this.pieces.find((p) => p.type == 'king');
 		const isolated = this.pieces.filter((p) => (p.inNeighbors().length == 0) && (p.outNeighbors().length == 0));
-		const paralized = this.pieces.filter((p) => (p.count == 2) && (p.inNeighbors().length == 0));
-		const twoMovers = this.pieces.filter((p) => p.count ==0);
-		
+		const paralized = this.pieces.filter((p) => !p.canMove() && (p.inNeighbors().length == 0));
+		// Reaching a piece that nothing can capture right now takes at least two captures:
+		// one to move into position and one to take it. These pieces can still do that.
+		const repositioners = this.pieces.filter((p) => p.remainingMoves() >= 2);
 
 		if (this.includeKing){
-			if ((king.count ==2) && (this.pieces.length > 1)){
+			if (!king.canMove() && (this.pieces.length > 1)){
 				isStuck = true;
 				stuckReasons.push("king is out of moves");
 			}
@@ -117,7 +106,7 @@ class CapturePuzzle {
 			isStuck = true;
 			stuckReasons.push("all pieces are out of moves");
 		} else {
-			if (paralized.length != 0 && twoMovers.length == 0){
+			if (paralized.length != 0 && repositioners.length == 0){
 				isStuck = true;
 				stuckReasons.push("there is a piece with no moves that can't be captured");
 			}
@@ -127,40 +116,20 @@ class CapturePuzzle {
 			isStuck = true;
 			stuckReasons.push("all pieces are isolated");
 		} else {
-			if (isolated.length != 0 && twoMovers.length == 0){
+			if (isolated.length != 0 && repositioners.length == 0){
 				isStuck = true;
 				stuckReasons.push("there is an isolated piece");
 			}
 		}
 
 		if(isStuck){
-			if (stuckReasons.length == 1){
-				stuckMessage += ": " + stuckReasons[0];	
-			} else {	
-				for (let i=0; i < stuckReasons.length; i++){
-					if (i == 0){
-						stuckMessage += ": " + stuckReasons[i];	
-					} else {
-						if (i == stuckReasons.length -1){
-							stuckMessage += " and " + stuckReasons[i];	
-						} else {
-							stuckMessage += ", " + stuckReasons[i];	
-						}
-					}
-				}
-			}
-			this.message = stuckMessage +".";
+			this.message = stuckMessage + ": " + joinWithAnd(stuckReasons) + ".";
 		}
 	}
 
-    selectCell(cell, target) {
-		let i = parseInt(target.getAttribute("data-row"));
-		let j = parseInt(target.getAttribute("data-col"));
-		let targetCell = this.board.cells[i][j];
-        console.log("clicked on: " + targetCell.decoration);
-        console.log("clicked on: " + this.getCapturePiece(i,j));
-
-		let clickedOn =this.getCapturePiece(i,j);
+    // called when a square is clicked
+    selectCell(cell) {
+		let clickedOn = this.getCapturePiece(cell);
 		if (this.selected == null && clickedOn!=null){
 			this.selected = clickedOn;
             if (this.selected.remainingMoves() === 1){
@@ -169,13 +138,11 @@ class CapturePuzzle {
                 this.message = "You selected a " + clickedOn.type + " with " + this.selected.remainingMoves() + " moves left.";
             }
         } else if (this.selected == clickedOn){
-			console.log("double clicked on same");
+			// same piece clicked again: keep it selected
 		} else if(clickedOn == null) {
-			console.log("clicked on empty");
 			this.selected = null;
 			this.message = "No piece is slelected, please choose a piece.";
 		} else if(this.selected.pieceIsReachable(clickedOn)) {
-			console.log(this.selected.type +" can capture " + clickedOn.type);
 			if (this.selected.remainingMoves() == 0) {
                 this.message = "No moves left for this piece.";
                 this.selected = null;
@@ -196,117 +163,50 @@ class CapturePuzzle {
 		} else {
 			this.checkForStuck();
 		}
-		this.colourCells();
-		evnts.fireEvent("refreshMessage");
-		
-		
+		evnts.fireEvent("gameChanged");
 	}
 
-    getCapturePiece(i, j) {
-        for (let k = 0; k < this.pieces.length; k++) {
-            if (this.pieces[k].isAt(i,j)) {
-                return this.pieces[k];
-            }
-        }
-        return null;
+    // the piece on this cell, or null if it is empty
+    getCapturePiece(cell) {
+        // find() returns undefined when nothing matches; callers expect null
+        return this.pieces.find(p => p.cell === cell) ?? null;
     }
 
-    solutionHTML(){
-        let list = this.moves.reverse();
-        let html = "<ol>\n";
-        for(let i = 0; i < list.length; i++) {
-            html += "<li>" + list[i] +"</li>\n";
-        }
-        html += "</ol>\n";
-        return html;
-    }
-
-	messageHTML(){
-		return this.message;
-	}
-
+    // a random piece that still has a capture left and an empty square it could move to,
+    // or null if there is none
     randomAvailablePiece(){
         let available = this.piecesWithMovesAndSpace();
+        if (available.length == 0) return null;
         return available[Math.floor(Math.random() * available.length)];
-    }
-
-    colourCells() {
-        for (let i = 0; i < this.board.rowNum; i++) {
-            for (let j = 0; j < this.board.colNum; j++) {
-                let div = getDiv(i, j);
-                div.attr("style", "color:black");
-                var cell = this.board.cells[i][j];
-                if (cell.decoration !=""){
-                    div.html(gameGlyph(i,j, cell.decoration));
-                    //div.css("background","#99ff99");
-                }
-
-            }
-        }
-
-        if (this.selected != null){
-            let si = this.selected.cell.rowNum;
-            let sj= this.selected.cell.colNum;
-            let sdiv = getDiv(si, sj);
-            if (this.selected.remainingMoves() == 0) {
-                sdiv.css("background","rgb(128,128,128,1)");
-            } else if (this.selected.remainingMoves() == 1) {
-                sdiv.css("background","rgb(128,128,128,0.5)");
-            }else if(this.selected.remainingMoves() == 2){
-                sdiv.css("background","rgb(128,128,128,0.2)");
-            }
-
-
-			let nbs = this.selected.neighbors();
-            for (let l = 0; l < nbs.length; l++){
-                let nbCell = nbs[l];
-                let i = nbCell.rowNum;
-                let j = nbCell.colNum;
-                if (this.selected.cellIsReachable(nbCell)&&nbCell.decoration!==""){
-                    let div = getDiv(i, j);
-                    div.css("background","#99ff99");
-                }
-            }
-        }
     }
 }
 
-class CapturePiece {
-    constructor(board) {
-        this.board = board;
+// ["a"] -> "a",  ["a", "b"] -> "a and b",  ["a", "b", "c"] -> "a, b and c"
+function joinWithAnd(items) {
+	if (items.length <= 1) return items.join("");
+	return items.slice(0, -1).join(", ") + " and " + items[items.length - 1];
+}
+
+// a Piece that also counts its captures (at most puzzle.maxCaptures)
+// and knows which puzzle it belongs to, so it can look at the other pieces
+class CapturePiece extends Piece {
+    constructor(type) {
+        super(type);
         this.count = 0;
-        this.type = "knight";
-        this.cell = null;
 		this.puzzle = null;
     }
 
     remainingMoves(){
-        return 2 - this.count;
+        return this.puzzle.maxCaptures - this.count;
     }
 
-	toString(){
-		let str = "" +this.type + " at " + this.cell;
-		return str;
-	}
-
-    isAt(i,j){
-        return this.cell.rowNum==i && this.cell.colNum==j;
-    }
-
-    setCell(cell) {
-        this.cell = cell;
-        this.cell.decoration = this.type;
-    }
-    getCell(){
-        return this.cell;
-    }
     moveTo(target){
         this.cell.decoration="";
         this.count ++;
         this.setCell(target);
     }
     canMove(){
-        return this.count < 2;
+        return this.remainingMoves() > 0;
     }
 
     canMoveAndHasSpace(){
@@ -322,138 +222,26 @@ class CapturePiece {
 		return this.puzzle.pieces.filter(p => this.pieceIsReachable(p));
 	}
 
-	//cell neighbors
-	neighbors(){
-		return this.cell.neighbors();
-	}
-
-	neumannNeighbors(){
-		return this.cell.neumannNeighbors();
-	}
-	
-    getNeighborCell(){
-        let nbs = this.cell.neighbors();
-        let nonEmpties = nbs.filter(n => n.decoration == "");
-        console.log("found occupied neighbours: "+  nbs.filter(n => n.decoration != ""));
-        return nonEmpties[Math.floor(Math.random() * nonEmpties.length)];
-    }
-
 	pieceIsReachable(piece){
 		let targetCell = piece.getCell();
 		return this.cellIsReachable(targetCell);
 	}
     cellIsReachable(cell){
-        if(!this.cell.neighbors().includes(cell)){
+        if(!this.neighbors().includes(cell)){
             return false;
         }
-        let thetype = this.type;
-        if(thetype==="king" | thetype==="knight"){ return true;}
-        let this_row = this.cell.rowNum;
-        let this_col = this.cell.colNum;
-        let other_row = cell.rowNum;
-        let other_col =  cell.colNum;
-
-        if (this_row == other_row || this_col == other_col){
-            console.log("- use rook positioning");
-            return this.cellIsReachableRook(cell);
-        }
-
-        console.log("- use bishop positioning");
-        return this.cellIsReachableBishop(cell);
+        // kings and knights jump, so nothing can block them
+        if (this.type === "king" || this.type === "knight") { return true; }
+        // rooks, bishops and queens are blocked by any piece in between
+        return this.squaresBetween(cell).every(square => square.decoration === "");
     }
 
-    cellIsReachableBishop(cell){
-        let this_row = this.cell.rowNum;
-        let this_col = this.cell.colNum;
-        let other_row = cell.rowNum;
-        let other_col =  cell.colNum;
-        if (this_row < other_row){ //other is ahead in row
-            if (this_col < other_col){ //other is ahead in column
-                let i = this_row + 1;
-                let j = this_col + 1;
-                while (i < other_row && j < other_col){
-                    let space = this.board.cells[i][j];
-                    if (space.decoration !== "") {
-                        console.log("-- found " + space.decoration + " in path");
-                        return false;
-                    }
-                    i++;
-                    j++;
-                }
-
-            } else { //other is behind on column
-                let i = this_row + 1;
-                let j = this_col - 1;
-                while (i < other_row && j > other_col){
-                    let space = this.board.cells[i][j];
-                    if (space.decoration !== "") {
-                        console.log("-- found " + space.decoration + " in path");
-                        return false;
-                    }
-                    i++;
-                    j--;
-                }
-            }
-        } else {
-            if (this_col < other_col){ //other is ahead in column
-                let i = this_row - 1;
-                let j = this_col + 1;
-                while (i > other_row && j < other_col){
-                    let space = this.board.cells[i][j];
-                    if (space.decoration !== "") {
-                        console.log("-- found " + space.decoration + " in path");
-                        return false;
-                    }
-                    i--;
-                    j++;
-                }
-
-            } else { //other is behind on column
-                let i = this_row - 1;
-                let j = this_col - 1;
-                while (i > other_row && j > other_col){
-                    let space = this.board.cells[i][j];
-                    if (space.decoration !== "") {
-                        console.log("-- found " + space.decoration + " in path");
-                        return false;
-                    }
-                    i--;
-                    j--;
-                }
-            }
-        }
-        return true;
-    }
-    cellIsReachableRook(cell){
-        let this_row = this.cell.rowNum;
-        let this_col = this.cell.colNum;
-        let other_row = cell.rowNum;
-        let other_col =  cell.colNum;
-
-        let minRow = Math.min(this_row, other_row);
-        let maxRow = Math.max(this_row, other_row);
-        let minCol = Math.min(this_col, other_col);
-        let maxCol = Math.max(this_col, other_col);
-
-        if (this_row == other_row){
-            for (let i = minCol + 1; i < maxCol; i++) {
-               let space = this.board.cells[this_row][i];
-               if (space.decoration !=""){
-                   console.log("-- found " + space.decoration + " in path");
-                   return false;
-               }
-            }
-        } else if (this_col == other_col){
-            for (let i = minRow + 1; i < maxRow; i++) {
-                let space = this.board.cells[i][this_col];
-                if (space.decoration !==""){
-                    console.log("-- found " + space.decoration + " in path");
-                    return false;
-                }
-            }
-        }
-        console.log("-- found nothing in rook path");
-        return true;
+    // the squares strictly between this piece and a cell on the same row, column or diagonal
+    squaresBetween(cell){
+        let di = Math.sign(cell.rowNum - this.cell.rowNum);
+        let dj = Math.sign(cell.colNum - this.cell.colNum);
+        let line = this.cell.ray(di, dj);
+        return line.slice(0, line.indexOf(cell));
     }
     hasEmptyNeighbors(){
         let nbs = this.reachableUnoccupiedNeighbors();
@@ -461,7 +249,7 @@ class CapturePiece {
     }
 
     reachableUnoccupiedNeighbors(){
-        return this.cell.neighbors().filter(n => (this.cellIsReachable(n) && n.decoration === ""));
+        return this.neighbors().filter(n => (this.cellIsReachable(n) && n.decoration === ""));
     }
 
 }
@@ -483,13 +271,12 @@ class PuzzleMove{
 }
 
 class PuzzleGenerator{
-    constructor(board, kings=true, pieceType='all') {
+    constructor(board, kings=true, pieceType='all', maxCaptures=2) {
         this.board = board;
 		this.includeKing = kings ;
-        this.puzzle = new CapturePuzzle(board);
+        this.puzzle = new CapturePuzzle(board, maxCaptures);
 		this.puzzle.includeKing = this.includeKing;
 		this.pieceType = pieceType;
-		this.puzzle.pieceType = this.pieceType;
 		
     }
 
@@ -503,52 +290,91 @@ class PuzzleGenerator{
     }
     initialPosition(){
         let startposition = this.board.randomStart();
-        let firstpiece = new CapturePiece(this.board);
-        if (this.includeKing){
-			firstpiece.type = "king";
-		} else {
-			firstpiece.type = this.randomType();
-		}
+        let firstpiece = new CapturePiece(this.includeKing ? "king" : this.randomType());
         firstpiece.setCell(startposition);
         this.puzzle.addPiece(firstpiece);
     }
+    // one backwards step; returns false if no piece can make it
     existingCapture(){
         let op = this.puzzle.randomAvailablePiece();
-        let newPiece = new CapturePiece(this.board);
-        newPiece.type = this.randomType();
-        console.log("new piece: " + newPiece.type);
+        if (op == null) return false;
+        let newPiece = new CapturePiece(this.randomType());
         this.puzzle.addPiece(newPiece);
 
         let nbs = op.reachableUnoccupiedNeighbors();
-        console.log("creating puzzle -- selected " + op);
 
         let ogCell = op.getCell();
         let newCell = nbs[Math.floor(Math.random() * nbs.length)];
 
-        console.log("new cell is reachable: " + op.cellIsReachable(newCell));
         op.moveTo(newCell);
         newPiece.setCell(ogCell);
         this.puzzle.moves.push("the " + op.type +" at "
             + newCell.position()  + " takes " + newPiece.type +" at " + ogCell.position() );
+        return true;
     }
 
+    // build a puzzle backwards: start from one piece and "un-capture" depth times.
+    // Each un-capture uses up one of a piece's captures, so the counts are
+    // reset at the end to give the player a fresh puzzle.
+    // Returns null if the generator gets stuck (every piece out of captures or boxed in),
+    // which happens more often with maxCaptures = 1 -- see generateCapturePuzzle.
     puzzleOfDepth(depth){
         this.initialPosition();
-        for(let i=0; i< depth; i++){
-            this.existingCapture();
-        }
+        // every() stops at the first step that fails
+        let complete = range(depth).every(() => this.existingCapture());
+        if (!complete) return null;
+        this.puzzle.resetPieceCounts();
         return this.puzzle;
     }
+}
 
-    //2pieces
-    verySimplePuzzle(){
-        return this.puzzleOfDepth(1);
+// a puzzle on a fresh size x size board, trying again if the generator gets stuck
+function generateCapturePuzzle(size, kings, pieceType, depth, maxCaptures, attempts = 100) {
+    for (let attempt = 0; attempt < attempts; attempt++) {
+        let puzzle = new PuzzleGenerator(new Board(size), kings, pieceType, maxCaptures).puzzleOfDepth(depth);
+        if (puzzle != null) return puzzle;
     }
-    //3pieces
-    simplePuzzle(){
-        return this.puzzleOfDepth(2);
-    }
-   
-    
+    return null;
+}
 
+/**
+* display: these functions read a puzzle and update the page
+*/
+
+// grey behind the selected piece: darker the fewer captures it has left
+// (indexed by captures left: 0, 1, 2, 3)
+const SELECTED_SHADE = ["rgb(128,128,128,1)", "rgb(128,128,128,0.5)", "rgb(128,128,128,0.2)", "rgb(128,128,128,0.1)"];
+
+// draw every piece; shade the selected piece and colour the pieces it can capture green
+function drawCaptureBoard(puzzle) {
+    puzzle.board.cells.flat().forEach(cell => {
+        let i = cell.rowNum;
+        let j = cell.colNum;
+        let div = getDiv(i, j);
+        let piece = puzzle.getCapturePiece(cell);
+        div.setAttribute("style", "color:black");
+        div.innerHTML = piece ? gameGlyph(piece.type) : emptyCell();
+    });
+
+    let selected = puzzle.selected;
+    if (selected != null){
+        getDiv(selected.cell.rowNum, selected.cell.colNum).style.background = SELECTED_SHADE[selected.remainingMoves()];
+        selected.outNeighbors().forEach(target =>
+            getDiv(target.cell.rowNum, target.cell.colNum).style.background = "#99ff99");
+    }
+}
+
+// everything the Piece Meal page shows for a puzzle
+function showCapture(puzzle) {
+    drawCaptureBoard(puzzle);
+    byId("messageDisplay").innerHTML = puzzle.message;
+    setButtonActive("#undoButton", puzzle.canUndo());
+    setButtonActive("#advanceButton", puzzle.checkForSolved());
+}
+
+function captureSolutionHTML(puzzle) {
+    // moves are recorded while building the puzzle backwards, so show them in reverse.
+    // [...puzzle.moves] copies the list first: reverse() on its own would change puzzle.moves itself
+    let items = [...puzzle.moves].reverse().map(move => "<li>" + move + "</li>\n");
+    return "<ol>\n" + items.join("") + "</ol>\n";
 }

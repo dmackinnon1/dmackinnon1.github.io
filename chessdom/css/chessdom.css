@@ -1,0 +1,28 @@
+/* Styles shared by all chessdom pages (Bootstrap 3 provides the rest). */
+
+/* the game board */
+table, th, td {
+	padding: 4px;
+	text-align: center;
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+/* the empty squares on the board and the Explorer's map */
+svg {
+	display: block;
+	margin: auto;
+	border: 1px solid black;
+}
+
+.centered {
+	text-align: center;
+}
+
+/* the About and solution panels are <details> elements; their <summary> is styled as a Bootstrap button */
+summary {
+	display: inline-block;  /* not a list item, so no disclosure triangle */
+}
+summary::-webkit-details-marker {
+	display: none;          /* Safari's disclosure triangle */
+}

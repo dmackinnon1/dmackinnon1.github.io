@@ -1,24 +1,29 @@
 'use strict';
-let gameType ={};
 
-gameType.isKnight = function() {
-	return gameType.type === "knight";
+// one-square steps: up, down, right, left, then the four diagonals
+const ORTHOGONAL_STEPS = [[1,0], [-1,0], [0,1], [0,-1]];
+const KING_STEPS = [...ORTHOGONAL_STEPS, [1,1], [1,-1], [-1,1], [-1,-1]];
+const KNIGHT_STEPS = [[-1,2], [-2,1], [-1,-2], [-2,-1], [1,2], [2,1], [1,-2], [2,-1]];
+
+/*
+* How each piece type moves: piece type -> function from a cell to the cells
+* a piece of that type standing there attacks (on an otherwise empty board).
+* Rooks, bishops and queens see all the way to the edge; capture.js checks
+* separately whether another piece is in the way.
+*/
+const MOVES = {
+	king:   cell => cell.steps(KING_STEPS),
+	knight: cell => cell.steps(KNIGHT_STEPS),
+	rook:   cell => [...cell.column(), ...cell.row()],
+	bishop: cell => [...cell.upDiagonal(), ...cell.downDiagonal()],
+	queen:  cell => [...MOVES.rook(cell), ...MOVES.bishop(cell)],
 };
 
-gameType.isKing = function() {
-	return gameType.type === "king";
-};
-
-gameType.isRook = function() {
-	return gameType.type === "rook";
-};
-
-gameType.isBishop = function() {
-	return gameType.type === "bishop";
-};
-gameType.isQueen = function() {
-	return gameType.type === "queen";
+function attackedCells(cell, type) {
+	let rule = MOVES[type];
+	return rule ? rule(cell) : [];
 }
+
 class Cell {
 		
 	constructor(rowNum, colNum, board) {
@@ -29,10 +34,7 @@ class Cell {
 	}
 	
 	
-	getDisplay() {
-		return this.decoration;	
-	}
-	
+	// the cell i rows and j columns away, or null if that is off the board
 	neighbor(i,j) {
 		if ((this.rowNum + i < this.board.getRowSize())
 			&&(this.rowNum + i >= 0)
@@ -42,219 +44,47 @@ class Cell {
 		}
 		return null;
 	}
-	
-	nne(){
-		return this.neighbor(2,1);
-	}
-	
-	nnw(){
-		return this.neighbor(2,-1);
-	}
-	
-	ene(){
-		return this.neighbor(1,2);		
-	}
-	
-	wnw(){
-		return this.neighbor(1,-2);
-	}
-	
-	sse(){
-		return this.neighbor(-2,1);
-	}
-	
-	ese(){
-		return this.neighbor(-1,2);
-	}
-	
-	ssw(){
-		return this.neighbor(-2,-1)
-	}
-	
-	wsw(){
-		return this.neighbor(-1,-2);
-	}
-	
-	north(){
-		return this.neighbor(1,0);
-	}
-	
-	south(){
-		return this.neighbor(-1,0);
-	}
-	
-	east(){
-		return this.neighbor(0,1);		
-	}
-	
-	west(){
-		return this.neighbor(0,-1);
-	}
-	
-	northEast(){
-		return this.neighbor(1,1);
-	}
-	
-	northWest(){
-		return this.neighbor(1,-1);
-	}
-	
-	southEast(){
-		return this.neighbor(-1,1)
-	}
-	
-	southWest(){
-		return this.neighbor(-1,-1);
-	}
-	
-	row(){
-		let row = [];
-		for (let i = 0; i < this.board.rowNum; i++) {
-			if (i !== this.colNum) row.push(this.board.cells[this.rowNum][i]);	
-		}
-		return row;
+
+	// the cells reached by each (i, j) step that stays on the board
+	steps(offsets){
+		return offsets.map(([i, j]) => this.neighbor(i, j)).filter(cell => cell != null);
 	}
 
+	// every other cell in this cell's row
+	row(){
+		return this.board.cells[this.rowNum].filter(c => c.colNum !== this.colNum);
+	}
+
+	// every other cell in this cell's column
 	column(){
-		let col = [];
-		for (let i = 0; i < this.board.colNum; i++) {
-			if (i !== this.rowNum) col.push(this.board.cells[i][this.colNum]);	
+		return this.board.cells.map(r => r[this.colNum]).filter(c => c.rowNum !== this.rowNum);
+	}
+
+	// cells from here to the edge of the board, stepping (di, dj) each time
+	// (a while loop is still the clearest way to walk until we fall off the board)
+	ray(di, dj){
+		let cells = [];
+		let next = this.neighbor(di, dj);
+		while (next != null) {
+			cells.push(next);
+			next = next.neighbor(di, dj);
 		}
-		return col;
+		return cells;
 	}
 
 	downDiagonal(){
-		let diag = [];
-		let i = this.rowNum +1; 
-		let j = this.colNum +1;
-		while( i< this.board.rowNum && j<this.board.colNum){
-			diag.push(this.board.cells[i][j]);
-			i++;
-			j++;
-		}
-
-		i = this.rowNum -1; 
-		j = this.colNum -1;
-		while( i >= 0 && j >= 0){
-			diag.push(this.board.cells[i][j]);
-			i--;
-			j--;
-		}
-		return diag;
+		return [...this.ray(1, 1), ...this.ray(-1, -1)];
 	}
 
 	upDiagonal(){
-		let diag = [];
-		let i = this.rowNum -1; 
-		let j = this.colNum +1;
-		while( i >= 0 && j<this.board.colNum){
-			diag.push(this.board.cells[i][j]);
-			i--;
-			j++;
-		}
-
-		i = this.rowNum +1; 
-		j = this.colNum -1;
-		while( i < this.board.rowNum && j >= 0){
-			diag.push(this.board.cells[i][j]);
-			i++;
-			j--;
-		}
-		return diag;
+		return [...this.ray(-1, 1), ...this.ray(1, -1)];
 	}
 
-	//refactor this and glyph to be functional
-	neighbors(){
-		if (this.decoration == "knight") { 
-			return this.knightNeighbors();
-		} 
-
-		if (this.decoration == "king") {
-			return this.kingNeighbors();
-		} 
-
-		if (this.decoration == "rook") {
-			return this.rookNeighbors();
-		}
-
-		if (this.decoration == "bishop") {
-			return this.bishopNeighbors();
-		}
-		if (this.decoration == "queen") {
-			return this.queenNeighbors();
-		}
-
-	}
-
-	queenNeighbors() {
-		let queen = this.rookNeighbors();
-		Array.prototype.push.apply(queen, this.bishopNeighbors());
-		return queen;
-	}
-
-	rookNeighbors(){
-		let rook = this.column();
-		Array.prototype.push.apply(rook, this.row());
-		return rook;
-	}
-
-	bishopNeighbors(){
-		let bish = this.upDiagonal();
-		Array.prototype.push.apply(bish, this.downDiagonal());
-		return bish;
-	}
-
-	kingNeighbors() {
-		let list = [];
-		if(this.north() != null) list.push(this.north());
-		if(this.south() != null) list.push(this.south());
-		if(this.east() != null) list.push(this.east());
-		if(this.west() != null) list.push(this.west());
-		
-		if(this.northEast() != null) list.push(this.northEast());
-		if(this.northWest() != null) list.push(this.northWest());
-		if(this.southEast() != null) list.push(this.southEast());
-		if(this.southWest() != null) list.push(this.southWest());				
-		return list;
-	}
-
-	knightNeighbors() {
-		let list = [];
-		if(this.ese() != null) list.push(this.ese());
-		if(this.sse() != null) list.push(this.sse());
-		if(this.wsw() != null) list.push(this.wsw());
-		if(this.ssw() != null) list.push(this.ssw());
-		
-		if(this.ene() != null) list.push(this.ene());
-		if(this.nne() != null) list.push(this.nne());
-		if(this.wnw() != null) list.push(this.wnw());
-		if(this.nnw() != null) list.push(this.nnw());
-		return list;
-	}
-
+	// the four cells directly up, down, right and left (used to grow Safe Harbour regions)
 	neumannNeighbors(){
-		var list = [];
-		if(this.north() != null) list.push(this.north());
-		if(this.south() != null) list.push(this.south());
-		if(this.east() != null) list.push(this.east());
-		if(this.west() != null) list.push(this.west());
-		return list;
+		return this.steps(ORTHOGONAL_STEPS);
 	}
 
-
-	
-	isNeighbor(cell) {
-		let nbrs = this.neighbors();
-		for (let i = 0; i < nbrs.length; i ++) {
-			if (cell.isEqual(nbrs[i])) return true;
-		}
-		return false;
-	}
-	
-	degree(){
-		return this.neighbors().length;
-	}
-	
 	toString() {
 		return "Cell [" + this.rowNum + "][" + this.colNum +"]: " + this.decoration;
 	}
@@ -262,51 +92,64 @@ class Cell {
 	position(){
 		return "(" +this.rowNum + "," + this.colNum + ")";
 	}
-
-	isEqual(other) {
-		let result =(this.rowNum === other.rowNum) && (this.colNum === other.colNum);
-		return result;
-	}
 };
 
 class Board {
 
+	// a board is ready to use as soon as it is created: no separate init() step
 	constructor(size) {
 		this.size = size;
 		this.rowNum = size;
 		this.colNum = size;
-		this.cells = [];
+		this.cells = Array.from({length: this.rowNum}, (_, i) =>
+			Array.from({length: this.colNum}, (_, j) => new Cell(i, j, this)));
 	}
-	
-	init() {
-		for (let i = 0; i < this.rowNum; i ++) {
-			this.cells[i] = [];
-			for (let j = 0; j < this.colNum; j ++){
-				this.cells[i].push (new Cell(i, j, this));
-			}
-		}
+	getCell(i, j) {
+		return this.cells[i][j];
 	}
+
 	randomStart() {
 		let i = randomInt(this.rowNum);
 		let j = randomInt(this.colNum);
 		return this.cells[i][j];
 	}
 	
-	toString () {
-		let result = "";
-		for (let i = 0; i < this.rowNum; i ++){
-			result += this.cells[i];
-		}
-		return result;
-	}
 	getRowSize() {
 		return this.rowNum;
 	}
 	getColumnSize(){
 		return this.colNum;
 	}
-	getSize() {
-		return this.colNum * this.rowNum;
+};
+
+/*
+* A piece of one type ("king", "knight", "rook", "bishop" or "queen") standing on a cell.
+* Placing a piece writes its type into the cell's decoration, which marks the cell
+* as occupied and tells the display which glyph to draw.
+* CapturePiece (capture.js) extends this; the other games use it as is.
+*/
+class Piece {
+	constructor(type) {
+		this.type = type;
+		this.cell = null;
+	}
+
+	setCell(cell){
+		this.cell = cell;
+		this.cell.decoration = this.type;
+	}
+
+	getCell(){
+		return this.cell;
+	}
+
+	// the cells this piece attacks
+	neighbors(){
+		return attackedCells(this.cell, this.type);
+	}
+
+	toString(){
+		return "" + this.type + " at " + this.cell;
 	}
 };
 
@@ -316,45 +159,75 @@ class Board {
 */
 
 function htmlForBoard(board) {
-	let html = "<table border = 1 cellspacing = 1 cellpadding = 1 align='center'>";
-	for (let i = 0; i < board.cells.length; i++){
-		let row = board.cells[i];
-		html += "<tr>";
-		for (let j = 0; j < row.length; j ++) {
-			let c = row[j];
-			html += "<td><div id='cell" + i +""+ j +"' class='gameCell' onclick='cellClick(event)'";
-			html += " data-row='"+ i + "' data-col='" + j + "'>";
-			html += emptyCell(i,j) + "</div></td>";
-		}
-		html += "</tr>";
-	}
-	html += "</table>";
-	return html;	
+	let rows = board.cells.map((row, i) => {
+		let tds = row.map((c, j) =>
+			"<td><div id='" + cellId(i, j) + "' class='gameCell' onclick='cellClick(event)'"
+			+ " data-row='"+ i + "' data-col='" + j + "'>"
+			+ emptyCell() + "</div></td>");
+		return "<tr>" + tds.join("") + "</tr>";
+	});
+	return "<table border = 1 cellspacing = 1 cellpadding = 1 align='center'>" + rows.join("") + "</table>";
 };
 
-function emptyCell(i,j){
+// an empty square: a blank svg the same size as a piece glyph
+function emptyCell(){
 	let empty = new Bldr("svg").att("width","28").att("height","28");
-	empty.att("data-row",i).att("data-col",j);
 	empty.att("stroke-width",0);
 	return empty.build();
 };
 
+// the id of a square's div, e.g. "cell-3-10" (the dashes keep row 1, column 10 apart from row 11, column 0)
+function cellId(i, j){
+	return "cell-" + i + "-" + j;
+}
+
+/*
+* The game currently on the page. Each page sets this when it creates a game;
+* every game class has a selectCell(cell) method that is called when a square is clicked.
+*/
+let game = null;
+
+// onclick handler for every square (set up in htmlForBoard).
+// event.currentTarget is the square's div, the element the handler is attached to;
+// event.target may be the glyph or svg inside it.
 function cellClick(event) {
-	let i = parseInt(event.target.getAttribute("data-row"));
-	let j = parseInt(event.target.getAttribute("data-col"));
-	game.clicked(i,j, event.target); //event.target
+	let i = parseInt(event.currentTarget.getAttribute("data-row"));
+	let j = parseInt(event.currentTarget.getAttribute("data-col"));
+	game.selectCell(game.board.getCell(i, j));
 };
 
+// small helpers for working with the page (plain DOM, no libraries)
+
+// the element with this id
+function byId(id) {
+	return document.getElementById(id);
+}
+
+// call handler(event) whenever any element matching the CSS selector is clicked
+function onClick(selector, handler) {
+	document.querySelectorAll(selector).forEach(element => element.addEventListener("click", handler));
+}
+
+// show Bootstrap buttons as the highlighted choice (btn-primary) or as inactive (btn-secondary)
+function setButtonActive(selector, active) {
+	document.querySelectorAll(selector).forEach(button => {
+		button.classList.toggle("btn-primary", active);
+		button.classList.toggle("btn-secondary", !active);
+	});
+}
+
+// highlight the button with this id, and show the rest of its group (e.g. ".typeButton") as unselected
+function selectButton(groupSelector, id) {
+	setButtonActive(groupSelector, false);
+	setButtonActive("#" + id, true);
+}
+
+// the div for the square at row i, column j
 function getDiv(i,j) {
-	return $("#cell" + i +""+j);
+	return byId(cellId(i, j));
 };
 	
 
-//object containing displayable elements
-let gameDisplay = {};
-gameDisplay.map = "";
-gameDisplay.score = "";
-gameDisplay.status = "";
 
 /**
  * utilities
@@ -364,104 +237,51 @@ function randomInt(lessThan){
 	return selection;
 };
 
+// [0, 1, ..., n-1] -- handy for looping a fixed number of times with forEach
+function range(n){
+	return [...Array(n).keys()];
+};
+
 function svgMap(pieces, cover, size) {
 	let svg = new Bldr("svg");
 	let boardSize = 30*size;
 	svg.att("align", "center").att("width",boardSize).att("height",boardSize);
 	let cellSize = boardSize/size;
-	//first the board
-	for (let i = 0; i < size; i++) {
-		for (let j = 0; j < size; j ++) {
-			let x = i*cellSize;
-			let y = j*cellSize;
-			if (i%2==0 && j%2==0){
-				let rect = new Bldr("rect").att("x", x).att("y",y);
-				rect.att("width", cellSize).att("height",cellSize).att("fill", "#ccccb3"); 			
-				svg.elem(rect);
-			}
-			if (i%2!=0 && j%2!=0){
-				let rect = new Bldr("rect").att("x", x).att("y",y);
-				rect.att("width", cellSize).att("height",cellSize).att("fill", "#ccccb3"); 			
-				svg.elem(rect);
-			}
+	//first the board: shade the squares where i and j are both even or both odd
+	range(size).forEach(i => range(size).forEach(j => {
+		if ((i + j) % 2 == 0){
+			let rect = new Bldr("rect").att("x", i*cellSize).att("y", j*cellSize);
+			rect.att("width", cellSize).att("height",cellSize).att("fill", "#ccccb3");
+			svg.elem(rect);
 		}
-	}
+	}));
+
 	//finally, the dots
-	for (let i=0; i< pieces.length; i++) {
-		let cell = pieces[i];
-		let x = (15 + cell.colNum*cellSize);
-		let y = (15 + cell.rowNum*cellSize);
-		let circle = new Bldr("circle").att("cx",x).att("cy", y);
-		circle.att("r",3).att("stroke", "black").att("stroke-width",1).att("fill","grey");
+	let dot = (cell, radius, fill) => {
+		let circle = new Bldr("circle").att("cx", 15 + cell.colNum*cellSize).att("cy", 15 + cell.rowNum*cellSize);
+		circle.att("r", radius).att("stroke", "black").att("stroke-width",1).att("fill", fill);
 		svg.elem(circle);
-		let c0 = new Bldr("circle").att("cx",x).att("cy", y);
-		c0.att("r",6).att("stroke", "black").att("stroke-width",1).att("fill","black");
-		svg.elem(c0);						
-	}
-	
-	for (let i=0; i< cover.length; i++) {
-		let cell = cover[i];
-		let x = (15 + cell.colNum*cellSize);
-		let y = (15 + cell.rowNum*cellSize);
-		let circle = new Bldr("circle").att("cx",x).att("cy", y);
-		circle.att("r",3).att("stroke", "black").att("stroke-width",1).att("fill","grey");
-		svg.elem(circle);
-	}
+	};
+	pieces.forEach(cell => {
+		dot(cell, 3, "grey");
+		dot(cell, 6, "black");
+	});
+	cover.forEach(cell => dot(cell, 3, "grey"));
 
 	return svg.build();
 };
 
-function knightGlyph(i,j){
-	let glyph = "<span class='glyphicon glyphicon-knight' ";
-	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
-	return glyph;	
+// Bootstrap glyphicon name for each piece type
+const GLYPHS = {
+	knight: "knight",
+	king:   "king",
+	rook:   "tower",
+	bishop: "bishop",
+	queen:  "queen",
 };
 
-function kingGlyph(i,j){
-	let glyph = "<span class='glyphicon glyphicon-king' ";
-	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
-	return glyph;	
-};
-
-function rookGlyph(i,j){
-	let glyph = "<span class='glyphicon glyphicon-tower' ";
-	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
-	return glyph;	
-};
-
-function bishopGlyph(i,j){
-	let glyph = "<span class='glyphicon glyphicon-bishop' ";
-	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
-	return glyph;	
-};
-
-function queenGlyph(i,j){
-	let glyph = "<span class='glyphicon glyphicon-queen' ";
-	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
-	return glyph;	
-};
-
-function blankGlyph(i,j){
-	let glyph = "<span class='glyphicon glyphicon-square-empty' ";
-	glyph += " data-row='"+ i + "' data-col='" + j + "'>";
-	return glyph;	
-};
-
-function gameGlyph(i,j, type) {
-	if (type == "knight"){
-		return knightGlyph(i,j);
-	}
-	if (type == "king"){
-		return kingGlyph(i,j);
-	}
-	if (type == "rook") {
-		return rookGlyph(i,j);
-	}
-	if (type == "bishop") {
-		return bishopGlyph(i,j);
-	}
-	if (type == "queen") {
-		return queenGlyph(i,j);
-	}
-	return blankGlyph(i,j);
+// the icon for a piece type
+function gameGlyph(type) {
+	let name = GLYPHS[type] ?? "square-empty";
+	return "<span class='glyphicon glyphicon-" + name + "'></span>";
 }

@@ -1,149 +1,94 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <title>Piece Meal</title>
-</head>
-
-<style>
-    table, th, td {
-        padding: 4px;
-        text-align: center;
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    svg {
-        display: block;
-        margin: auto ;
-        border: 1px solid black;
-    }
-
-    .buttonDiv {
-        display: inline-block;
-        padding: 2px;
-        border: 2px;
-    }
-
-    .centered {
-        text-align: center;
-    }
-
-</style>
-</head>
-<script src="js/evnts.js"></script> <!-- required for callback registration-->
-<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piece Meal</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
 <script src="js/chess_base.js"></script>
 <script src="js/capture.js"></script>
-
 <script>
-     var maxDepth = 5;
-     var gameBoard;
-     var puzzle;
-     var depth = 0;
-     var game;
-     var levels = [3,5,7,9,11];
-     var backup;
-     var kings = true;
-     var pieces = 'all';
+    var gameBoard;
+    var puzzle;
+    var depth = 0;
+    // captures needed for each of the five puzzles in a set (a puzzle has one more piece than this).
+    // Chosen so that each puzzle in a set is about 3-4 times harder than the one before, and so that
+    // 2 and 3 captures per piece give similar difficulty at each level (see research/README.md).
+    // With one capture per piece every capture lands on the same square, so big puzzles
+    // are often impossible (knights, for example, can't have more than 9 pieces).
+    var LEVELS = { 1: [3,4,5,7,8], 2: [3,5,7,9,11], 3: [3,5,8,10,13] };
+    var levels = LEVELS[2];
+    var kings = true;
+    var pieces = 'all';
+    var maxCaptures = 2;
 
     function refresh(level = 0){
         depth = level;
-        console.log("depth is: " + depth);
-        gameBoard = new Board(8);
-        gameBoard.init();
-        let generator = new PuzzleGenerator(gameBoard,kings,pieces);
-        puzzle = generator.puzzleOfDepth(levels[depth]);
-        puzzle.resetPieceCounts();
+        let newPuzzle = generateCapturePuzzle(8, kings, pieces, levels[depth], maxCaptures);
+        if (newPuzzle == null) {
+            byId("messageDisplay").innerHTML = "Couldn't make a puzzle with these settings -- please try again.";
+            return;
+        }
+        puzzle = newPuzzle;
+        gameBoard = puzzle.board;
         game = puzzle;
-        $("#boardDisplay").html(htmlForBoard(gameBoard));
-        puzzle.colourCells();
-        $("#solutionDisplay").html(puzzle.solutionHTML());
-        $("#messageDisplay").html(puzzle.messageHTML());
+        byId("boardDisplay").innerHTML = htmlForBoard(gameBoard);
+        byId("solutionDisplay").innerHTML = captureSolutionHTML(puzzle);
         setLevel();
-        backup = puzzle.clone();
-        $('#solution').collapse('hide');
-        $("#advanceButton").removeClass("btn-primary");
-        $("#advanceButton").addClass("btn-secondary");
-          
-    }
-
-    function setButtons() {
-        $(".btn-primary").addClass("btn-secondary");
-        $(".btn-primary").removeClass("btn-primary");
-
-        $("#" + pieces).removeClass("btn-secondary");
-        $("#" + pieces).addClass("btn-primary");
-        $(".nav-button-default").addClass("btn-default");
-        $(".nav-button-primary").addClass("btn-primary");
+        byId("solution").open = false;
+        showCapture(puzzle);
     }
 
     function setLevel() {
-       // $("#levelDisplay").html("<img src=\"imgs/level" + (depth+1) + ".svg\" width=\"190\" height=\"50\"/>");
-        $("#levelDisplay").html("<h4>Puzzle " + (depth+1) + " of " + levels.length + ": " +(levels[depth] + 1) + " pieces." + "</h4>");
-
+        byId("levelDisplay").innerHTML = "<h4>Puzzle " + (depth+1) + " of " + levels.length + ": " +(levels[depth] + 1) + " pieces." + "</h4>";
     }
 
-    $(document).ready(function(){
-    
-        $("#resetButton").on("click", function(event){
-            refresh();
-        });
-        $("#advanceButton").on("click", function(event){
+    // DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+    document.addEventListener("DOMContentLoaded", function(){
+
+        onClick("#resetButton", () => refresh());
+
+        onClick("#advanceButton", function(event){
             if (puzzle.checkForSolved()){
-              refresh(depth = ((depth +1) % maxDepth));
+                refresh((depth + 1) % levels.length);
             } else {
-                $("#messageDisplay").html("Solve the current puzzle or start a new puzzle set");
+                byId("messageDisplay").innerHTML = "Solve the current puzzle or start a new puzzle set";
             }
         });
 
-         $("#undoButton").on("click", function(event){
-               puzzle.undoLastMove();
+        onClick("#undoButton", () => puzzle.undoLastMove());
+
+        evnts.addCallback("gameChanged", function () {
+            showCapture(puzzle);
         });
 
-        evnts.addCallback("refreshMessage", function () {
-            $("#messageDisplay").html(puzzle.messageHTML());
-        });
-
-        evnts.addCallback("refreshMessage", function () {
-          if(puzzle.canUndo()){
-              $("#undoButton").removeClass("btn-secondary");
-              $("#undoButton").addClass("btn-primary");
-          } else {
-              $("#undoButton").removeClass("btn-primary");
-              $("#undoButton").addClass("btn-secondary");
-          }
-            if(puzzle.checkForSolved()){
-              $("#advanceButton").removeClass("btn-secondary");
-              $("#advanceButton").addClass("btn-primary");
-          } else {
-              $("#advanceButton").removeClass("btn-primary");
-              $("#advanceButton").addClass("btn-secondary");
-          }
-        });
-
-        $(".checkbox").on('click',function(e){	
-            kings = $('#kings:checked').val()=='yes';
-            console.log("kings setting updated to " + kings);
+        byId("kings").addEventListener("change", function(){
+            kings = byId("kings").checked;
             refresh();
-         });
-        
-        $(".typeButton").on("click", function(event){
-        pieces = event.currentTarget.id;
-        console.log(pieces);
-		setButtons();
-        refresh();
-	});
-        setButtons();
-        refresh();
+        });
 
+        onClick(".typeButton", function(event){
+            pieces = event.currentTarget.id;
+            selectButton(".typeButton", pieces);
+            refresh();
+        });
+
+        onClick(".capturesButton", function(event){
+            maxCaptures = parseInt(event.currentTarget.dataset.value);
+            levels = LEVELS[maxCaptures];
+            selectButton(".capturesButton", event.currentTarget.id);
+            refresh();
+        });
+
+        selectButton(".typeButton", pieces);
+        selectButton(".capturesButton", "captures" + maxCaptures);
+        refresh();
     });
-
-
 </script>
+</head>
 
 <body>
 
@@ -151,7 +96,7 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="..">
-                <img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+                <img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
             </a>
             <p class="navbar-text navbar-right">
                 <a href=".." class="navbar-link">dmackinnon1.github.io</a>
@@ -161,24 +106,22 @@
 </nav>
 
 <div class="container-fluid">
-    <div class='row'>
-        <div class='col-sm-1'></div>
-        <div class='col-sm-10'>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
             <div class="page-header">
                 <h1>
-                    <div class="btn-group btn-group-md " role="group">
-                        <a class="btn btn-default nav-button-default" href="./puzzles.html">Puzzles</a>
-                        <a class="btn btn-default nav-button-default" href=".">Explorer</a>
-                        <a class="btn btn-primary nav-button-primary" href="./capture.html">Piece Meal</a>
-                         <a class="btn btn-default nav-button-default" href="./avoidance.html">Safe Harbour</a>
-                    </div><br/>
+                    <span class="btn-group" role="group">
+                        <a class="btn btn-default" href="./puzzles.html">Puzzles</a>
+                        <a class="btn btn-default" href=".">Explorer</a>
+                        <a class="btn btn-primary" href="./capture.html">Piece Meal</a>
+                        <a class="btn btn-default" href="./avoidance.html">Safe Harbour</a>
+                    </span><br>
                     Piece Meal <small> capture all the pieces </small>
                 </h1>
             </div>
-            <button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
-                About
-            </button>
-            <div id='full' class='collapse '>
+            <details id="full">
+                <summary class="btn btn-info">About</summary>
                 <br>
                 <div class="media">
                     <a class="media-left media-middle" href="#">
@@ -187,82 +130,81 @@
                     <div class="media-body">
                         <h4 class="media-heading">Piece Meal</h4>
                         <p><strong>Piece Meal</strong> was inspired by the NYT "Capture" puzzle.</p>
-						<p>The goal is simple: use the pieces on the board to capture each other until only one piece is left.</p>
+                        <p>The goal is simple: use the pieces on the board to capture each other until only one piece is left.</p>
                         Piece Meal puzzles have these simple rules:
                         <ol>
                             <li>The pieces are all the same colour, and must capture each other.</li>
                             <li>Every move must be one that takes another piece.</li>
-                            <li>Each piece can only make up to two moves.</li>
+                            <li>Each piece can only make up to two moves (you can change this to one or three below).</li>
                             <li>If there is a king on the board, the king makes the last capture and is the last piece standing.</li>
                         </ol>
-                        <p>You can choose to play with a final king or without.</p>
+                        <p>You can choose to play with a final king or without, and choose how many captures each piece may make.
+                            Two is the original rule; one turns each puzzle into a single chain of captures, and three gives you more freedom.</p>
                         <p>You can select to play with all pieces of the same type (except for the optional final king), or opt for a random mix of piece types.</p>
                     </div>
                 </div>
                 <br>
-            </div>
+            </details>
 
-</br>
-</br>
-<div class="centered">
-<div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="all" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-asterisk'></span></button>
-  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
-  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
-  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
-   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
-
-</div>
-</div>
-
-            
-            <form>
-<div class="checkbox centered">
-<label><input id="kings" type="checkbox" checked=true value="yes">include king?</label>
-</div>
-</form>
-
-            <!-- hr>
-            <div id="puzzleDescription" style="text-align=center"></div>
-            <hr>
-            <h4><div id="puzzleStatus" style="text-align=center"></div></h4>
-            -->
-            <hr>
-            <h3><div id="boardDisplay" style="text-align=center"></div></h3>
-           
-            <div id="undoButtonHolder">
-                        <button type="button" id="undoButton", class="btn btn-secondary">Undo last Move</span></button>
-            </div>
-            <hr>
-            <h4><div id="messageDisplay" style="text-align=center"></div></h4>
-            <hr>
-            <div id="levelGroup"">
-                <div id="levelDisplay">
-                    <!img src="imgs/level1.svg" width="190" height="50">
+            <br>
+            <br>
+            <div class="centered">
+                <div class="btn-group btn-group-lg" role="group">
+                    <button type="button" id="all" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-asterisk"></span></button>
+                    <button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+                    <button type="button" id="rook" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-tower"></span></button>
+                    <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-bishop"></span></button>
+                    <button type="button" id="queen" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-queen"></span></button>
                 </div>
-                    <div id="advanceButtonHolder">
-                        <button type="button" id="advanceButton", class="btn btn-secondary">Advance to next puzzle</span></button>
-                    </div>
             </div>
-           <hr> 
-            <button id="solutionButton" type='button' class='btn btn-info' data-toggle='collapse' data-target='#solution'>
-                A solution...
-            </button>
-            <div id='solution' class='collapse '>
-                <h5>Here's one possible solution to this puzzle.</h5>
-                <h5><div id="solutionDisplay" style="text-align=center"></div></h5>
+
+            <form>
+                <div class="checkbox centered">
+                    <label><input id="kings" type="checkbox" checked value="yes">include king?</label>
+                </div>
+            </form>
+
+            <div class="centered">
+                captures per piece:
+                <div class="btn-group" role="group">
+                    <button type="button" id="captures1" class="btn btn-secondary capturesButton" data-value="1">1</button>
+                    <button type="button" id="captures2" class="btn btn-secondary capturesButton" data-value="2">2</button>
+                    <button type="button" id="captures3" class="btn btn-secondary capturesButton" data-value="3">3</button>
+                </div>
             </div>
 
             <hr>
-            
-            <div id="resetButtonHolder">
-                <button type="button" id="resetButton", class="btn btn-primary">New Puzzle Set</span></button>
-                <!--button type="button" id="goBackButton", class="btn btn-primary">Reset Current Puzzle</span></button -->
+            <div id="boardDisplay" class="h3"></div>
+
+            <div id="undoButtonHolder">
+                <button type="button" id="undoButton" class="btn btn-secondary">Undo last Move</button>
             </div>
             <hr>
-            <!div id="mapDisplay" style="text-align=center"></div>
+            <div id="messageDisplay" class="h4"></div>
+            <hr>
+            <div id="levelGroup">
+                <div id="levelDisplay"></div>
+                <div id="advanceButtonHolder">
+                    <button type="button" id="advanceButton" class="btn btn-secondary">Advance to next puzzle</button>
+                </div>
+            </div>
+            <hr>
+            <details id="solution">
+                <summary class="btn btn-info">A solution...</summary>
+                <h5>Here's one possible solution to this puzzle.</h5>
+                <div id="solutionDisplay" class="h5"></div>
+            </details>
+
+            <hr>
+
+            <div id="resetButtonHolder">
+                <button type="button" id="resetButton" class="btn btn-secondary">New Puzzle Set</button>
+            </div>
+            <hr>
             <hr>
         </div>
-        <div class='col-sm-1'></div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
 </body>
 </html>

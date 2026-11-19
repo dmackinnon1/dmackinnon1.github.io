@@ -1,60 +1,22 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"> 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chess Domination</title>
-</head>
-
-<style>
-table, th, td {
-	padding: 4px;
-	text-align: center;
-    border: 1px solid black;
-    border-collapse: collapse; 
-}
-svg {
-	display: block; 
-	margin: auto ;
-	border: 1px solid black;
-}
-
-.buttonDiv {
-	display: inline-block;
-	padding: 2px;
-	border: 2px;
-}
-
-.centered {
-	text-align: center;
-}
-
-</style>
-</head>
-<script src="js/evnts.js"></script> <!-- required for callback registration-->
-<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
 <script src="js/chess_base.js"></script>
 <script src="js/chess_domination.js"></script>
-
 <script>
 let puzzles = [];
 let originals = [];
-gameType.type  = 'queen';
-$(document).ready(function(){
-	console.log("about to fetch remote data");
-	$.getJSON("data/puzzles.json", function(data){
-		originals = data;
-	}).done(function() {
-		setButtons();
-		refresh();
-	});
-});
+let pieceType = 'queen';
 
 function resetType(){
-	puzzles = originals.filter(puzzle => puzzle.pieces[0].name == gameType.type);
+	puzzles = originals.filter(puzzle => puzzle.pieces[0].name == pieceType);
 }
 
 function refresh() {
@@ -65,54 +27,39 @@ function refresh() {
 	puzzles = removeElement(puzzles, selected);
 	let size = selected.size
 	let gameBoard = new Board(size);
-	gameBoard.init();
 	game = new Puzzle(gameBoard, selected);
-	$("#boardDisplay").html(htmlForBoard(game.getBoard()));
-	$("#puzzleDescription").html(game.puzzleDescription());	
-	$("#puzzleStatus").html(gameDisplay.status);
+	byId("boardDisplay").innerHTML = htmlForBoard(game.getBoard());
+	byId("puzzleDescription").innerHTML = puzzleDescription(game);
 	game.startGame();
 }
 
-function setButtons() {
-	$(".btn-primary").addClass("btn-secondary");
-	$(".btn-primary").removeClass("btn-primary");
+// DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+document.addEventListener("DOMContentLoaded", function(){
+	onClick("#resetButton", () => refresh());
 
-	$("#" + gameType.type).removeClass("btn-secondary");	
-	$("#" + gameType.type).addClass("btn-primary");
-	$(".nav-button-default").addClass("btn-default");
-	$(".nav-button-primary").addClass("btn-primary");
-}
-
-
-$(document).ready(function(){
-    $("#resetButton").on("click", function(event){
-		refresh();
-	});	
-
-	$(".typeButton").on("click", function(event){
-		gameType.type = event.currentTarget.id;
-		setButtons();
+	onClick(".typeButton", function(event){
+		pieceType = event.currentTarget.id;
+		selectButton(".typeButton", pieceType);
 		resetType();
 		refresh();
 	});
+
+	evnts.addCallback("gameChanged", function() {
+		showDomination(game);
+		byId("puzzleStatus").innerHTML = puzzleStatus(game);
+	});
+
+	// load the puzzle definitions, then show the first puzzle
+	fetch("data/puzzles.json")
+		.then(response => response.json())
+		.then(data => {
+			originals = data;
+			selectButton(".typeButton", pieceType);
+			refresh();
+		});
 });
-
-$(document).ready(function(){  
-    evnts.addCallback("refreshMap", function() {
-		$("#mapDisplay").html(gameDisplay.map);
-    });
-
-    evnts.addCallback("refreshScore", function() {
-		$("#scoreDisplay").html(gameDisplay.score);
-    });
-
-    evnts.addCallback("refreshScore", function() {
-		$("#puzzleStatus").html(gameDisplay.status);
-    });
- });
-
-
 </script>
+</head>
 
 <body>
 
@@ -120,84 +67,83 @@ $(document).ready(function(){
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="..">
-				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+				<img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
 			</a>
 			<p class="navbar-text navbar-right">
 				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
 			</p>
 		</div>
-		</div>
+	</div>
 </nav>
 
 <div class="container-fluid">
-	<div class='row'>
-		<div class='col-sm-1'></div>
-		<div class='col-sm-10'>
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10">
 			<div class="page-header">
 				<h1>
-				<div class="btn-group btn-group-md " role="group">
-					<a class="btn btn-primary nav-button-primary" href="./puzzles.html">Puzzles</a>
-					<a class="btn btn-default nav-button-default" href=".">Explorer</a>
-					<a class="btn btn-default nav-button-default" href="./capture.html">Piece Meal</a>
-					<a class="btn btn-default nav-button-default" href="./avoidance.html">Safe Harbour</a>
-				</div><br/>
-				Chess <small> domination and independence puzzles </small>
+					<span class="btn-group" role="group">
+						<a class="btn btn-primary" href="./puzzles.html">Puzzles</a>
+						<a class="btn btn-default" href=".">Explorer</a>
+						<a class="btn btn-default" href="./capture.html">Piece Meal</a>
+						<a class="btn btn-default" href="./avoidance.html">Safe Harbour</a>
+					</span><br>
+					Chess <small> domination and independence puzzles </small>
 				</h1>
-			</div> 	
-			<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
-				About 
-			</button>
-			<div id='full' class='collapse '>
+			</div>
+			<details id="full">
+			    <summary class="btn btn-info">About</summary>
 				<br>
 				<div class="media">
-  					<a class="media-left media-middle" href="#">	
-    					<img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
-  					</a>
-  				<div class="media-body">
-    				<h4 class="media-heading">Domination and Independence</h4>
-					In the mathematical chess problem of <b>domination</b>, 
-					you are tasked with finding an arrangement of several pieces 
-					of the same type so that every square on the board is reachable in a 
-					single move by at least one of the pieces. 
-					In the problem of <b>independence</b>, your goal is to place the maximum 
-					number of pieces of the same type so that none of the pieces lie in the 
-					path of another. 
-					<br>
-					Choose the puzzle piece that you would like to answer puzzles about,
-					read the puzzle statement, and click on the board to place and remove
-					pieces.
+					<a class="media-left media-middle" href="#">
+						<img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
+					</a>
+					<div class="media-body">
+						<h4 class="media-heading">Domination and Independence</h4>
+						In the mathematical chess problem of <b>domination</b>,
+						you are tasked with finding an arrangement of several pieces
+						of the same type so that every square on the board is reachable in a
+						single move by at least one of the pieces.
+						In the problem of <b>independence</b>, your goal is to place the maximum
+						number of pieces of the same type so that none of the pieces lie in the
+						path of another.
+						<br>
+						Choose the puzzle piece that you would like to answer puzzles about,
+						read the puzzle statement, and click on the board to place and remove
+						pieces.
+					</div>
+				</div>
+				<br>
+			</details>
+			<hr>
+			<div class="centered">
+				<div class="btn-group btn-group-lg" role="group">
+					<button type="button" id="king" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-king"></span></button>
+					<button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+					<button type="button" id="rook" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-tower"></span></button>
+					<button type="button" id="bishop" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-bishop"></span></button>
+					<button type="button" id="queen" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-queen"></span></button>
 				</div>
 			</div>
-			<br>
-	</div>
-	<hr>
-	<div class="centered">
-<div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
-  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
-  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
-  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
-   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
 
-</div>
-</div>
-
-	<hr>
-	<div id="puzzleDescription" style="text-align=center"></div>				
-	<hr>
-	<h4><div id="puzzleStatus" style="text-align=center"></div></h4>
-	<hr>		
-	<h3><div id="boardDisplay" style="text-align=center"></div></h3>
-	<hr>
-	<h3><div id="scoreDisplay" style="text-align=center"></div></h3>
-	<hr>
-	<div id="resetButtonHolder">
-		<button type="button" id="resetButton", class="btn btn-primary">New Puzzle</span></button>
+			<hr>
+			<div id="puzzleDescription"></div>
+			<hr>
+			<div id="puzzleStatus" class="h4"></div>
+			<hr>
+			<div id="boardDisplay" class="h3"></div>
+			<hr>
+			<div id="scoreDisplay" class="h3"></div>
+			<hr>
+			<div id="resetButtonHolder">
+				<button type="button" id="resetButton" class="btn btn-secondary">New Puzzle</button>
+			</div>
+			<hr>
+			<div id="mapDisplay"></div>
+			<hr>
+		</div>
+		<div class="col-sm-1"></div>
 	</div>
-	<hr>
-	<div id="mapDisplay" style="text-align=center"></div>
-	<hr>
-</div>	
-<div class='col-sm-1'></div>
+</div>
 </body>
 </html>

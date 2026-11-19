@@ -8,44 +8,10 @@
 'use strict';
 class Bldr {
 
-	constructor(name, id) {
-		this.id = id;
+	constructor(name) {
 		this.name = name;
 		this.attributes = [];
 		this.elements = [];
-	}
-
-	//for now, we do not make this recursive - just the top level builder is searched
-	find(id) {
-		for (let i = 0; this.elements.length; i ++) {
-			let elem = this.elements[i];
-			if (elem.id == id) return elem;
-		}
-		return null;
-	}
-
-	remove(id) {
-		let pop = null;
-		let reduced = [];
-		for (let i = 0; this.elements.length; i ++) {
-			let elem = this.elements[i];
-			if (elem.id != id) {
-				reduced.push(elem);
-			} else {
-				pop = elem;
-			}
-		}
-		this.elements = reduced;
-		return pop;
-	}
-
-	findAll(name){
-		let named = [];
-		for (let i = 0; this.elements.length; i ++) {
-			let elem = this.elements[i];
-			if (elem.name == name) named.push(elem);
-		}
-		return named;
 	}
 
 	att(name, value) {
@@ -65,16 +31,9 @@ class Bldr {
 	}
 
 	build() {
-		let s = "<" + this.name;
-		for(let i = 0; i< this.attributes.length; i++) {
-			s += " " + this.attributes[i].toString();
-		}
-		s += ">";
-		for(let i = 0; i< this.elements.length; i++) {
-			s += " " + this.elements[i].build();
-		}
-		s += "</" + this.name + ">";
-		return s;
+		let atts = this.attributes.map(a => " " + a.toString()).join("");
+		let children = this.elements.map(e => " " + e.build()).join("");
+		return "<" + this.name + atts + ">" + children + "</" + this.name + ">";
 	}
 };
 

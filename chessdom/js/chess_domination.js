@@ -1,13 +1,16 @@
 'use strict';
 /*
-* Domination class keeps track of chess board domination and independence.
+* Domination keeps track of the pieces placed on a board and the squares they attack.
+* It knows nothing about the page: after every change it fires the "gameChanged"
+* event, and the display code (bottom of this file) draws the game from its state.
 */
-class Domination {		
-	constructor(board) {
+class Domination {
+	// pieceType: the kind of piece placed by clicking a square
+	constructor(board, pieceType = "knight") {
 		this.board = board;
-		board.init();
+		this.pieceType = pieceType;
 		this.pieces =[];
-		this.cover =[];
+		this.cover =[];  // every square attacked by at least one piece
 	}
 
 	getBoard() {
@@ -15,201 +18,112 @@ class Domination {
 	}
 
 	startGame() {
-		gameDisplay.map = svgMap(this.pieces, this.cover, this.board.size);
-		gameDisplay.score = scoreDisplay(0,this.dominationScore(), this.independenceScore()); 	
-		evnts.fireEvent("refreshMap");
-		evnts.fireEvent("refreshScore");
+		this.updateCover();
+		evnts.fireEvent("gameChanged");
 	}
 
-	colourCells(){
-		for (let i = 0; i < this.board.rowNum; i++) {
-			for (let j = 0; j < this.board.colNum; j++) {
-				let div = getDiv(i, j);
-				div.attr("style", "color:black");		
-			}
-		}
-		this.cover = [];
-		for (let k = 0; k < this.pieces.length; k++)  {
-			let selected = this.pieces[k];
-			let nbs = selected.neighbors();
-			for (let l = 0; l < nbs.length; l++){
-				let nbCell = nbs[l];
-				let i = nbCell.rowNum;
-				let j = nbCell.colNum;
-				if (!this.isInSet(i,j,this.cover)){
-						this.cover.push(nbCell);
-						let div = getDiv(i, j);
-						div.css("background","#99ff99");
-				}
-			}
-		}
-
-	}
-	
-	dominationScore() {
-		let score = 0;
-		for (let i = 0; i < this.board.rowNum; i++) {
-			for (let j = 0; j < this.board.colNum; j++) {
-				if (!(this.isInSet(i,j, this.cover) || this.isInSet(i,j,this.pieces))){
-					score ++;
-				}
-			}
-		}
-		return score;	
-	}
-
-	independenceScore() {
-		let score = 0;
-		for(let k=0; k <this.pieces.length; k++) {
-			let cell = this.pieces[k];
-			if (this.isInSet(cell.rowNum, cell.colNum, this.cover)) {
-				score ++;
-			}
-		}
-		return score;
-	}
-
-	getCell(i, j) {
-		return this.board.cells[i][j];
-	}
-	
-	
-	clicked(i,j, target) {
-		let cell = this.getCell(i,j);
-		this.selectCell(cell, target);
-	}
-	
-	
-	isInSet(i,j, set) {
-		for (let k=0; k < set.length; k++) {
-			let current = set[k];
-			if (current.rowNum == i && current.colNum == j) return true;
-		}
-		return false;
-	}
-	
-	remove(i,j) {
-		let reduced = [];
-		for (let k=0; k < this.pieces.length; k++) {
-			let current = this.pieces[k];
-			if (current.rowNum == i && current.colNum == j){
-				continue;
-			} else {
-				reduced.push(current);
-			}
-		}
-		this.pieces = reduced;
-	}
-	
-	selectCell(cell, target) {
-		let i = parseInt(target.getAttribute("data-row"));
-		let j = parseInt(target.getAttribute("data-col"));
-		let targetCell = this.board.cells[i][j];
-		let parentTarget = target;
-		if (target.localName === 'span' || target.localName ==='svg') {
-			parentTarget = target.parentNode;
-		}	
-		if (this.isInSet(i, j, this.pieces)) {
-			this.remove(i,j);
-			targetCell.decoration = "";
-			parentTarget.innerHTML = emptyCell(i,j);	
+	// called when a square is clicked: add a piece there, or remove the one that is there
+	selectCell(cell) {
+		let existing = this.pieceOn(cell);
+		if (existing) {
+			this.pieces = this.pieces.filter(piece => piece !== existing);
+			cell.decoration = "";
 		} else {
-			targetCell.decoration = gameType.type;
-			this.pieces.push(targetCell);
-			parentTarget.innerHTML = gameGlyph(i,j, targetCell.decoration);
+			let piece = new Piece(this.pieceType);
+			piece.setCell(cell);
+			this.pieces.push(piece);
 		}
-		this.colourCells();
-		gameDisplay.map = svgMap(this.pieces, this.cover, this.board.size);
-		evnts.fireEvent("refreshMap");
-		gameDisplay.score = scoreDisplay(this.pieces.length, this.dominationScore(), this.independenceScore()); 
-		evnts.fireEvent("refreshScore");
-	}			
+		this.updateCover();
+		evnts.fireEvent("gameChanged");
+	}
+
+	updateCover(){
+		this.cover = [];
+		this.pieces.forEach(piece => {
+			piece.neighbors().forEach(nbCell => {
+				if (!this.cover.includes(nbCell)){
+					this.cover.push(nbCell);
+				}
+			});
+		});
+	}
+
+	// the piece on this cell, or undefined if it is empty
+	pieceOn(cell) {
+		return this.pieces.find(piece => piece.cell === cell);
+	}
+
+	// the cells that have a piece on them
+	occupiedCells() {
+		return this.pieces.map(piece => piece.cell);
+	}
+
+	// number of squares that are neither occupied nor attacked
+	dominationScore() {
+		let occupied = this.occupiedCells();
+		return this.board.cells.flat().filter(cell =>
+			!(this.cover.includes(cell) || occupied.includes(cell))).length;
+	}
+
+	// number of pieces that are attacked by another piece
+	independenceScore() {
+		return this.pieces.filter(piece => this.cover.includes(piece.cell)).length;
+	}
 };
 
 /*
-{
-  "name": "5 queens on 5x5",
-  "size": 5,
-  "cover": "true",
-  "unguard": "true",
-  "pieces": [
-    {
-      "name": "queen",
-      "count": 5
-    }
-  ]
-}
-In this first version of mathematical chess puzzles,
-we are assume only one piece type
+* A Puzzle is a Domination game with a goal, read from data/puzzles.json, e.g.
+* {
+*   "name": "5 queens on 5x5",
+*   "size": 5,
+*   "cover": true,     (every square must be attacked or occupied)
+*   "unguard": true,   (no piece may attack another)
+*   "pieces": [ { "name": "queen", "count": 5 } ]
+* }
+* For now every puzzle uses only one piece type.
 */
-
 class Puzzle extends Domination {
 	constructor(board, puzzledef) {
-		super(board);
+		super(board, puzzledef.pieces[0].name);
 		this.puzzledef = puzzledef;
-		this.number = parseInt(puzzledef.pieces[0].count)
-		this.type = puzzledef.pieces[0].name
+		this.number = puzzledef.pieces[0].count;
+		this.type = puzzledef.pieces[0].name;
 		this.size = puzzledef.size;
-		this.resetStatus();
-	}
-
-	selectCell(cell, target){
-		super.selectCell(cell, target);
-		this.resetStatus();
-		evnts.fireEvent("refreshScore");
-	}
-
-	resetStatus(){
-		if (this.isSolved()){
-			gameDisplay.status = "You solved the Puzzle!";
-		} else {
-			gameDisplay.status = "Not solved yet...";		
-		}			
 	}
 
 	isSolved(){
-		let solvedCover = false;
-		let solvedUnguard = false;
-		let solvedPieceCount = false;
-
-		if (this.pieces.length === this.number){
-			solvedPieceCount = true;
-		}
-		if(this.puzzledef.cover === 'true'){
-			if (this.dominationScore() === 0){
-				solvedCover = true;
-			} else {
-				solvedCover = false;
-			} 
-		} else {
-			solvedCover = true;
-		}
-		if (this.puzzledef.unguard === 'true'){
-			if (this.independenceScore() === 0){
-				solvedUnguard = true;
-			} else {
-				solvedUnguard = false;
-			}
-		} else {
-			solvedUnguard = true;
-		}
-		return solvedPieceCount && solvedUnguard && solvedCover;
+		let rightCount = this.pieces.length === this.number;
+		let dominated = !this.puzzledef.cover || this.dominationScore() === 0;
+		let independent = !this.puzzledef.unguard || this.independenceScore() === 0;
+		return rightCount && dominated && independent;
 	}
-
-	puzzleDescription() {
-		let d = "<div><h4> Your Puzzle: " + this.puzzledef.name + "</h4>";
-		d += "Place " + this.number +" " + this.type +"s";
-		d += " on a " + this.size + "x" + this.size + " chessboard.";
-		if(this.puzzledef.cover === 'true'){
-			d+= " The board must be dominated.";
-		}
-		if(this.puzzledef.unguard === 'true'){
-			d+= " The pieces must be independent. </div>";
-		}
-		return d;
-	}
-
 };
+
+/**
+* display: these functions read a game and update the page
+*/
+
+// put a glyph on every occupied square and colour every attacked square green
+function drawDominationBoard(game) {
+	game.board.cells.flat().forEach(cell => {
+		let i = cell.rowNum;
+		let j = cell.colNum;
+		let div = getDiv(i, j);
+		let piece = game.pieceOn(cell);
+		div.innerHTML = piece ? gameGlyph(piece.type) : emptyCell();
+		div.setAttribute("style", "color:black");
+		if (game.cover.includes(cell)) {
+			div.style.background = "#99ff99";
+		}
+	});
+}
+
+// everything the Explorer and Puzzles pages show for a game
+function showDomination(game) {
+	drawDominationBoard(game);
+	byId("mapDisplay").innerHTML = svgMap(game.occupiedCells(), game.cover, game.board.size);
+	byId("scoreDisplay").innerHTML = scoreDisplay(game.pieces.length, game.dominationScore(), game.independenceScore());
+}
 
 function scoreDisplay(pieces, domination, independence) {
 	let html = new Bldr("h4").att("align","center");
@@ -230,21 +144,27 @@ function scoreDisplay(pieces, domination, independence) {
 	return html.build();
 }
 
+function puzzleDescription(puzzle) {
+	let d = "<div><h4> Your Puzzle: " + puzzle.puzzledef.name + "</h4>";
+	d += "Place " + puzzle.number +" " + puzzle.type +"s";
+	d += " on a " + puzzle.size + "x" + puzzle.size + " chessboard.";
+	if(puzzle.puzzledef.cover){
+		d+= " The board must be dominated.";
+	}
+	if(puzzle.puzzledef.unguard){
+		d+= " The pieces must be independent.";
+	}
+	return d + "</div>";
+}
+
+function puzzleStatus(puzzle) {
+	return puzzle.isSolved() ? "You solved the Puzzle!" : "Not solved yet...";
+}
+
 //utilities
 
-function randomInt(lessThan){
-	return Math.floor(Math.random()*lessThan);
-};
-
 function removeElement(array, e) {
-	let newArray = [];
-	let x;
-	for (x in array) {
-		if (e !== array[x]) {
-			newArray.push(array[x]);
-		}
-	}
-	return newArray;
+	return array.filter(x => x !== e);
 }
 
 function randomRange(greaterThan, lessThan){

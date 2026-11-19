@@ -1,102 +1,53 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"> 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chess Domination</title>
-</head>
-
-<style>
-table, th, td {
-	padding: 4px;
-	text-align: center;
-    border: 1px solid black;
-    border-collapse: collapse; 
-}
-svg {
-	display: block; 
-	margin: auto ;
-	border: 1px solid black;
-}
-
-.buttonDiv {
-	display: inline-block;
-	padding: 2px;
-	border: 2px;
-}
-
-.centered {
-	text-align: center;
-}
-
-
-</style>
-</head>
-<script src="js/evnts.js"></script> <!-- required for callback registration-->
-<script src="js/bldrs.js"></script> <!-- required for html/svg building -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
 <script src="js/chess_base.js"></script>
 <script src="js/chess_domination.js"></script>
-
 <script>
 var size = 8;
-gameType.type = "knight";
+var pieceType = "knight";
 
 function refresh() {
 	var gameBoard = new Board(size);
-	gameBoard.init();
-	game = new Domination(gameBoard);
-	console.log('board size is now ' + size);
-	$("#boardDisplay").html(htmlForBoard(game.getBoard()));
+	game = new Domination(gameBoard, pieceType);
+	byId("boardDisplay").innerHTML = htmlForBoard(game.getBoard());
 	setButtons();
 	game.startGame();
 }
 
 function setButtons() {
-	$(".btn-primary").addClass("btn-secondary");
-	$(".btn-primary").removeClass("btn-primary");
-
-	$("#" + gameType.type).removeClass("btn-secondary");	
-	$("#" + gameType.type).addClass("btn-primary");
-	$("#b" + size +"x" + size).removeClass("btn-secondary");	
-	$("#b" + size +"x" + size).addClass("btn-primary");
-	$(".nav-button-default").addClass("btn-default");
-	$(".nav-button-primary").addClass("btn-primary");
+	selectButton(".typeButton", pieceType);
+	selectButton(".sizeButton", "b" + size + "x" + size);
 }
 
-$(document).ready(function(){
-    $("#refresh").on("click", function(event){
-		refresh();
-	});	
-
-	$(".sizeButton").on("click", function(event){
-		size = parseInt(event.currentTarget.getAttribute("data-value"));
+// DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+document.addEventListener("DOMContentLoaded", function(){
+	onClick(".sizeButton", function(event){
+		size = parseInt(event.currentTarget.dataset.value);
 		refresh();
 	});
 
-
-	$(".typeButton").on("click", function(event){
-		gameType.type = event.currentTarget.id;
+	onClick(".typeButton", function(event){
+		// the next pieces placed on the current board will be of this type
+		pieceType = event.currentTarget.id;
+		game.pieceType = pieceType;
 		setButtons();
 	});
+
+	evnts.addCallback("gameChanged", function() {
+		showDomination(game);
+	});
+	refresh();
 });
-
-$(document).ready(function(){
-   
-    evnts.addCallback("refreshMap", function() {
-		$("#mapDisplay").html(gameDisplay.map);
-    });
-
-    evnts.addCallback("refreshScore", function() {
-		$("#scoreDisplay").html(gameDisplay.score);
-    });
-    refresh();
-});
-
-
 </script>
+</head>
 
 <body>
 
@@ -104,89 +55,87 @@ $(document).ready(function(){
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="..">
-				<img src="imgs/github_badge1.png" style="max-width:100%;max-height:100%" >
+				<img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
 			</a>
 			<p class="navbar-text navbar-right">
 				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
 			</p>
 		</div>
-		</div>
+	</div>
 </nav>
+
 <div class="container-fluid">
-	<div class='row'>
-		<div class='col-sm-1'></div>
-		<div class='col-sm-10'>
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10">
 			<div class="page-header">
 				<h1>
-				<div class="btn-group btn-group-md " role="group">
-					<a class="btn nav-button-default btn-default" href="./puzzles.html">Puzzles</a>
-					<a class="btn nav-button-primary btn-primary" href=".">Explorer</a>
-					<a class="btn nav-button-default btn-default" href="./capture.html">Piece Meal</a>
-					<a class="btn nav-button-default btn-default" href="./avoidance.html">Safe Harbour</a>
-				</div><br/>
-				Chess <small> domination and independence explorer </small>
+					<span class="btn-group" role="group">
+						<a class="btn btn-default" href="./puzzles.html">Puzzles</a>
+						<a class="btn btn-primary" href=".">Explorer</a>
+						<a class="btn btn-default" href="./capture.html">Piece Meal</a>
+						<a class="btn btn-default" href="./avoidance.html">Safe Harbour</a>
+					</span><br>
+					Chess <small> domination and independence explorer </small>
 				</h1>
 			</div>
-<button type='button' class='btn btn-info' data-toggle='collapse' data-target='#full'>
-About </button>
-<div id='full' class='collapse '>
-<br>
-<div class="media">
-  <a class="media-left media-middle" href="#">
-    <img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
-  </a>
-  <div class="media-body">
-    <h4 class="media-heading">Domination and Independence</h4>
-In the mathematical chess problem of <b>domination</b>, 
-you are tasked with finding an arrangement of several pieces 
-of the same type so that every square on the board is reachable in a 
-single move by at least one of the pieces. 
-In the problem of <b>independence</b>, your goal is to place the maximum 
-number of pieces of the same type so that none of the pieces lie in the 
-path of another. For example, try to find: 
-<ul>
-<li> for each board size, a smallest arrangement of knights that dominates the board;</li>
-<li> a way to place 5 independent queens on a 5x5 board, and a way to place 8 independent queens on an 8x8 board.</li>
-</ul> 
-</div>
-</div>
-<br>
-</div>
-<hr>			
-<div class="centered">
-<div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="b5x5" class="btn btn-secondary sizeButton" data-value = "5">5x5</button>
-  <button type="button" id="b7x7" class="btn btn-secondary sizeButton" data-value = "7">7x7</button>
-  <button type="button" id="b8x8" class="btn btn-secondary sizeButton" data-value = "8">8x8</button>
-  <button type="button" id="b9x9" class="btn btn-secondary sizeButton" data-value = "9">9x9</button>
-  <button type="button" id="b10x10" class="btn btn-secondary sizeButton" data-value = "10">10x10</button>
- <!-- <button type="button" id="b12x12" class="btn btn-secondary">12x12</button>-->
-</div>
-</div>
-<br>
-<div class="centered">
-<div class="btn-group btn-group-lg " role="group">
-  <button type="button" id="king" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-king'></span></button>
-  <button type="button" id="knight" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-knight'></span></button>
-  <button type="button" id="rook" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-tower'></span></button>
-  <button type="button" id="bishop" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-bishop'></span></button>
-   <button type="button" id="queen" class="btn btn-secondary typeButton"><span class='glyphicon glyphicon-queen'></span></button>
-
-
-</div>
-</div>
+			<details id="full">
+			    <summary class="btn btn-info">About</summary>
+				<br>
+				<div class="media">
+					<a class="media-left media-middle" href="#">
+						<img class="media-object" src="imgs/knight_domination.png" alt="Knight Domination Image" width="150" height="150">
+					</a>
+					<div class="media-body">
+						<h4 class="media-heading">Domination and Independence</h4>
+						In the mathematical chess problem of <b>domination</b>,
+						you are tasked with finding an arrangement of several pieces
+						of the same type so that every square on the board is reachable in a
+						single move by at least one of the pieces.
+						In the problem of <b>independence</b>, your goal is to place the maximum
+						number of pieces of the same type so that none of the pieces lie in the
+						path of another. For example, try to find:
+						<ul>
+							<li> for each board size, a smallest arrangement of knights that dominates the board;</li>
+							<li> a way to place 5 independent queens on a 5x5 board, and a way to place 8 independent queens on an 8x8 board.</li>
+						</ul>
+					</div>
+				</div>
+				<br>
+			</details>
+			<hr>
+			<div class="centered">
+				<div class="btn-group btn-group-lg" role="group">
+					<button type="button" id="b5x5" class="btn btn-secondary sizeButton" data-value="5">5x5</button>
+					<button type="button" id="b7x7" class="btn btn-secondary sizeButton" data-value="7">7x7</button>
+					<button type="button" id="b8x8" class="btn btn-secondary sizeButton" data-value="8">8x8</button>
+					<button type="button" id="b9x9" class="btn btn-secondary sizeButton" data-value="9">9x9</button>
+					<button type="button" id="b10x10" class="btn btn-secondary sizeButton" data-value="10">10x10</button>
+				</div>
+			</div>
+			<br>
+			<div class="centered">
+				<div class="btn-group btn-group-lg" role="group">
+					<button type="button" id="king" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-king"></span></button>
+					<button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+					<button type="button" id="rook" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-tower"></span></button>
+					<button type="button" id="bishop" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-bishop"></span></button>
+					<button type="button" id="queen" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-queen"></span></button>
+				</div>
+			</div>
 
 			<hr>
-			<h3><div id="boardDisplay" style="text-align=center"></div></h3>
-			
+			<div id="boardDisplay" class="h3"></div>
+
 			<hr>
-			
-			<h3><div id="scoreDisplay" style="text-align=center"></div></h3>
+
+			<div id="scoreDisplay" class="h3"></div>
 			<hr>
-			<div id="mapDisplay" style="text-align=center"></div>
+			<div id="mapDisplay"></div>
 			<hr>
+		</div>
+		<div class="col-sm-1"></div>
 	</div>
-	<div class='col-sm-1'>
 </div>
 </body>
 </html>

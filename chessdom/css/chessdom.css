@@ -15,6 +15,16 @@ svg {
 	border: 1px solid black;
 }
 
+/* every square on a board is the same size, whatever it shows (a piece, a number, or
+   nothing), so boards stay square; 28px is the size of the empty-square svg */
+.gameCell {
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .centered {
 	text-align: center;
 }

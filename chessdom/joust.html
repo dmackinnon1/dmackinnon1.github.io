@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joust</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/chess_base.js"></script>
+<script src="js/tour.js"></script>
+<script src="js/joust.js"></script>
+<script>
+var pieceType = "knight";
+
+// a new game: the player starts on the top row, the adversary on the bottom row
+function refresh() {
+	game = new Joust(new Board(8), pieceType);
+	game.smartAdversary = byId("smart").checked;
+	byId("boardDisplay").innerHTML = htmlForBoard(game.board);
+	showJoust(game);
+}
+
+// DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+document.addEventListener("DOMContentLoaded", function(){
+	onClick("#refresh", () => refresh());
+
+	onClick(".typeButton", function(event){
+		pieceType = event.currentTarget.id;
+		selectButton(".typeButton", pieceType);
+		refresh();
+	});
+
+	byId("smart").addEventListener("change", function(){
+		game.smartAdversary = byId("smart").checked;
+	});
+
+	evnts.addCallback("gameChanged", function() {
+		showJoust(game);
+	});
+
+	selectButton(".typeButton", pieceType);
+	refresh();
+});
+</script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+	</div>
+</nav>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10">
+			<div class="page-header">
+				<h1>
+					<span id="siteMenu"></span><br>
+					Joust
+				</h1>
+			</div>
+			<details id="full">
+				<summary class="btn btn-info">About</summary>
+				<br>
+				<div class="media">
+					<a class="media-left media-middle" href="#">
+						<img class="media-object" src="imgs/picasso_don_quixote.jpg" alt="Picasso's Don Quixote" width="150" height="150">
+					</a>
+					<div class="media-body">
+						<h4 class="media-heading">Joust</h4>
+						<p>You are moving a chess piece around a board. Your adversary is also moving around the board, using the same move options as the type of chess piece that you have selected.</p>
+						<p>Both you and your adversary are not allowed to land on a square that has already been visited by either of you.</p>
+						<p>Your goal is to block your adversary from making any further moves before they block you.
+							A smart adversary weighs up its own open moves against yours, and will take a square you need when that helps it.</p>
+						<p>This game was inspired by "<a href="https://www.minichessgames.com/#/">Radioactive Pooping Knights</a>."</p>
+					</div>
+				</div>
+				<br>
+			</details>
+			<br>
+			<div class="centered">
+				<div class="btn-group btn-group-lg" role="group">
+					<button type="button" id="king" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-king"></span></button>
+					<button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+					<button type="button" id="rook" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-tower"></span></button>
+					<button type="button" id="queen" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-queen"></span></button>
+				</div>
+			</div>
+			<div id="finish"></div>
+			<hr>
+			<button type="button" id="refresh" class="btn btn-default">New Game</button>
+			<div id="boardDisplay" class="h3"></div>
+			<hr>
+			<form>
+				<div class="checkbox centered">
+					<label><input id="smart" type="checkbox" checked value="yes">smart adversary</label>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-1"></div>
+	</div>
+</div>
+</body>
+</html>

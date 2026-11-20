@@ -14,6 +14,11 @@ const KNIGHT_STEPS = [[-1,2], [-2,1], [-1,-2], [-2,-1], [1,2], [2,1], [1,-2], [2
 const MOVES = {
 	king:   cell => cell.steps(KING_STEPS),
 	knight: cell => cell.steps(KNIGHT_STEPS),
+	// two pieces used only by the tour puzzles (tour.js):
+	// a wazir (its fairy chess name) steps one square up, down, left or right -- Numbrix puzzles follow it
+	wazir:  cell => cell.steps(ORTHOGONAL_STEPS),
+	// "any" can move to every other square, for exploring tours with no movement rule at all
+	any:    cell => cell.board.cells.flat().filter(other => other !== cell),
 	rook:   cell => [...cell.column(), ...cell.row()],
 	bishop: cell => [...cell.upDiagonal(), ...cell.downDiagonal()],
 	queen:  cell => [...MOVES.rook(cell), ...MOVES.bishop(cell)],
@@ -96,11 +101,12 @@ class Cell {
 
 class Board {
 
-	// a board is ready to use as soon as it is created: no separate init() step
-	constructor(size) {
+	// a board is ready to use as soon as it is created: no separate init() step.
+	// Boards are square unless a number of columns is given (the tour pages allow e.g. 5x6).
+	constructor(size, columns = size) {
 		this.size = size;
 		this.rowNum = size;
-		this.colNum = size;
+		this.colNum = columns;
 		this.cells = Array.from({length: this.rowNum}, (_, i) =>
 			Array.from({length: this.colNum}, (_, j) => new Cell(i, j, this)));
 	}
@@ -119,6 +125,11 @@ class Board {
 	}
 	getColumnSize(){
 		return this.colNum;
+	}
+
+	// the number of squares on the board
+	cellCount(){
+		return this.rowNum * this.colNum;
 	}
 };
 
@@ -280,8 +291,12 @@ const GLYPHS = {
 	queen:  "queen",
 };
 
+// a Bootstrap icon by name, e.g. iconGlyph("remove-circle")
+function iconGlyph(name) {
+	return "<span class='glyphicon glyphicon-" + name + "'></span>";
+}
+
 // the icon for a piece type
 function gameGlyph(type) {
-	let name = GLYPHS[type] ?? "square-empty";
-	return "<span class='glyphicon glyphicon-" + name + "'></span>";
+	return iconGlyph(GLYPHS[type] ?? "square-empty");
 }

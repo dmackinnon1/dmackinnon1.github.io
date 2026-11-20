@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tourist</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/chess_base.js"></script>
+<script src="js/tour.js"></script>
+<script src="js/tourist.js"></script>
+<script>
+var pieceType = "knight";
+
+// a new tour, started on a random square
+function refresh() {
+	game = new Tourist(new Board(8), pieceType);
+	game.showCounts = byId("counts").checked;
+	game.showHints = byId("hint").checked;
+	byId("boardDisplay").innerHTML = htmlForBoard(game.board);
+	showTourist(game);
+}
+
+// DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+document.addEventListener("DOMContentLoaded", function(){
+	onClick("#backtrack", () => game.backtrack());
+
+	onClick(".typeButton", function(event){
+		pieceType = event.currentTarget.id;
+		selectButton(".typeButton", pieceType);
+		refresh();
+	});
+
+	document.querySelectorAll("#counts, #hint").forEach(box => box.addEventListener("change", function(){
+		game.setOptions(byId("counts").checked, byId("hint").checked);
+	}));
+
+	evnts.addCallback("gameChanged", function() {
+		showTourist(game);
+	});
+
+	selectButton(".typeButton", pieceType);
+	refresh();
+});
+</script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+	</div>
+</nav>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10">
+			<div class="page-header">
+				<h1>
+					<span id="siteMenu"></span><br>
+					Tourist
+				</h1>
+			</div>
+			<details id="full">
+				<summary class="btn btn-info">About</summary>
+				<br>
+				<div class="media">
+					<a class="media-left media-middle" href="#">
+						<img class="media-object" src="imgs/picasso_don_quixote.jpg" alt="Picasso's Don Quixote" width="150" height="150">
+					</a>
+					<div class="media-body">
+						<h4 class="media-heading">Chess Tourist</h4>
+						<p>When a chess piece has traveled around a chessboard touching every square exactly once, it has completed a "tour" of the board.
+							Your task is to complete a tour on the board below using the selected chess piece.</p>
+						<p>Your tour has been started on a randomly selected square.</p>
+						<ul>
+							<li>The light green squares indicate a legal move. This is based on the type of chess piece you have selected.</li>
+							<li>If <strong>show counts</strong> is checked, the numbers on each square tell you how many open moves are available from that square.</li>
+							<li>If <strong>show hints</strong> is checked, the legal moves with the lowest number of move options are highlighted in dark green.</li>
+						</ul>
+						<p>The recommended strategy for building knight tours is to follow the <em>Warnsdorff heuristic</em>, which states that you should
+							always move to a square with the lowest number of available moves from it (the ones in dark green when hints are turned on).</p>
+					</div>
+				</div>
+				<br>
+			</details>
+			<br>
+			<div class="centered">
+				<div class="btn-group btn-group-lg" role="group">
+					<button type="button" id="king" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-king"></span></button>
+					<button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+					<button type="button" id="rook" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-tower"></span></button>
+					<button type="button" id="queen" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-queen"></span></button>
+				</div>
+			</div>
+			<div id="finish"></div>
+			<hr>
+			<div id="boardDisplay" class="h3"></div>
+			<hr>
+			<form>
+				<div class="checkbox centered">
+					<label><input id="counts" type="checkbox" checked value="yes">show counts</label>
+				</div>
+				<div class="checkbox centered">
+					<label><input id="hint" type="checkbox" value="yes">show hints</label>
+				</div>
+			</form>
+			<div class="backtrackDisplay">
+				<button type="button" id="backtrack" class="btn btn-default">Backtrack</button>
+				<div id="missteps"></div>
+			</div>
+			<hr>
+			<div id="mapDisplay"></div>
+			<hr>
+		</div>
+		<div class="col-sm-1"></div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tour Generator</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/chessdom.css">
+<script src="js/evnts.js"></script>
+<script src="js/bldrs.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/chess_base.js"></script>
+<script src="js/tour.js"></script>
+<script src="js/tour_generator.js"></script>
+<script>
+var pieceType = "knight";
+
+// a new tour for the current piece type
+function refresh() {
+	game = new TourGenerator(new Board(8), pieceType);
+	byId("boardDisplay").innerHTML = htmlForBoard(game.board);
+	showGenerator(game);
+}
+
+// DOMContentLoaded: the page's elements exist, so we can attach handlers and draw
+document.addEventListener("DOMContentLoaded", function(){
+	onClick("#refresh", () => refresh());
+
+	onClick(".typeButton", function(event){
+		pieceType = event.currentTarget.id;
+		selectButton(".typeButton", pieceType);
+		refresh();
+	});
+
+	evnts.addCallback("gameChanged", function() {
+		showGenerator(game);
+	});
+
+	selectButton(".typeButton", pieceType);
+	refresh();
+});
+</script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default" style="margin-bottom:0px">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="..">
+				<img src="imgs/github_badge1.png" alt="GitHub" style="max-width:100%;max-height:100%">
+			</a>
+			<p class="navbar-text navbar-right">
+				<a href=".." class="navbar-link">dmackinnon1.github.io</a>
+			</p>
+		</div>
+	</div>
+</nav>
+
+<br>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10">
+			<div class="page-header">
+				<h1>
+					<span id="siteMenu"></span><br>
+					Tour Generator
+				</h1>
+			</div>
+
+			<button type="button" id="refresh" class="btn btn-default">New Base Tour</button>
+
+			<br>
+			<div>
+				Using this page, you can explore how new possible paths are opened up by hiding the numbers on specific squares.
+				When a value on a square is hidden, alternate paths that preserve the remaining exposed numbers will be calculated.
+				You cannot hide the first square (square numbered 1), but you can hide any other cells. If you hide many cells, the
+				calculations to find alternate paths may start to take longer. The number of alternate paths varies depending on the
+				chess piece type that you choose. The piece represented by the circled "X" is a wazir, the piece that Numbrix puzzles
+				follow: it moves one square up, down, left, or right. The asterisk (*) represents a piece that can move
+				to any square - the graph of its available moves is the complete graph (K<sub>64</sub>). With this piece, hiding even a few
+				squares allows a great many paths, so the page stops counting at 1,000.
+			</div>
+			<br>
+			<div class="centered">
+				<div class="btn-group btn-group-lg" role="group">
+					<button type="button" id="king" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-king"></span></button>
+					<button type="button" id="knight" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-knight"></span></button>
+					<button type="button" id="wazir" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-remove-circle"></span></button>
+					<button type="button" id="any" class="btn btn-secondary typeButton"><span class="glyphicon glyphicon-asterisk"></span></button>
+				</div>
+			</div>
+			<hr>
+			<div id="boardDisplay" class="h3"></div>
+			<hr>
+			<div id="pathCount"></div>
+			<hr>
+			<div id="mapDisplay"></div>
+			<hr>
+			<br>
+		</div>
+		<div class="col-sm-1"></div>
+	</div>
+</div>
+</body>
+</html>
